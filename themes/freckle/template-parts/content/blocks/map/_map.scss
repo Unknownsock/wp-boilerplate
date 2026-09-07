@@ -1,0 +1,31 @@
+.b-map {
+    $block: '.b-map';
+
+    // Background colour comes from the shared "white" class on the
+    // section - see block-map.php + _default.scss.
+    padding: 0;
+
+    #{$block}__embed {
+        width: 100%;
+        height: 50rem;
+        // Leaflet's default control chrome (zoom buttons, attribution) is
+        // built for a generic app, not this theme - keep it, just tone it
+        // down so it doesn't compete with the simplified basemap.
+        font-family: var(--font-stack-body);
+
+        .leaflet-control-zoom a {
+            color: var(--primary-color-3);
+            box-shadow: none;
+        }
+
+        .leaflet-control-attribution {
+            background: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+    }
+
+    #{$block}__error {
+        padding: 2rem;
+        text-align: center;
+    }
+}

@@ -1,0 +1,12 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-buttons {
+    padding-block: 4rem;
+    // Universal block width/padding - matches every other block.
+    @include block-bounds();
+
+    &__inner {
+        width: 100%;
+    }
+}

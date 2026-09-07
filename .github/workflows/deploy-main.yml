@@ -1,0 +1,15 @@
+name: Deploy to Live
+
+on:
+    push:
+        branches: [main]
+    workflow_dispatch:
+
+jobs:
+    deploy-live:
+        uses: Unknownsock/gha-wp-deploy/.github/workflows/deploy.yml@v1
+        with:
+            environment: production
+        secrets:
+            PRODUCTION_FTP_USERNAME: ${{ secrets.PRODUCTION_FTP_USERNAME }}
+            PRODUCTION_FTP_PASSWORD: ${{ secrets.PRODUCTION_FTP_PASSWORD }}

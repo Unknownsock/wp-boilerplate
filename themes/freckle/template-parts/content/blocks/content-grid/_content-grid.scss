@@ -1,0 +1,85 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-content-grid {
+    $block: '.b-content-grid';
+
+    // Background colour comes from the shared "white" class on the
+    // section - see block-content-grid.php + _default.scss.
+    display: flex;
+    flex-flow: column;
+    gap: var(--grid-gutter);
+    @include block-bounds();
+
+    #{$block}__row {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: var(--grid-gutter);
+    }
+
+    #{$block}__column {
+        grid-column: span 10;
+        box-sizing: border-box;
+        display: flex;
+        flex-flow: column;
+
+        // Column span out of 10 - only applied at $grid-md and up, same
+        // as the old fraction system, so narrow viewports always stack
+        // full-width regardless of the configured span.
+        @media screen and (min-width: $grid-md) {
+            @for $i from 1 through 10 {
+                &--#{$i} {
+                    grid-column: span #{$i};
+                }
+            }
+        }
+
+        // Optional border (block-content-grid.php's `border` toggle) -
+        // its own inset (padding here, not on __column-inner) so a panel
+        // colour never touches this outline; independent of --panel
+        // below (can be combined with it or used alone).
+        &--border {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 2rem;
+            padding: 2rem;
+        }
+    }
+
+    // Wraps the column's actual content - carries the panel background
+    // (below) so it stays inset from #{$block}__column--border's outline
+    // instead of the two touching.
+    #{$block}__column-inner {
+        display: flex;
+        flex-flow: column;
+        gap: var(--grid-gutter);
+        width: 100%;
+
+        // Per-column background colour ("panel" - block-content-grid.php
+        // only adds this modifier + the plain colour class, e.g. "navy",
+        // when the column's own colour isn't left at "None"). Same
+        // shared White/Blue/Orange/Navy palette as cards and section
+        // backgrounds - see $panel-colours in abstracts/_mixins.scss for
+        // the name -> token mapping this loop pulls from.
+        &--panel {
+            padding: var(--grid-gutter);
+            border-radius: 1rem;
+            box-sizing: border-box;
+
+            @each $name in white, blue, orange, navy {
+                &.#{$name} {
+                    background-color: panel-colour($name, bg);
+                    color: panel-colour($name, fg);
+                    h1,
+                    h2,
+                    h3,
+                    h4,
+                    h5,
+                    h6,
+                    p {
+                        color: panel-colour($name, fg);
+                    }
+                }
+            }
+        }
+    }
+}

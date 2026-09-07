@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane@example.com"
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "Hello World",
+      "content": "This is a sample post."
+    },
+    {
+      "id": 2,
+      "title": "Cypress Testing",
+      "content": "This post is about setting up Cypress."
+    }
+  ]
+}

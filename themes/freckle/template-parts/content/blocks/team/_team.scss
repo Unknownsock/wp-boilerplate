@@ -1,0 +1,110 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-team {
+    $block: '.b-team';
+    @include block-bounds();
+    display: flex;
+    flex-flow: column;
+    gap: 4rem;
+    align-items: center;
+
+    #{$block}__intro {
+        max-width: 70rem;
+        text-align: center;
+        display: flex;
+        flex-flow: column;
+        gap: 1rem;
+    }
+
+    #{$block}__grid {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 4rem 2rem;
+        @media screen and (min-width: $grid-sm) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    #{$block}__item {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    // No fixed width/height - the container (max-width + aspect-ratio)
+    // controls the size, the photo just fills it. Spacing from the
+    // name/role below comes from __item's own gap, not a margin here.
+    #{$block}__image {
+        width: 100%;
+        max-width: 37rem;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    #{$block}__photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    #{$block}__name {
+        margin-bottom: 0;
+        font-family: var(--font-stack-headers);
+        font-size: 1.8rem;
+        font-weight: 500;
+    }
+
+    #{$block}__role {
+        margin-bottom: 0;
+        font-size: 1.4rem;
+        opacity: 0.7;
+    }
+
+    #{$block}__bio {
+        color: var(--secondary-color-1);
+        text-align: left;
+
+        p:first-child {
+            margin-top: 0;
+        }
+    }
+
+    // Bio modal (block-team.php's second loop, .o-modal--team) - photo in
+    // its own fixed-width column, text filling the rest.
+    #{$block}__modal-image {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 20rem;
+        aspect-ratio: 1 / 1;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        @media screen and (min-width: $grid-md) {
+            width: 20rem;
+        }
+    }
+
+    #{$block}__modal-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    #{$block}__modal-content {
+        display: flex;
+        flex-flow: column;
+        gap: 3rem;
+        min-width: 0;
+
+        // Overrides #{$block}__bio's own white (--secondary-color-1) -
+        // the modal (.o-modal--team, _modal.scss) is a white panel, not
+        // the dark grid this component normally sits in.
+        #{$block}__bio {
+            color: var(--primary-color-3);
+        }
+    }
+}

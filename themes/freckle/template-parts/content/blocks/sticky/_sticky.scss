@@ -1,0 +1,143 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-sticky {
+    display: grid;
+    gap: var(--grid-gutter);
+    grid-template-columns: 1fr;
+    align-items: start;
+    // Background colour comes from the shared "cream" class on the
+    // section (see block-sticky.php + _default.scss) rather than being
+    // hardcoded here - that's what keeps the adjacent-same-colour
+    // padding-avoidance rules working against other block types too.
+    overflow: unset;
+    overflow: clip;
+    @include block-bounds();
+    @media screen and (min-width: $grid-lg) {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--grid-section);
+    }
+    &__intro {
+        position: relative;
+        display: flex;
+        flex-flow: column;
+        gap: 2rem;
+        align-items: flex-start;
+        z-index: 2;
+        @media screen and (min-width: $grid-md) {
+            top: calc(var(--nav-height-md) + var(--grid-section));
+            position: sticky;
+        }
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: var(--primary-text-color);
+            strong {
+                color: var(--primary-color-1);
+                font-weight: inherit;
+            }
+        }
+        p:not(.c-eyebrow) {
+            color: var(--primary-text-color);
+            font-size: 2rem;
+            opacity: 0.7;
+        }
+        .b-sticky__shapes {
+            position: absolute;
+            height: 100%;
+            z-index: -1;
+            @media screen and (min-width: $grid-md) {
+                position: relative;
+            }
+            svg {
+                * {
+                    stroke-width: 0.8rem;
+                    vector-effect: non-scaling-stroke;
+                }
+            }
+        }
+        .b-sticky__shape_1 {
+            position: absolute;
+            bottom: -163rem;
+            left: -44rem;
+            width: 90rem;
+            @media screen and (min-width: $grid-md) {
+                bottom: -108rem;
+                left: -57rem;
+                width: 103rem;
+                height: auto;
+            }
+        }
+        .b-sticky__shape_2 {
+            position: absolute;
+            bottom: -123rem;
+            left: -11rem;
+            width: 101rem;
+            @media screen and (min-width: $grid-md) {
+                bottom: -69rem;
+                left: -11rem;
+                width: 101rem;
+            }
+        }
+    }
+
+    &__text {
+        display: flex;
+        flex-flow: column;
+        gap: 2rem;
+    }
+
+    &__boxes {
+        display: flex;
+        flex-flow: column;
+        gap: 2rem;
+        z-index: 2;
+    }
+
+    &__box {
+        display: flex;
+        flex-flow: column;
+        gap: 2rem;
+        align-items: flex-start;
+        padding: 3rem;
+        box-sizing: border-box;
+        background-color: var(--secondary-color-1);
+        border-radius: 1rem;
+        @media screen and (min-width: $grid-md) {
+            padding: 4rem;
+        }
+    }
+
+    &__icon {
+        width: 4.4rem;
+        height: 4.2rem;
+    }
+
+    &__box-title {
+        margin-bottom: 0;
+        // font-size: 1.8rem;
+        font-weight: 500;
+        color: var(--primary-color-1);
+    }
+
+    &__box-text {
+        margin-bottom: 0;
+        font-size: 1.6rem;
+        line-height: 1.6em;
+        color: var(--primary-text-color);
+        opacity: 0.7;
+    }
+
+    &__box-actions {
+        margin-top: 0.5rem;
+        .c-button-group {
+            width: auto;
+            flex: 0 0 auto;
+            flex-flow: column;
+            align-items: flex-start;
+        }
+    }
+}

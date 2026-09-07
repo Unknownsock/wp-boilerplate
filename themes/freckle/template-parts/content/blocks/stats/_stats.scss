@@ -1,0 +1,121 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-stats {
+    $block: '.b-stats';
+
+    padding-left: var(--grid-gutter);
+    padding-bottom: var(--grid-gutter);
+    // Background colour comes from the `background_colour` ACF field via
+    // the shared .gradient/.navy/etc classes in _default.scss, not a
+    // hardcoded value here (defaults to `gradient` - see block-stats.php).
+    @include block-bounds();
+    @media screen and (min-width: $grid-md) {
+        padding-top: 8rem;
+        padding-bottom: 8rem;
+    }
+
+    #{$block}__grid {
+        width: 100%;
+        display: flex;
+        gap: 2rem;
+        flex-flow: row wrap;
+        justify-content: space-between;
+        // Top-aligned, not centred - items vary in total height depending
+        // on their text/label length, but the image circle is always a
+        // fixed 25rem and always the first thing in the item (text sits
+        // below it), so top-aligning keeps every image's top edge level
+        // and lets __arrow's margin-top target the image's centre
+        // specifically, rather than drifting with the text underneath.
+        align-items: flex-start;
+    }
+
+    // Plain image + text - no hex/shape artwork. Text above/below the
+    // image are independent fields (block-stats.php's `text_above`/
+    // `text_below`), so markup order alone decides the visual stack -
+    // no modifier class needed here any more.
+    #{$block}__item {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: 3rem;
+        // Equal flex-basis so the three items sit evenly spread across
+        // the row (with __grid's space-between) instead of clustering in
+        // the centre - no fixed max-width here, the number's digit count
+        // still needs room to grow (0 -> 1,000,000+) without clipping.
+        flex: 1 1 0;
+    }
+
+    // White circular plate behind the icon - the container (max-width +
+    // aspect-ratio) still controls the size, image itself just fills it.
+    #{$block}__image {
+        width: 100%;
+        max-width: 29rem;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        padding: 2rem;
+        border: 0.1rem solid var(--secondary-color-1);
+        box-sizing: border-box;
+        img {
+            width: 100%;
+            // max-width: 25rem;
+            aspect-ratio: 1 / 1;
+            background-color: var(--secondary-color-1);
+            border-radius: 50%;
+        }
+    }
+
+    #{$block}__image-el {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    #{$block}__text {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    #{$block}__number {
+        display: flex;
+        align-items: baseline;
+        gap: 0.2rem;
+        margin-bottom: 0;
+        font-family: var(--font-stack-headers);
+        font-size: 4rem;
+        line-height: 1.2em;
+        font-weight: 500;
+        line-height: 1;
+        color: var(--secondary-color-1);
+    }
+
+    #{$block}__label {
+        margin-bottom: 0;
+        max-width: 16rem;
+        text-align: center;
+        font-family: var(--font-stack-body);
+        font-size: 2.9rem;
+        line-height: 1.6em;
+        font-weight: 300;
+        color: var(--secondary-color-1);
+    }
+
+    // Dotted connector + arrow rendered between items (not after the last
+    // one) - inline SVG so it can pick up the item text colour via
+    // currentColor rather than being baked in as a fixed white asset.
+    #{$block}__arrow {
+        display: none;
+        flex: 0 0 auto;
+        margin: auto 0 14rem 0;
+        align-self: flex-start;
+        width: 4rem;
+        height: auto;
+        color: var(--secondary-color-1);
+
+        @media screen and (min-width: $grid-md) {
+            display: block;
+        }
+    }
+}

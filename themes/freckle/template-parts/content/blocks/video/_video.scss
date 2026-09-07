@@ -1,0 +1,87 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-video {
+    // Background colour comes from the shared "white" class on the
+    // section - see block-video.php + _default.scss.
+    @include block-bounds();
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: var(--grid-gutter);
+    z-index: 2;
+
+    &--landscape {
+        flex-flow: column;
+    }
+
+    // Portrait, centred: media alone, capped to roughly a third of the
+    // block width and centred - replaces the old empty .col-4 spacer divs
+    // either side of the video.
+    &--portrait.b-video--centered {
+        justify-content: center;
+
+        .b-video__media {
+            width: 100%;
+            max-width: 40rem;
+            margin: 0 auto;
+        }
+    }
+
+    &__media {
+        width: 100%;
+        flex: 1 1 30rem;
+
+        @media screen and (max-width: $grid-md) {
+            order: 2;
+        }
+    }
+
+    &__body {
+        flex: 1 1 40rem;
+        display: flex;
+        flex-flow: column;
+        gap: 2.5rem;
+    }
+
+    &__embed {
+        width: 100%;
+        aspect-ratio: 16/9;
+        border-radius: 0.75rem;
+        overflow: hidden;
+
+        &--portrait {
+            aspect-ratio: 9/16;
+
+            iframe {
+                width: 100%;
+                height: 100% !important;
+            }
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border-radius: 0.75rem;
+        }
+    }
+
+    &__video {
+        width: 100%;
+        border-radius: 0.75rem;
+        overflow: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+        .u-strong,
+        strong {
+            color: var(--primary-color-1);
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "staging": {
+    "enabled": false,
+    "uploadAll": false,
+    "clean": false,
+    "chunkSize": 100,
+    "themes": ["freckle"],
+    "remotePath": "/public_html/wp-content/themes",
+    "ftpHost": "ftp.example.com",
+    "protocol": "ftp"
+  },
+  "production": {
+    "enabled": false,
+    "uploadAll": false,
+    "clean": false,
+    "chunkSize": 100,
+    "themes": ["freckle"],
+    "remotePath": "/public_html/wp-content/themes",
+    "ftpHost": "ftp.example.com",
+    "protocol": "ftp"
+  }
+}

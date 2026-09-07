@@ -1,0 +1,37 @@
+// Screen-reader-only utility + skip link. Migrated from the old
+// assets/css/accessibility.css, which defined the same .sr-only /
+// .sr-only-focusable classes but was never actually enqueued anywhere in
+// the theme - see AUDIT_perf_seo_a11y.md item #7.
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.sr-only-focusable:active,
+.sr-only-focusable:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+}
+
+// Combined with .sr-only-focusable on the same element (see header.php) -
+// that class handles the hide/reveal-on-focus toggle, this just styles it
+// once visible.
+.skip-link {
+    z-index: 10000;
+    padding: 1rem 2rem;
+    background-color: var(--primary-color-1);
+    color: var(--secondary-color-1);
+    text-decoration: none;
+    border-radius: 0 0 0.5rem 0;
+}

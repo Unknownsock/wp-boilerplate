@@ -1,0 +1,66 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-contact {
+    // Background colour comes from the section's own class (default
+    // "navy") - see block-contact.php + _default.scss.
+    display: grid;
+    gap: var(--grid-gutter);
+    grid-template-columns: 1fr;
+    align-items: center;
+    @include block-bounds();
+    @media screen and (min-width: $grid-lg) {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--grid-section);
+    }
+    &__actions {
+        width: 100%;
+    }
+    &__intro {
+        display: flex;
+        flex-flow: column;
+        gap: 2rem;
+        align-items: flex-start;
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: var(--secondary-color-1);
+            .u-strong,
+            strong {
+                color: var(--primary-color-1);
+                font-weight: inherit;
+            }
+        }
+        p:not(.c-eyebrow) {
+            color: var(--secondary-color-1);
+            opacity: 0.8;
+        }
+    }
+
+    &__text {
+        @include media(md) {
+            width: 100%;
+        }
+    }
+    &__text {
+        display: flex;
+        flex-flow: column;
+        gap: 2rem;
+    }
+
+    &__form {
+        width: 100%;
+        box-sizing: border-box;
+        padding: var(--grid-gutter);
+        border-radius: 1rem;
+        background-color: #fb62b2;
+        @media screen and (min-width: $grid-md) {
+            padding: 4rem;
+        }
+        @include panel-form-fields;
+    }
+}

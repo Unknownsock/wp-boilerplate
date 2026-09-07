@@ -1,0 +1,22 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-cards {
+    // Background colour comes from the shared "cream" class on the
+    // section - see block-cards.php + _default.scss.
+    @include block-bounds();
+
+    // Cards use .c-card--large (src/sass/components/_card.scss) -
+    // this block only owns the grid layout around them.
+    &__grid {
+        display: grid;
+        // gap: var(--grid-gutter);
+        gap: 2rem;
+        grid-template-columns: repeat(1, 1fr);
+        // margin-top: var(--grid-gutter);
+        @media screen and (min-width: $grid-md) {
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--grid-gutter);
+        }
+    }
+}

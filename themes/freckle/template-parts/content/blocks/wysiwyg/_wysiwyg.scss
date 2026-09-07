@@ -1,0 +1,10 @@
+﻿@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-wysiwyg {
+    // Background colour comes from the shared "white" class on the
+    // section - see block-wysiwyg.php + _default.scss.
+    // Universal block width/padding (var(--container), 128rem) - matches
+    // every other block, rather than its own narrower one-off.
+    @include block-bounds();
+}

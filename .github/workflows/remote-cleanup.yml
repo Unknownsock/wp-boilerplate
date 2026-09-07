@@ -1,0 +1,33 @@
+name: Remote Cleanup (delete a file on FTP)
+
+# Manual-only. Trigger from the Actions tab (works fine from the GitHub
+# mobile app or mobile browser) when you need to remove a stray file from
+# staging/production without FTP client access - e.g. a leftover Vite
+# `hot` file uploaded before it was added to .gitignore.
+
+on:
+    workflow_dispatch:
+        inputs:
+            environment:
+                description: 'Target environment'
+                required: true
+                type: choice
+                options:
+                    - staging
+                    - production
+            target_path:
+                description: 'Path to delete, relative to the theme root (e.g. "hot")'
+                required: true
+                default: 'hot'
+
+jobs:
+    delete-remote-file:
+        uses: Unknownsock/gha-wp-deploy/.github/workflows/remote-cleanup.yml@v1
+        with:
+            environment: ${{ inputs.environment }}
+            target_path: ${{ inputs.target_path }}
+        secrets:
+            STAGING_FTP_USERNAME: ${{ secrets.STAGING_FTP_USERNAME }}
+            STAGING_FTP_PASSWORD: ${{ secrets.STAGING_FTP_PASSWORD }}
+            PRODUCTION_FTP_USERNAME: ${{ secrets.PRODUCTION_FTP_USERNAME }}
+            PRODUCTION_FTP_PASSWORD: ${{ secrets.PRODUCTION_FTP_PASSWORD }}

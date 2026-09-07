@@ -1,0 +1,233 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// Optional animated-logo hook (component-site-branding.php) - if a client
+// logo SVG has a group with this class, it spins continuously. Shared by
+// header and footer, so this is deliberately top-level rather than nested
+// under .o-site-header. transform-box: fill-box + origin: center means the
+// browser rotates around the group's own bounding box centre - no need to
+// hand-calculate the pinwheel's centre point in SVG user units. Unused
+// (no-op) until a logo SVG actually tags a group with this class.
+.c-logo__spin {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: c-logo-spin 16s linear infinite;
+}
+
+// Footer logo doesn't spin - static.
+.o-site-footer .c-logo__spin {
+    animation: none;
+}
+
+// Wordmark paths (grey by default) - same transition timing as
+// .o-site-header's own background-color swap below, so the is-scrolled
+// colour change animates in step with it.
+.c-logo__text {
+    transition: var(--transition) fill;
+}
+
+.o-site-header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: var(--nav-height-xl);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-sizing: border-box;
+    // Transparent over the hero until scrolled a little, then swaps to a
+    // solid white bar (.is-scrolled, toggled in navigation.js on scroll -
+    // see headerScrollState()). Mobile keeps its own always-solid
+    // background regardless (&__inner below), so this only really shows
+    // above $grid-md.
+    background-color: transparent;
+    box-shadow: none;
+    z-index: 999;
+    transition:
+        var(--transition) height,
+        var(--transition) background-color,
+        var(--transition) box-shadow;
+
+    // "Contact us" (outline white -> orange below) - same duration as
+    // this bar's own background-color swap above (no delay on either any
+    // more), so both now change on the same schedule instead of the
+    // button's colour-swap outrunning the bar behind it.
+    .o-site-header__actions .c-button--outline {
+        transition:
+            var(--transition) background-color,
+            var(--transition) border-color;
+        .c-button__inner {
+            transition: var(--transition) color;
+        }
+    }
+
+    &.is-scrolled {
+        background-color: var(--secondary-color-1);
+        box-shadow: 0 0.4rem 0.4rem rgba(0, 0, 0, 0.1);
+
+        // Nav text defaults to white (_navigation.scss) to sit over the
+        // transparent/dark hero - once the bar goes solid white, flip it
+        // to navy so it's still readable. Desktop only - mobile's nav
+        // link colour already comes from its own always-solid panel.
+        @media screen and (min-width: $grid-nav) {
+            .o-primary-nav
+                > .menu-main-menu-container
+                > ul
+                > li:not(.o-primary-nav__cta)
+                > a {
+                color: var(--primary-color-3);
+
+                // Same specificity as the rule above (both scoped under
+                // .is-scrolled), so this wins over it on hover instead of
+                // losing to it - without this, .is-scrolled's flat color
+                // override (4 classes) out-specifies the plain :hover
+                // state in _navigation.scss (3 classes + :hover) and the
+                // orange hover never shows once the header has scrolled.
+                @include hover() {
+                    color: var(--primary-color-1);
+                }
+            }
+        }
+
+        // Logo wordmark (component-site-branding.php's temporary hardcoded
+        // SVG, .c-logo__text on its text paths) - grey by default, dark
+        // blue (navy) once the header's own background is behind it.
+        .site-branding .c-logo__text {
+            fill: var(--primary-color-3);
+        }
+
+        // "Contact us" (outline white, site-header.php) reads white
+        // against the transparent/dark hero - once the bar goes solid,
+        // swap it to orange so it doesn't disappear against the same
+        // white background.
+        .o-site-header__actions .c-button--white {
+            --btn-color: var(--primary-color-1);
+            .c-button__inner {
+                color: var(--secondary-color-1);
+            }
+            @include hover() {
+                --btn-color: var(--primary-color-3);
+            }
+        }
+    }
+    @media screen and (min-width: $grid-md) {
+        height: var(--nav-height-md);
+    }
+
+    &__overlay {
+        position: fixed;
+        top: var(--nav-height-md);
+        left: 0;
+        width: 100%;
+        height: calc(100% - var(--nav-height-md));
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(6px);
+        z-index: -1;
+        opacity: 0;
+        transition: var(--transition) all;
+        visibility: none;
+        user-select: none;
+        pointer-events: none;
+        .is-toggled & {
+            opacity: 1;
+            user-select: all;
+            pointer-events: all;
+        }
+    }
+
+    &__inner {
+        width: 100%;
+        display: flex;
+        gap: 3rem;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+        // Static, not block-bounds() - the header bar shouldn't re-centre
+        // its content within the container on very wide screens like the
+        // rest of the page does; just match block-bounds()'s fluid edge
+        // padding (3rem at mobile, scaling up to 8rem by 1440px, flat above).
+        padding-inline: betterClamp(2rem, 4rem, 76.8rem, 144rem);
+        @media screen and (max-width: $grid-md) {
+            // padding-inline: var(--grid-gutter);
+            height: 100%;
+            // background: var(--secondary-color-1);
+        }
+
+        .site-branding {
+            display: flex;
+            align-items: center;
+            pointer-events: all;
+            // transform: translateY(1.5rem);
+            a {
+                display: flex;
+                img,
+                svg {
+                    width: 17rem;
+                    height: auto;
+                    display: flex;
+                    overflow: visible;
+                    @media screen and (min-width: $grid-nav) {
+                        width: 17.4rem;
+                    }
+                    .logo-outline {
+                        stroke-width: 15px;
+                        paint-order: fill stroke;
+                        stroke: var(--secondary-color-1);
+                    }
+                }
+            }
+        }
+        .c-social {
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            flex-flow: row;
+            .c-social__link {
+                width: 4.4rem;
+                height: 4.4rem;
+            }
+        }
+        .hamburger {
+            @media screen and (min-width: $grid-nav) {
+                display: none;
+            }
+
+            // White against the transparent/dark hero on mobile (__inner
+            // has no background of its own there any more) - once
+            // .is-scrolled below, flip back to navy for the pinwheel logo's
+            // own dark-on-white contrast.
+            .top,
+            .middle,
+            .bottom {
+                background-color: var(--secondary-color-1);
+            }
+        }
+    }
+
+    &.is-scrolled &__inner .hamburger {
+        .top,
+        .middle,
+        .bottom {
+            background-color: var(--primary-color-3);
+        }
+    }
+
+    // Pill-shaped CTA buttons, scoped to the header - doesn't touch the
+    // site-wide .c-button--solid/--outline styles used elsewhere.
+    &__actions {
+        // margin-left: auto;
+        gap: 3rem;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        @media screen and (max-width: $grid-xl) {
+            display: none;
+        }
+        .c-button__inner {
+            svg {
+                display: none;
+            }
+        }
+    }
+}

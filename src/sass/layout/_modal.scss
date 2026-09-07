@@ -1,0 +1,272 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+.o-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    box-sizing: border-box;
+    width: 100vw;
+    height: 100vh;
+    // Keeps the panel off the window edges on small viewports, where
+    // __panel switches to width: 100%.
+    padding: var(--grid-gutter);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    // visibility: hidden;
+    user-select: none;
+    pointer-events: none;
+    backdrop-filter: blur(1rem);
+    background-color: rgba(var(--secondary-color-2), 0.25);
+    z-index: -1;
+    transition:
+        var(--transition-long) opacity,
+        0ms top var(--transition-long),
+        0ms z-index var(--transition-long);
+    &.is-active {
+        opacity: 1;
+        // visibility: visible;
+        pointer-events: all;
+        // Was "user-select: all", which selects the whole subtree as one
+        // block on a single click instead of allowing normal text
+        // selection - "auto" is what was actually meant here.
+        user-select: auto;
+        transition:
+            var(--transition-long) opacity,
+            0ms top var(--transition-long);
+        z-index: 9999;
+    }
+    .c-button {
+        width: 100% !important;
+        max-width: unset;
+        .c-button__inner {
+            margin-top: 3px !important;
+            height: calc(100% + 2px) !important;
+        }
+    }
+
+    &__overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(#36393a, 0.5);
+        backdrop-filter: blur(1rem);
+        pointer-events: all;
+    }
+
+    &__close {
+        position: absolute;
+        padding: 1rem;
+        width: 4rem;
+        height: 4rem;
+        top: 2rem;
+        right: 2rem;
+        border-radius: 50%;
+        z-index: 99;
+        box-sizing: border-box;
+        transition: var(--transition-long) all;
+        @include hover() {
+            background-color: var(--secondary-color-1);
+            svg {
+                * {
+                    stroke: var(--primary-color-1);
+                }
+            }
+        }
+        cursor: pointer;
+        svg {
+            width: 100%;
+            height: 100%;
+            * {
+                stroke-width: 0.4rem;
+                stroke: var(--secondary-color-1);
+                transition: var(--transition-long) all;
+            }
+        }
+    }
+
+    // Replaces the old row/col-12/content grid wrappers - .o-modal is
+    // already the full-viewport flex box centring this on both axes, so
+    // the panel doesn't need a grid to sit inside.
+    &__panel {
+        position: relative;
+        box-sizing: border-box;
+        padding: var(--grid-gutter);
+        width: 65rem;
+        display: flex;
+        gap: var(--grid-gutter);
+        flex-flow: column;
+        border-radius: 1.5rem;
+        // Inverted from .b-contact__form's light panel / dark accent
+        // fields - the modal reads as the dark variant of the same
+        // component instead of an identical copy.
+        background-color: var(--primary-color-1);
+        pointer-events: all;
+        @media screen and (min-width: $grid-md) {
+            padding: 4rem;
+        }
+        @media screen and (max-width: $grid-nav) {
+            width: 100%;
+        }
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
+            text-align: center;
+            color: var(--secondary-color-1);
+        }
+        p {
+            width: 85%;
+            margin: 0 auto;
+            opacity: 0.8;
+        }
+        .screen-reader-response {
+            display: none;
+        }
+        .wpcf7-response-output {
+            color: var(--secondary-color-1);
+        }
+        h3 {
+            font-size: betterClamp(3.6rem, 6rem);
+        }
+    }
+
+    // Team bio modal - white panel, profile photo beside the text instead
+    // of the contact modal's centred dark-pink form layout above.
+    &--team {
+        .o-modal__panel {
+            width: 90rem;
+            max-width: 100%;
+            flex-flow: column;
+            background-color: var(--secondary-color-1);
+            @media screen and (min-width: $grid-md) {
+                flex-flow: row;
+                align-items: flex-start;
+            }
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            p {
+                text-align: left;
+                color: var(--primary-color-3);
+            }
+            p {
+                width: 100%;
+                margin: 0;
+                opacity: 1;
+            }
+        }
+
+        // The close icon's default stroke (--secondary-color-1, white)
+        // vanishes against this variant's white panel.
+        .o-modal__close svg * {
+            stroke: var(--primary-color-3);
+        }
+    }
+
+    &__intro {
+        display: flex;
+        gap: 2rem;
+        flex-flow: column;
+    }
+
+    // Form styling - same shared mixin as .b-contact__form, so the modal
+    // form and the in-page contact block are the same component in colour
+    // and can't drift apart again.
+    &__form {
+        width: 100%;
+        @include panel-form-fields;
+
+        // Inverted from the mixin's default (dark-pink label/field text on
+        // the light-pink panel): light pink here, since the panel itself
+        // is now the dark pink.
+        label {
+            color: #fb62b2;
+        }
+        // Extra :not(#\#) pair boosts this above the sitewide translucent
+        // "pink-panel field" rule in components/_forms.scss (an ID-level
+        // selector always outranks a class-based one, regardless of import
+        // order) - solid light pink, no opacity, with a dark-pink placeholder.
+        input:not(#\#):not(#\#):not([type='checkbox']):not([type='radio']):not(
+                [type='submit']
+            ):not([type='button']),
+        textarea:not(#\#):not(#\#),
+        select:not(#\#):not(#\#) {
+            background-color: #fb62b2;
+            &::placeholder {
+                color: var(--primary-color-1);
+            }
+        }
+
+        // The sitewide hexagon checkbox (components/_forms.scss) fills
+        // with the main pink - identical to this panel's dark-pink
+        // background, so the unchecked box disappears. White instead.
+        .custom-checkbox .checkbox-dot {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='15' viewBox='0 0 18 15' fill='none'%3E%3Cpath d='M12.3449 0H4.80359C4.43692 0 4.09671 0.195 3.91148 0.51L0.13892 6.99C-0.0463065 7.305 -0.0463065 7.695 0.13892 8.01L3.91148 14.49C4.09671 14.805 4.43314 15 4.80359 15H12.3449C12.7116 15 13.0518 14.805 13.237 14.49L17.0096 8.01C17.1948 7.695 17.1948 7.305 17.0096 6.99L13.237 0.51C13.0518 0.195 12.7154 0 12.3449 0Z' fill='%23ffffff' /%3E%3C/svg%3E");
+        }
+        // Its checked-state tick is also white by default, which would now
+        // vanish against the white dot above - swap it to the panel pink.
+        // (Extra .custom-checkbox ancestor keeps this above the base rule's
+        // specificity regardless of partial import order.)
+        .custom-checkbox input[type='checkbox']:checked + .checkbox-dot::after {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='8' viewBox='0 0 18 15' fill='none'%3E%3Cpath d='M12.3449 0H4.80359C4.43692 0 4.09671 0.195 3.91148 0.51L0.13892 6.99C-0.0463065 7.305 -0.0463065 7.695 0.13892 8.01L3.91148 14.49C4.09671 14.805 4.43314 15 4.80359 15H12.3449C12.7116 15 13.0518 14.805 13.237 14.49L17.0096 8.01C17.1948 7.695 17.1948 7.305 17.0096 6.99L13.237 0.51C13.0518 0.195 12.7154 0 12.3449 0Z' fill='%23DF0E7B'/%3E%3C/svg%3E");
+        }
+    }
+}
+
+*,
+.contact {
+    form {
+        display: flex;
+        // gap: var(--grid-gutter);
+        gap: 2rem;
+        flex-flow: column;
+        @media screen and (max-width: $grid-nav) {
+            gap: 1rem;
+        }
+        > .split {
+            display: flex;
+            // gap: var(--grid-gutter);
+            gap: 2rem;
+            flex-flow: row;
+            @media screen and (max-width: $grid-nav) {
+                gap: 1rem;
+            }
+            > input {
+                width: 50%;
+            }
+        }
+        .wpcf7-acceptance {
+            label {
+                display: flex;
+                align-items: center;
+                .wpcf7-list-item-label {
+                    font-size: 1.4rem;
+                    a {
+                        color: var(--primary-color-1);
+                        @include underline;
+                    }
+                }
+            }
+        }
+        // input {
+        // 	border-radius: 1.5rem;
+        // 	background-color: var(--secondary-color-1);
+        // }
+        // input[type="submit"] {
+        // 	height: 5rem;
+        // }
+    }
+}
+// TikTok popup (.pop-up/.track_this/.pop-up-close) removed - legacy,
+// previous client. See git history if it's ever needed again.

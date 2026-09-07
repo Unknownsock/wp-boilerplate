@@ -1,0 +1,96 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-logos {
+    // Background colour comes from the shared "white" class on the
+    // section - see block-logos.php + _default.scss.
+    padding-inline: betterClamp(3rem, 8rem, 76.8rem, 144rem);
+    // padding: 0;
+    gap: 2rem;
+    overflow: hidden;
+    @media screen and (min-width: $grid-md) {
+        padding-top: var(--grid-section-small);
+        padding-bottom: var(--grid-section-small);
+    }
+
+    // Clips the track's own overflow so only one loop is ever visible.
+    &__viewport {
+        width: 100%;
+        overflow: visible;
+    }
+
+    // Two identical __list copies placed side by side (see
+    // block-logos.php), animated from translateX(0) to translateX(-50%)
+    // - exactly one copy's width - so the loop point is invisible. This
+    // relies on one copy always being wider than the viewport (there's
+    // enough logos for that to hold); see the services block's marquee
+    // for the 3-copy version needed when that isn't true.
+    // width:max-content lets the track grow past 100% instead of the
+    // lists wrapping/shrinking to fit.
+    &__track {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        width: max-content;
+        animation: b-logos-scroll 100s linear infinite;
+
+        @include hover() {
+            animation-play-state: paused;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            animation: none;
+        }
+    }
+
+    &__list {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        list-style: none;
+        margin: 0;
+        flex: 0 0 auto;
+    }
+
+    &__item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // Matches the old swiper spaceBetween: 80 (80px ~ 5rem) between
+        // logos - the last item in each __list sits flush against the
+        // next __list's first item, same gap as everywhere else.
+        margin-right: 5rem;
+
+        a {
+            position: relative;
+            display: flex;
+
+            @include hover() {
+                img {
+                    transform: scale(1.05);
+                }
+            }
+            img {
+                transition: transform var(--transition);
+            }
+        }
+
+        img {
+            width: 100%;
+            max-width: 15em;
+            height: auto;
+            max-height: 9rem;
+        }
+    }
+}
+
+@keyframes b-logos-scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        // Exactly one __list's width, since the track holds two
+        // identical copies back to back.
+        transform: translateX(-50%);
+    }
+}

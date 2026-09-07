@@ -1,0 +1,447 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// Reusable card component, two size variants:
+// --small: plain post/client card - used by the listing block, the
+//   "related" sections on single.php/single-clients.php/index.php (via
+//   template-parts/articles/article-listing.php), and the latest-blogs
+//   block. Keeps its hover lift/zoom treatment.
+// --large: static image + content card, used only by the cards block
+//   (block-cards.php). Image on top, content always visible below - no
+//   hover reveal, no crop/mask, no measured lift. Alternating
+//   --card-bg/--card-fg/--card-accent per card is still the one bit of
+//   "design", not interaction.
+.c-card {
+    position: relative;
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+    flex-flow: column;
+    box-sizing: border-box;
+    overflow: hidden;
+    // Establishes a stacking context with no other side effects (no
+    // layout/visual change) - contains __link's z-index: -1 below, so
+    // it can only ever paint behind THIS card's own content, never
+    // behind sibling cards or anything further up the page.
+    isolation: isolate;
+
+    // Both variants alternate dark/light background+text via
+    // --card-bg/--card-fg, matching the source design.
+    &--small {
+        --card-bg: var(--secondary-color-1);
+        --card-fg: var(--secondary-color-2);
+        background-color: var(--card-bg);
+        border-radius: 1.6rem;
+        &:nth-child(even) {
+            --card-bg: var(--primary-color-3);
+            --card-fg: var(--secondary-color-1);
+            color: var(--primary-color-1);
+            @include hover() {
+                // Targets __title directly, not this element - __title
+                // sets its own explicit colour (both the default at
+                // &__title above and the even-specific override below),
+                // so nothing here would ever inherit a colour set on the
+                // card itself. :not(#\#) beats the general
+                // .c-card--small hover rule above (same specificity
+                // otherwise, and that one comes later in the file, so it
+                // would win the tie and silently override this back to
+                // --primary-color-1).
+                .c-card__title:not(#\#) {
+                    color: var(--primary-color-1);
+                }
+            }
+        }
+        .c-card__content {
+            background-color: var(--card-bg);
+        }
+    }
+
+    &--large {
+        // Single navy bg + orange border by default, matching the
+        // reference design - no per-card alternation any more (that was
+        // the old client's checkerboard pattern). Editors can still pick
+        // a different panel colour per card (block-cards.php's
+        // "Background Colour" field, "none" = this default navy) - same
+        // shared White/Blue/Orange/Navy palette content-grid's per-column
+        // colour and section backgrounds also use (see $panel-colours in
+        // abstracts/_mixins.scss), just re-pointed at --card-* instead of
+        // a plain background-color so __title's accent and
+        // __eyebrow/__text colours stay in sync automatically.
+        @include panel-colour-vars(navy);
+        border: 1px solid var(--primary-color-1);
+        border-radius: 1.6rem;
+        box-sizing: border-box;
+        padding: 2rem;
+        // No background/padding here - the border lives on the card, but
+        // the coloured fill lives on __inner below, inset 2rem from it,
+        // so the background never touches the border on any side.
+
+        &.white {
+            @include panel-colour-vars(white);
+        }
+        &.blue {
+            @include panel-colour-vars(blue);
+        }
+        &.orange {
+            @include panel-colour-vars(orange);
+        }
+        &.navy {
+            @include panel-colour-vars(navy);
+        }
+    }
+
+    &__image {
+        position: relative;
+        display: flex;
+        width: 100%;
+        overflow: hidden;
+        transition: var(--transition-long) transform;
+        -webkit-mask-size: 100% 100%;
+        mask-size: 100% 100%;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-long) transform;
+        }
+
+        .c-card--small & {
+            // No CSS mask any more - the torn-edge cut is painted on
+            // top instead, via __image-shape (see comment on that
+            // selector below), the same "static image, painted overlay
+            // rides the hover lift" technique --large uses. A mask
+            // baked directly into __image can't follow __content's
+            // translateY() on hover; the painted overlay, living inside
+            // __content, can.
+            aspect-ratio: 388 / 335;
+        }
+
+        .c-card--large & {
+            // Static image, natural ratio - no hover lift/crop to sync
+            // with any more. Its own radius, inset from the card's edge
+            // by the card's own padding (see .c-card--large above).
+            aspect-ratio: 3 / 2;
+            border-radius: 1rem;
+        }
+    }
+
+    // Small: real torn-edge overlay, still used by article-listing.php's
+    // small cards. Large no longer uses this - static image, no crop.
+    &__image-shape {
+        color: var(--card-bg, var(--secondary-color-1));
+
+        .c-card--small & {
+            display: block;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 100%;
+            width: calc(100% + 0.1rem);
+            transform: translateY(0.1rem);
+            height: auto;
+        }
+    }
+
+    &__inner {
+        .c-card--small & {
+            display: flex;
+            flex-flow: column;
+            width: 100%;
+            height: 100%;
+        }
+
+        // Large: wraps image + content (see block-cards.php) and carries
+        // the card's own coloured fill (--card-bg) - the border stays on
+        // .c-card--large itself, but the background sits here, inset
+        // 2rem in from it on every side, so it never touches the border.
+        .c-card--large & {
+            display: flex;
+            flex-flow: column;
+            gap: 3rem;
+            width: 100%;
+            height: 100%;
+            padding: 2rem 2rem 3rem 2rem;
+            box-sizing: border-box;
+            background-color: var(--card-bg);
+            border-radius: calc(1.6rem - 1px);
+        }
+    }
+
+    &__content {
+        position: relative;
+        // padding: 0rem var(--grid-gutter) var(--grid-gutter) var(--grid-gutter);
+        padding: 0;
+        display: flex;
+        flex: 1;
+        flex-flow: column;
+        justify-content: flex-end;
+        gap: 3rem;
+        box-sizing: border-box;
+
+        // Large: top-aligned, not pushed to the bottom of the card -
+        // when grid stretch (see .c-card--large's own comment) gives a
+        // card extra height to match a taller sibling, the heading
+        // should stay put right under the image, not centre/shift down
+        // into the extra space.
+        .c-card--large & {
+            justify-content: flex-start;
+        }
+        .c-card--large & {
+            background-color: var(--card-bg);
+            // padding: 2rem 0.5rem 0.5rem;
+            @media screen and (min-width: $grid-nav) {
+                // padding: 2rem 0.8rem 0.8rem;
+            }
+        }
+    }
+
+    &__eyebrow {
+        margin-bottom: 0;
+        font-family: var(--font-stack-body);
+        font-size: 1.6rem;
+        font-weight: 500;
+        line-height: 1.6em;
+        text-transform: uppercase;
+        color: var(--primary-color-1);
+
+        // Alternate the accent colour per card, matching the source design.
+        .c-card:nth-child(even) & {
+            // color: var(--primary-color-1);
+        }
+
+        // Large: track --card-accent instead of the fixed orange above -
+        // otherwise the .orange background_colour variant (see
+        // .c-card--large.orange above) would paint an orange eyebrow on
+        // an orange card, invisible.
+        .c-card--large & {
+            color: var(--card-accent);
+        }
+
+        // Small cards' eyebrow is a post tag - always light pink,
+        // lowercase, no alternating colour.
+        .c-card--small & {
+            font-size: 1.6rem;
+            line-height: 1.6em;
+            letter-spacing: -0.032rem;
+            text-transform: lowercase;
+            color: var(--primary-color-1);
+        }
+    }
+
+    &__title {
+        margin-bottom: 0;
+        // padding-bottom: 2px;
+        // Matches h4 (_base.scss) rather than inheriting h3's larger size
+        // from the <h3> tag this renders on.
+        font-size: 2rem;
+        @media screen and (min-width: $grid-md) {
+            font-size: 2.8rem;
+        }
+        // :not(#\#) boosts this above section-level background text-colour
+        // rules (section.<colour> h1..h6, _default.scss) - without it, a
+        // card sitting inside a coloured section loses this to that rule
+        // on the element-count tiebreak (same 1-class specificity, more
+        // elements in that selector), so the card's own contrast-correct
+        // colour would silently get overridden by the section's.
+        &:not(#\#) {
+            color: var(--card-fg);
+        }
+        text-decoration: none;
+        transition: var(--transition) color;
+        // overflow: hidden;
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        // Large: no line-clamp, no forced min-height - a one-line title
+        // and a two-line title both just take their natural height. Grid
+        // stretch (the .c-card--large grid's default align-items) is
+        // what keeps a row's cards the same overall height when one
+        // title wraps, not a hardcoded line-count guess.
+        .c-card--small & {
+            @media screen and (min-width: $grid-md) {
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 3;
+                line-clamp: 3;
+                overflow: hidden;
+                min-height: calc(1.2em * 3);
+            }
+        }
+        .c-card--small:nth-child(even) & {
+            color: var(--primary-color-1);
+        }
+
+        // Bold text within the wysiwyg title alternates yellow/purple.
+        p strong:nth-of-type(odd) {
+            color: var(--primary-color-1);
+            font-weight: inherit;
+        }
+        p strong:nth-of-type(even) {
+            color: var(--primary-color-1);
+            font-weight: inherit;
+        }
+
+        // --large overrides the yellow/purple alternation above with a
+        // single accent colour that tracks the card's own --card-bg
+        // (see --card-accent on .c-card--large above) - always paired
+        // with whichever bg pattern is active at the current breakpoint,
+        // instead of a fixed nth-child rule that could drift out of
+        // sync between mobile's simple odd/even bg and desktop's
+        // diagonal one.
+        .c-card--large & {
+            color: var(--secondary-color-1);
+            .u-strong,
+            strong {
+                color: var(--primary-color-6);
+            }
+        }
+    }
+
+    // __heading/__body are separate elements (rather than one flat block
+    // of children) so each can be targeted independently by
+    // scroll/entrance animation JS - see cards/_cards.scss. Large-only.
+    &__heading,
+    &__body {
+        display: flex;
+        flex-flow: column;
+        gap: 2rem;
+        width: 100%;
+    }
+
+    &__text {
+        // :not(#\#) - see __title's own comment above; same section-level
+        // override risk for the wysiwyg <p> tags this wraps.
+        p:not(#\#) {
+            margin-bottom: 0;
+            font-family: var(--font-stack-body);
+            font-size: 1.8rem;
+            line-height: 1.6em;
+            color: var(--card-fg);
+            // opacity: 0.7;
+        }
+    }
+
+    // Small-only.
+    &__excerpt {
+        margin-bottom: 0;
+        padding-right: 3rem;
+        font-family: var(--font-stack-body);
+        font-size: 1.6rem;
+        line-height: 1.6em;
+        // :not(#\#) - see __title's own comment above.
+        &:not(#\#) {
+            color: var(--card-fg);
+        }
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+    }
+
+    // Large-only "stretched link" (see block-cards.php, which only
+    // renders it at all when the CMS link field is filled in - unlike
+    // __cta below, it's not decorative, so there's no reason to render
+    // it empty). z-index: -1 puts it behind __cta/__inner/__content
+    // and everything else in the card automatically - none of them
+    // need a z-index of their own for this to work, since z-index:auto
+    // (their default) always paints above a negative z-index sibling.
+    // .c-card's own isolation: isolate (see top of file) keeps that
+    // -1 contained to this card's own stacking, so it can never leak
+    // behind sibling cards or the page behind them.
+    // Small-only now (article-listing.php's whole-card stretched link) -
+    // large's markup (block-cards.php) doesn't render this at all, the
+    // whole card is a plain <a>/<div> instead.
+    &__link {
+        .c-card--small & {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+        }
+    }
+
+    // Plain corner-pinned arrow chip, decorative only (aria-hidden in
+    // the markup) - small-only now, article-listing.php's stretched-link
+    // cards. Large's markup doesn't render this at all any more.
+    &__cta {
+        position: absolute;
+        bottom: 2rem;
+        right: 2rem;
+        width: 1.2rem;
+        height: 1.2rem;
+        display: flex;
+        align-items: center;
+        color: var(--primary-color-1);
+        // transform here is only ever used on --small, to counter
+        // __content's own translateY on hover (see @include hover()
+        // below) - needs its own transition so that cancelling-out
+        // animates in step with it instead of snapping instantly.
+        transition:
+            var(--transition) color,
+            var(--transition-long) transform;
+    }
+
+    &__arrow {
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+
+    // Large's body (text + buttons) is always visible now - static,
+    // no hover reveal.
+    &--large &__body {
+        & > *:first-child {
+            // margin-top: 2rem;
+        }
+        .c-button {
+            justify-content: flex-start;
+        }
+    }
+
+    // Small-only now - large is fully static, no hover effects.
+    @include hover() {
+        &.c-card--small {
+            .c-card__title {
+                color: var(--primary-color-1);
+            }
+            .c-card__content {
+                transform: translateY(-2rem);
+            }
+            // __cta lives inside __content here - a plain descendant of
+            // a transformed element rides along with it, so this
+            // cancels __content's own translateY above right back out,
+            // keeping __cta fixed in place.
+            .c-card__cta {
+                transform: translateY(2rem);
+            }
+            .c-card__image {
+                img {
+                    transform: scale(1.05);
+                }
+            }
+        }
+    }
+
+    // @include hover() above doesn't react to focus (its own :focus is
+    // deliberately commented out, shared by every component using it -
+    // not something to change globally just for this one case).
+    // Small-only now - large is fully static.
+    @media not all and (pointer: coarse) {
+        &--small:focus-within {
+            .c-card__title {
+                color: var(--primary-color-1);
+            }
+            .c-card__content {
+                transform: translateY(-2rem);
+            }
+            .c-card__cta {
+                transform: translateY(2rem);
+            }
+            .c-card__image img {
+                transform: scale(1.05);
+            }
+        }
+    }
+}

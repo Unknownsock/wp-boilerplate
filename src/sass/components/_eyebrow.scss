@@ -1,0 +1,60 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// Shared eyebrow label - small text with a line drawn in CSS, not typed
+// as a dash into the field. Used above headings/paragraphs throughout
+// the theme (hero, block-title, sticky, content-grid, etc.)
+// --default sits before the text only, --centre sits either side.
+.c-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-stack-body);
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 1.4em;
+    letter-spacing: 20%;
+    text-transform: uppercase;
+    color: var(--primary-color-1);
+
+    &::before,
+    &::after {
+        content: '';
+        display: block;
+        height: 0.1rem;
+        background-color: currentColor;
+    }
+
+    &--default {
+        &::before {
+            width: 0.1rem;
+            // Overrides the shared height: 0.1rem above - on mobile this
+            // is a vertical divider, not a horizontal dash, so it needs
+            // to run the full height of the row rather than being a
+            // fixed 0.1rem dot. align-self: stretch is needed alongside
+            // it since .c-eyebrow's own align-items: center would
+            // otherwise still centre a 0-height auto item.
+            height: auto;
+            align-self: stretch;
+            display: flex;
+
+            @media screen and (min-width: $grid-md) {
+                width: 4rem;
+                height: 0.1rem;
+                align-self: auto;
+            }
+        }
+        &::after {
+            display: none;
+        }
+    }
+
+    &--centre {
+        justify-content: center;
+        &::before,
+        &::after {
+            flex: 1 1 auto;
+            max-width: 4rem;
+        }
+    }
+}

@@ -1,0 +1,412 @@
+@use 'sass:string';
+@use 'sass:math';
+@use 'sass:map';
+@use 'variables' as *;
+
+// Shared four-colour "panel" palette - the same White/Blue/Orange/Navy
+// choice editors get on cards (block-cards.php), content-grid columns
+// (block-content-grid.php), and section backgrounds (the "Background
+// Colour" clone field, field_617ea04499fac). Single source of truth for
+// which name maps to which token, so all three stay in sync instead of
+// each hand-copying the same four colours and silently drifting apart
+// if the palette ever changes. Each consumer still decides HOW to apply
+// these (custom properties for a card's coordinated bg/text/accent vs a
+// flat background-color for a section) - see panel-colour-vars() below
+// for the former; the latter just calls panel-colour() directly.
+$panel-colours: (
+    white: (
+        bg: var(--secondary-color-1),
+        fg: var(--primary-color-3),
+        accent: var(--primary-color-1),
+    ),
+    blue: (
+        bg: var(--primary-color-5),
+        fg: var(--secondary-color-1),
+        accent: var(--primary-color-3),
+    ),
+    orange: (
+        bg: var(--primary-color-1),
+        fg: var(--secondary-color-1),
+        accent: var(--primary-color-3),
+    ),
+    navy: (
+        bg: var(--primary-color-3),
+        fg: var(--secondary-color-1),
+        accent: var(--primary-color-1),
+    ),
+);
+
+// Looks up one token from $panel-colours above, e.g.
+// panel-colour(orange, bg) => var(--primary-color-1).
+@function panel-colour($name, $key) {
+    @return map.get(map.get($panel-colours, $name), $key);
+}
+
+// Sets custom properties from $panel-colours above, for a component that
+// coordinates several inner parts (background + text + one accent) off
+// a single colour choice - e.g. .c-card--large's own
+// --card-bg/--card-fg/--card-accent. $bg/$fg/$accent name the custom
+// properties to set, defaulting to the card component's own names so its
+// `&.white { @include panel-colour-vars(white); }` stays a one-liner.
+@mixin panel-colour-vars(
+    $name,
+    $bg: '--card-bg',
+    $fg: '--card-fg',
+    $accent: '--card-accent'
+) {
+    #{$bg}: panel-colour($name, bg);
+    #{$fg}: panel-colour($name, fg);
+    #{$accent}: panel-colour($name, accent);
+}
+
+@mixin reset {
+    padding: 0;
+    margin: 0;
+}
+
+@mixin overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+// Typography
+@mixin fluid-content($properties, $min-vw, $max-vw, $min-value, $max-value) {
+    @each $property in $properties {
+        #{$property}: $min-value;
+    }
+
+    @media screen and (min-width: $min-vw) {
+        @each $property in $properties {
+            #{$property}: calc(
+                #{$min-value} +
+                    #{strip-unit($max-value - $min-value)} *
+                    (100vw - #{$min-vw}) /
+                    #{strip-unit($max-vw - $min-vw)}
+            );
+        }
+    }
+
+    @media screen and (min-width: $max-vw) {
+        @each $property in $properties {
+            #{$property}: $max-value;
+        }
+    }
+}
+
+@mixin media($size) {
+    @if $size ==xs {
+        @media screen and (max-width: $grid-xs) {
+            @content;
+        }
+    } @else if $size ==sm {
+        @media screen and (max-width: $grid-sm) {
+            @content;
+        }
+    } @else if $size ==md {
+        @media screen and (max-width: $grid-md) {
+            @content;
+        }
+    } @else if $size ==lg {
+        @media screen and (max-width: $grid-lg) {
+            @content;
+        }
+    } @else if $size ==xl {
+        @media screen and (max-width: $grid-xl) {
+            @content;
+        }
+    }
+}
+
+@mixin hover($media-query: null) {
+    @media not all and (pointer: coarse) {
+        @if $media-query {
+            @media #{$media-query} {
+                &:hover,
+                &:focus-visible {
+                    @content;
+                }
+            }
+        } @else {
+            &:hover,
+            &:focus-visible {
+                @content;
+            }
+        }
+    }
+    // Disable hover effect on mobile devices (where pointer is coarse)
+    @media (pointer: coarse) {
+        &:focus,
+        &:hover {
+            // pointer-events: none; // Disable hover interaction
+        }
+    }
+}
+
+@mixin responsive-ratio($x, $y, $pseudo: false) {
+    $padding: string.unquote(($y / $x) * 100 + '%');
+
+    @if $pseudo {
+        &:before {
+            @include pseudo($pos: relative);
+            width: 100%;
+            padding-top: $padding;
+        }
+    } @else {
+        padding-top: $padding;
+    }
+}
+
+@mixin hardware($backface: true, $perspective: 1000) {
+    @if $backface {
+        backface-visibility: hidden;
+    }
+
+    perspective: $perspective;
+}
+
+@mixin underline() {
+    // &:after {
+    //     content: '';
+    //     position: absolute;
+    //     width: 100%;
+    //     transform: scaleX(0);
+    //     height: 0.3rem;
+    //     bottom: 0;
+    //     left: 0;
+    //     background-color: var(--primary-color-1);
+    //     transform-origin: bottom right;
+    //     transition: transform 0.25s ease-out;
+    // }
+    // @include hover() {
+    //     &:after {
+    //         transform: scaleX(1);
+    //         transform-origin: bottom left;
+    //     }
+    // }
+}
+
+// Underline driven by a --active custom property (0→1 on hover) rather
+// than a transform the hover selector flips directly.
+@mixin underline-active($color: var(--primary-color-1), $height: 0.1rem) {
+    --active: 0;
+    position: relative;
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -0.2em;
+        width: calc(var(--active) * 100%);
+        height: $height;
+        background-color: $color;
+        border-radius: 9999px;
+        transition: width 0.2s ease-in-out;
+    }
+    @include hover() {
+        --active: 1;
+    }
+}
+
+@function betterClamp(
+    $minSize,
+    $maxSize,
+    $minWidth: 76.8rem,
+    $maxWidth: 192rem
+) {
+    // do calculations
+    $slope: math.div($maxSize - $minSize, $maxWidth - $minWidth);
+    $yAxisIntersection: -$minWidth * $slope + $minSize;
+
+    // output as rem
+    @return clamp(
+        #{$minSize},
+        #{$yAxisIntersection} + #{$slope} * 100vw,
+        #{$maxSize}
+    );
+}
+
+// Fluid edge padding that caps out at $max-width instead of growing forever
+// on ultra-wide screens. Pass a narrower $max-width per block in its own
+// partial (e.g. @include block-bounds(100rem)) when it needs a tighter
+// column than the site default.
+//
+// The gutter itself is fluid too: flat at $min-pad below $min-vw (mobile),
+// scaling linearly up to $max-pad by $max-vw (1440px), then flat at
+// $max-pad beyond that — via betterClamp, so no extra media query needed.
+@mixin block-bounds(
+    $max-width: var(--container),
+    $min-pad: 3rem,
+    $max-pad: 8rem,
+    $min-vw: 76.8rem,
+    $max-vw: 144rem
+) {
+    box-sizing: border-box;
+    // Exposed as a custom property (inherited by descendants) so a child
+    // can cancel out just one side, e.g. to bleed to the viewport edge:
+    // right: calc(var(--bounds-pad) * -1); width: calc(100% + var(--bounds-pad));
+    // Uses 100vw, not 100%, deliberately: a custom property isn't a frozen
+    // computed value, it's substituted wherever var() is read, so a bare
+    // % here would re-resolve against each consumer's own containing
+    // block (e.g. a grid track) instead of staying constant everywhere.
+    --bounds-pad: max(
+        #{betterClamp($min-pad, $max-pad, $min-vw, $max-vw)},
+        calc((100vw - #{$max-width}) / 2)
+    );
+    padding-inline: var(--bounds-pad);
+}
+
+// Hexagon icon button - two stacked masked pseudo-elements (see
+// layout/_layout.scss .c-social--sticky for the original use of this
+// technique). $border-color is the outer layer, $fill-color the inner
+// one inset by .2rem, which is what reads as a hex-shaped border since
+// SVG stroke doesn't carry through mask-image. viewBox is corrected
+// from the source asset's stated "0 0 31 36" - the path's own
+// coordinates run negative and were clipped by that viewBox.
+@mixin hex-icon(
+    $border-color: rgba(255, 255, 255, 0.2),
+    $fill-color: var(--primary-color-3),
+    $icon-color: var(--primary-color-1),
+    $hover-fill: var(--primary-color-3),
+    $hover-icon-color: var(--primary-color-1)
+) {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 31 / 36;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: 0;
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        mask-image: url("data:image/svg+xml,%3Csvg viewBox='-9.2225 0 39.63 35.28' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M17.8875 0H3.2975C1.5075 0 -0.1425 0.95 -1.0325 2.5L-8.3325 15.14C-9.2225 16.69 -9.2225 18.59 -8.3325 20.14L-1.0325 32.78C-0.1425 34.33 1.5075 35.28 3.2975 35.28H17.8875C19.6775 35.28 21.3275 34.33 22.2175 32.78L29.5175 20.14C30.4075 18.59 30.4075 16.69 29.5175 15.14L22.2175 2.5C21.3275 0.95 19.6775 0 17.8875 0Z'/%3E%3C/svg%3E");
+        mask-size: 100% 100%;
+        mask-repeat: no-repeat;
+        transition: var(--transition) all;
+    }
+
+    &::before {
+        inset: 0;
+        background-color: $border-color;
+    }
+
+    &::after {
+        inset: 0.2rem;
+        background-color: $fill-color;
+    }
+
+    svg {
+        position: relative;
+        z-index: 1;
+        width: 45%;
+        height: 45%;
+        * {
+            fill: $icon-color;
+        }
+    }
+
+    @include hover() {
+        &::before,
+        &::after {
+            background-color: $hover-fill;
+        }
+        svg * {
+            fill: $hover-icon-color;
+        }
+    }
+}
+
+// Tinted pink-panel form field colours - shared by .b-contact__form and
+// .modal__form so the two stay in sync instead of drifting apart as
+// separately hand-copied rules.
+@mixin panel-form-fields {
+    form {
+        display: flex;
+        flex-flow: column;
+        gap: 2rem;
+    }
+    label {
+        display: flex;
+        flex-flow: column;
+        gap: 1rem;
+        color: var(--primary-color-1);
+        font-family: var(--font-stack-body);
+        font-size: 1.4rem;
+        font-weight: 500;
+        line-height: 1.4em;
+        letter-spacing: 20%;
+        text-transform: uppercase;
+    }
+    .wpcf7-form:not(#\#):not(#\#) .hidden-fields-container {
+        display: none;
+    }
+    .wpcf7-turnstile {
+        display: none;
+    }
+    .wpcf7-list-item-label {
+        font-family: var(--font-stack-body);
+        font-size: 1.6rem;
+        font-style: normal;
+        font-weight: 300;
+        line-height: 160%;
+        letter-spacing: -0.32px;
+        text-transform: none;
+        a {
+            text-decoration: underline;
+            color: var(--secondary-color-1);
+        }
+    }
+    // Beats the sitewide ".wpcf7-acceptance label .wpcf7-list-item-label a"
+    // rule in layout/_modal.scss (applies to every form via "*") on
+    // specificity (3 classes vs its 2) - without this the privacy-policy
+    // link renders in the same pink as the panel background and disappears.
+    .wpcf7-acceptance .wpcf7-list-item-label a {
+        color: var(--secondary-color-1);
+    }
+    input:not([type='checkbox']):not([type='radio']):not([type='submit']):not(
+            [type='button']
+        ),
+    textarea,
+    select {
+        background-color: var(--primary-color-1);
+        border-radius: 5px;
+        border: 0.1rem solid transparent;
+        // Was "&:placeholder" - not a real pseudo-class, so this never
+        // actually applied. Fixed to "::placeholder".
+        &::placeholder {
+            color: var(--primary-color-1);
+            letter-spacing: -2%;
+            font-size: 1.6rem;
+            line-height: 1.6em;
+        }
+        &:focus,
+        &:active {
+            outline: 1px solid #e0ff07;
+        }
+        // CF7's own invalid-field flag - a visible yellow border since
+        // the default border above is transparent.
+        &[aria-invalid='true'] {
+            border-color: var(--primary-color-1);
+        }
+    }
+    // Fallback for the form-level invalid status: a Turnstile failure
+    // marks the whole <form> invalid without setting aria-invalid on any
+    // of the visible fields, so the rule above alone wouldn't show
+    // anything. .wpcf7-form is a descendant here, not an ancestor, so
+    // this has to be written out rather than built from "&".
+    .wpcf7-form.invalid,
+    .wpcf7-form[data-status='invalid'] {
+        input:not([type='checkbox']):not([type='radio']):not(
+                [type='submit']
+            ):not([type='button']),
+        textarea,
+        select {
+            border-color: var(--primary-color-1);
+        }
+    }
+}

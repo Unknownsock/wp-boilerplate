@@ -1,0 +1,7 @@
+node_modules
+bin
+config
+themes/*/assets/js
+themes/*/assets/css
+src/sass/style.scss
+*.php

@@ -1,0 +1,87 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+.hamburger {
+    position: relative;
+    padding: 0;
+    z-index: 99;
+    cursor: pointer;
+    transition: var(--transition) all ease-in;
+    .inner {
+        position: relative;
+        padding: 0;
+        // Drives both the box size and the X-close offset below, so the
+        // two always agree with each other instead of the offset being a
+        // guessed constant that only happens to match one breakpoint.
+        --hamburger-width: 3.5rem;
+        --hamburger-height: 2.3rem;
+        --hamburger-bar: 0.1rem;
+        width: var(--hamburger-width);
+        height: var(--hamburger-height);
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: var(--transition) all ease-in;
+        @media screen and (min-width: $grid-md) {
+            --hamburger-width: 4.2rem;
+            --hamburger-height: 2.8rem;
+        }
+        .top,
+        .middle,
+        .bottom {
+            position: relative;
+            width: 100%;
+            height: var(--hamburger-bar);
+            background-color: var(--primary-color-3);
+            border-radius: 0.4rem;
+            transform-origin: center;
+            transition: var(--transition) all ease-in;
+        }
+    }
+
+    @include hover() {
+        transition: var(--transition) all ease-in-out;
+        .inner {
+            .top,
+            .middle,
+            .bottom {
+                background-color: var(--primary-color-1);
+            }
+        }
+    }
+
+    &.is-toggled {
+        .inner {
+            .top,
+            .middle,
+            .bottom {
+                transition: var(--transition) all ease-out;
+            }
+            // .top sits at the container's top edge and .bottom at its
+            // bottom edge (justify-content: space-between above), so
+            // reaching the shared vertical centre - required for the two
+            // to overlap into a clean X once rotated about their own
+            // centre - takes exactly half the leftover space between
+            // them: (height - bar thickness) / 2.
+            .top {
+                transform: translateY(
+                        calc((var(--hamburger-height) - var(--hamburger-bar)) / 2)
+                    )
+                    rotate(-45deg);
+            }
+            .middle {
+                opacity: 0;
+            }
+            .bottom {
+                transform: translateY(
+                        calc(
+                            (var(--hamburger-height) - var(--hamburger-bar)) /
+                                -2
+                        )
+                    )
+                    rotate(45deg);
+            }
+        }
+    }
+}

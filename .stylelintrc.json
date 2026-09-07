@@ -1,0 +1,29 @@
+{
+    "plugins": [
+        "stylelint-scss",
+        "stylelint-selector-bem-pattern"
+    ],
+    "extends": [
+        "stylelint-config-recommended-scss",
+        "stylelint-config-two-dash-bem"
+    ],
+    "rules": {
+        "plugin/selector-bem-pattern": {
+            "componentName": "[A-Z][a-zA-Z0-9]+",
+            "componentSelectors": {
+                "initial": "^\\.{componentName}(?:-[a-z]+)?$",
+                "combined": "^\\.combined-{componentName}-[a-z]+$"
+            },
+            "utilitySelectors": "^\\.util-[a-z]+$"
+        },
+        "comment-no-empty": null,
+        "no-duplicate-selectors": null,
+        "no-descending-specificity": null,
+        "rule-empty-line-before": null,
+        "function-name-case": null,
+        "selector-class-pattern": null,
+
+        "scss/comment-no-empty": true,
+        "scss/no-global-function-names": null
+    }
+}

@@ -1,0 +1,79 @@
+.acf-field-message .acf-label {
+	display: none;
+}
+
+.acf-field-message .acf-input p {
+	margin: 0;
+}
+
+[data-type="repeater"]>.acf-label,
+[data-type="group"]>.acf-label {
+	display: none !important;
+	margin: 0;
+}
+
+[data-type="repeater"]>.acf-label label,
+[data-type="group"]>.acf-label label {
+	display: none !important;
+}
+
+.acf-field-repeater > .acf-label label,
+.acf-field-repeater .acf-field-group > .acf-label label,
+.acf-fields.-sidebar > .acf-field-group > .acf-label label {
+	display: none !important;
+}
+
+.acf-fields.-sidebar > .acf-field.acf-field-group .acf-label label {
+	display: none !important;
+}
+
+.acf-field-group .acf-th {
+	display: none;
+}
+
+.acf-field-64ed44c4480c4 .acf-button-group,
+.acf-field-64edca8237ac0 .acf-button-group,
+.acf-field-64ecf1670ba49 .acf-button-group,
+.acf-field-62fd06bc27c1d .acf-button-group,
+.acf-field-62fa881a948a6 .acf-button-group,
+.acf-field-62fe619cad9e8 .acf-button-group,
+.acf-field-62fba9134b22e .acf-button-group,
+.acf-field-62fa067c5b494 .acf-button-group,
+.acf-field-62f65a823528a .acf-button-group,
+.acf-field-62f614f4ddee1 .acf-button-group {
+	width: 100%;
+}
+
+.acf-field-64ed44c4480c4 img,
+.acf-field-64edca8237ac0 img,
+.acf-field-64ecf1670ba49 img,
+.acf-field-62fd06bc27c1d img,
+.acf-field-62fa881a948a6 img,
+.acf-field-62fe619cad9e8 img,
+.acf-field-62fba9134b22e img,
+.acf-field-62fa067c5b494 img,
+.acf-field-62f65a823528a img,
+.acf-field-62f614f4ddee1 img {
+	max-width: 100%;
+}
+
+.acf-button-group label {
+	display: flex !important;
+}
+
+label img {
+	width: 100%;
+	max-width: 150px;
+}
+
+[data-name="button_colour"] .acf-input img,
+[data-name="background_colour"] .acf-input img {
+	width: 100%;
+	max-width: 50px;
+	border-radius: 50%;
+}
+
+.acf-button-group label.selected {
+	border-color: #e14d43 !important;
+	background: #e14d43 !important;
+}

@@ -1,0 +1,104 @@
+{
+    "key": "group_68b9a010megacolumn",
+    "title": "Mega Menu — Column (dropdown links)",
+    "fields": [
+        {
+            "key": "field_68b9a011megacolumn",
+            "label": "Start New Column",
+            "name": "mega_start_column",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Start a new column in the dropdown at this item. The first item in a dropdown always begins column 1 regardless of this setting.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_68b9a012megacolumn",
+            "label": "Column Title",
+            "name": "mega_column_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Shown at the top of this column.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68b9a011megacolumn",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68b9a013megacolumn",
+            "label": "Column Text",
+            "name": "mega_column_text",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Shown under the column title.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68b9a011megacolumn",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "rows": 3,
+            "new_lines": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "menu_level",
+                "operator": "==",
+                "value": "1"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1788739741
+}

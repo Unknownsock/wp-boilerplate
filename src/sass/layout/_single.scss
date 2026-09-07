@@ -1,0 +1,50 @@
+.sidebar {
+    .meta {
+        .day,
+        .month,
+        .author {
+            margin-bottom: 0;
+            line-height: 1em;
+        }
+        .day {
+            color: var(--primary-color-1);
+            font-size: 2rem;
+        }
+        .month {
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+        .author {
+        }
+    }
+    .c-button-group {
+        // margin-top: calc(var(--grid-gutter)*2);
+    }
+    .share,
+    .socials {
+        margin: auto 0 calc(var(--grid-gutter) * 2) 0;
+        padding-top: calc(var(--grid-gutter) * 2);
+        > div {
+            align-self: flex-start;
+        }
+    }
+    label.wrap {
+        // margin-top: calc(var(--grid-gutter)*2);
+    }
+    .icon {
+        svg {
+            width: 50%;
+            max-width: 15rem;
+            margin-bottom: var(--grid-gutter);
+            * {
+                fill-opacity: 0;
+                stroke-width: 0.2rem;
+                stroke: var(--primary-color-1);
+            }
+        }
+    }
+    h4 {
+        margin-bottom: calc(var(--grid-gutter) * 2);
+        color: var(--primary-color-1);
+    }
+}

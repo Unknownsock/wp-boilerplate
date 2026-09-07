@@ -1,0 +1,116 @@
+@use "../abstracts/variables" as *;
+
+.container {
+	width: 100%;
+	max-width: 100%;
+	margin: 0 auto;
+	display: flex;
+	flex: 1;
+	gap: 4rem;
+	flex-wrap: wrap;
+	justify-content: center;
+	@media(min-width: $grid-xl) {
+		max-width: var(--container);
+	}
+	.block-full & {
+		max-width: 100vw;
+	}
+	.block-edge & {
+		max-width: unset;
+	}
+	.block-gutter & {
+		max-width: unset;
+	}
+	.block-small & {
+		max-width: 100rem;
+	}
+}
+
+.row {
+	position: relative;
+	width: 100%;
+	max-width: 100%;
+	padding: 0 calc(var(--grid-gutter-large)/2);
+	// gap: 0 calc(var(--grid-gutter-large)/2);
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	box-sizing: border-box;
+	@media(min-width: $grid-md) {
+		flex-flow: row wrap;
+	}
+	@media(max-width: $grid-md) {
+		padding: 0 calc(var(--grid-gutter)/2);
+		gap: calc(var(--grid-gutter));
+	}
+	.block-edge & {
+		padding: 0;
+	}
+	.block-full & {
+		padding: 0;
+	}
+}
+
+// [class*="col"] {
+// 	position: relative;
+// 	max-width: 100%;
+// 	padding: 0 calc(var(--grid-gutter-large)/2);
+// 	display: flex;
+// 	flex: 1;
+// 	// flex-grow: 0;
+//     // flex-shrink: 1;
+// 	flex-flow: row wrap;
+// 	align-content: flex-start;
+// 	box-sizing: border-box;
+// 	@media (max-width: $grid-md) {
+// 		width: 100%;
+// 		padding: 0 calc(var(--grid-gutter)/2);
+// 		flex-basis: 100%;
+// 	}
+//     .block-full &,
+//     .block-edge & {
+//         padding: 0;
+//     }
+// 	.block-gutter & {
+// 		padding: 0 .5rem;
+// 	}
+// }
+
+$breakpoints: (
+	"xs": 480px,
+	"sm": 576px,
+	"md": 768px,
+	"lg": 992px,
+	"xl": 1200px,
+	"xxl": 1400px,
+	"ql": 1920px
+);
+
+@mixin generate-columns() {
+	@for $i from 1 through 12 {
+		.col-#{$i} {
+			@media screen and (min-width: $grid-md) {
+				flex-basis: calc((100% / 12) * #{$i});
+				max-width: calc((100% / 12) * #{$i});
+			}
+		}
+
+		@each $breakpoint, $width in $breakpoints {
+			@media screen and (min-width: $width) {
+				.col-#{$breakpoint}-#{$i} {
+					flex-basis: calc((100% / 12) * #{$i});
+					max-width: calc((100% / 12) * #{$i});
+				}
+			}
+		}
+
+	}
+}
+
+@include generate-columns();
+
+// Specific column breaks
+// [class*="col-"] {
+
+// }
+

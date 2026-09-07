@@ -1,0 +1,79 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-latest-blogs {
+    // Background colour comes from the shared "cream" class on the
+    // section (see block-latest-blogs.php + _default.scss) rather than
+    // being hardcoded here - both the ACF-driven usage and the compact
+    // "related articles" variant already always end up cream, so
+    // there's no separate modifier needed.
+    gap: 6rem;
+    @include block-bounds();
+
+    &__header {
+        display: flex;
+        flex-flow: row wrap;
+        gap: 2rem;
+        align-items: flex-end;
+        justify-content: space-between;
+        @media screen and (min-width: $grid-md) {
+            > * {
+                // 50% each plus the flex gap between them would exceed
+                // 100% and force a wrap - subtract half the gap from
+                // each side to compensate.
+                width: calc(50% - 1rem);
+            }
+        }
+    }
+
+    &__intro {
+        display: flex;
+        flex-flow: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    &__title {
+        margin-bottom: 0;
+
+        strong {
+            color: var(--primary-color-1);
+            font-weight: inherit;
+        }
+    }
+
+    &__actions {
+        flex: 0 0 auto;
+        .c-button-group {
+            justify-content: flex-end;
+        }
+    }
+
+    // Cards use .c-card--small (src/sass/components/_card.scss) -
+    // this block only owns the grid layout around them.
+    &__grid {
+        display: grid;
+        gap: calc(var(--grid-section) / 2);
+        grid-template-columns: repeat(1, 1fr);
+        @media screen and (min-width: $grid-md) {
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--grid-gutter);
+        }
+        @media screen and (min-width: $grid-lg) {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    // Added only when this block is used as the "related articles"
+    // template part (single.php/index.php/single-clients.php) rather
+    // than the ACF Blog-listing block (block-latest-blogs.php) - those
+    // titles are usually 1-2 lines, so the small card's default 3-line
+    // clamp/min-height (_card.scss) leaves an oversized empty gap.
+    &--compact .c-card__title {
+        @media screen and (min-width: $grid-md) {
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            min-height: calc(1.2em * 2);
+        }
+    }
+}

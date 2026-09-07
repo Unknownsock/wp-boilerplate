@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<ruleset name="IMP Theme Coding Standards">
+    <description>Coding standards for IMP WordPress Theme</description>
+
+    <!-- Use WordPress standards -->
+    <rule ref="WordPress-Core" />
+    <rule ref="WordPress-Docs" />
+
+    <!-- Only lint PHP; CSS/JS are linted separately by stylelint/eslint -->
+    <arg name="extensions" value="php" />
+
+    <!-- Exclude third-party code -->
+    <exclude-pattern>/vendor/*</exclude-pattern>
+    <exclude-pattern>/node_modules/*</exclude-pattern>
+    <exclude-pattern>/dist/*</exclude-pattern>
+
+    <!-- Set error severity -->
+    <arg name="severity" value="5" />
+    <arg name="warning-severity" value="4" />
+
+    <!-- Show progress and use colors -->
+    <arg value="sp" />
+    <arg name="colors" />
+
+    <!-- Target files -->
+    <file>.</file>
+</ruleset>

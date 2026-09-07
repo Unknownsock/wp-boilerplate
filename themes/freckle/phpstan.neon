@@ -1,0 +1,16 @@
+parameters:
+    level: 5
+    paths:
+        - includes
+        - template-parts
+        - 404.php
+        - footer.php
+        - functions.php
+        - header.php
+        - index.php
+        - search.php
+        - sidebar.php
+        - single-clients.php
+        - single.php
+    bootstrapFiles:
+        - vendor/php-stubs/acf-pro-stubs/acf-pro-stubs.php

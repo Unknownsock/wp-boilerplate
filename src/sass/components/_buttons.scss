@@ -1,0 +1,323 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+.c-button-group {
+    width: 100%;
+    display: flex;
+    gap: 1rem;
+    row-gap: 1rem;
+    flex: 1 1 auto;
+    flex-flow: row wrap;
+    align-items: normal;
+    @media screen and (min-width: $grid-md) {
+        row-gap: 2rem;
+    }
+
+    // Force every button onto its own line regardless of viewport -
+    // opt in per block instance (component-button-group.php's
+    // `force_stack` arg) rather than the default responsive wrap.
+    &--stack {
+        flex-flow: column;
+        align-items: flex-start;
+        .c-button {
+            width: 100%;
+        }
+    }
+}
+
+.jcf-button,
+.wpcf7-submit,
+.c-button {
+    position: relative;
+    width: unset;
+    display: flex;
+    align-items: flex-start;
+    color: var(--secondary-color-1);
+    text-align: center;
+    leading-trim: both;
+    text-edge: cap;
+    font-feature-settings: 'calt' off;
+    font-family: var(--font-stack-body);
+    font-size: 1.4rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1em;
+    padding: 1.2rem 2rem;
+    text-transform: none;
+    text-decoration: none;
+    box-sizing: border-box;
+    transition: var(--transition) all ease-in-out;
+    cursor: pointer;
+    @media screen and (max-width: $grid-md) {
+        width: 100%;
+        max-width: unset;
+        margin-left: 0;
+        justify-content: center;
+    }
+
+    &__icon {
+        display: block;
+        * {
+            fill: var(--secondary-color-1);
+            transition: var(--transition) all;
+        }
+    }
+
+    &__inner {
+        height: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding: 0;
+        display: flex;
+        gap: 1rem;
+        align-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        white-space: nowrap;
+        box-sizing: border-box;
+        @media screen and (max-width: $grid-md) {
+            white-space: normal;
+            text-align: center;
+        }
+    }
+
+    &__arrow {
+        display: block;
+        flex-shrink: 0;
+        transition: var(--transition) transform;
+    }
+
+    &__icon-inline {
+        display: flex;
+        flex-shrink: 0;
+        width: 1.6rem;
+        height: 1.6rem;
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+        * {
+            stroke: currentColor;
+            transition: var(--transition) stroke;
+        }
+    }
+
+    @include hover() {
+        .c-button__arrow {
+            transform: translateX(0.5rem);
+        }
+    }
+
+    &--solid {
+        // Simple rounded pill - a single flat background colour + border
+        // radius, no hex/mask artwork. Colour variants below just set
+        // --btn-color (fill) and the inner text colour; hover swaps both.
+        text-align: center;
+        flex-flow: row;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999rem;
+        background-color: var(--btn-color);
+        transition: var(--transition) background-color;
+
+        .c-button__icon {
+            display: none;
+        }
+
+        .c-button__inner {
+            position: relative;
+            z-index: 1;
+            transition: var(--transition) color;
+        }
+
+        &.c-button--blue {
+            --btn-color: var(--primary-color-5);
+            .c-button__inner {
+                color: var(--secondary-color-1);
+            }
+            @include hover() {
+                --btn-color: var(--primary-color-1);
+            }
+        }
+
+        &.c-button--white {
+            --btn-color: var(--secondary-color-1);
+            .c-button__inner {
+                color: var(--primary-color-1);
+            }
+            @include hover() {
+                --btn-color: var(--primary-color-1);
+                .c-button__inner {
+                    color: var(--primary-color-3);
+                }
+            }
+        }
+
+        // Orange variant colours.
+        &.c-button--orange {
+            --btn-color: var(--primary-color-1);
+            .c-button__inner {
+                color: var(--secondary-color-1);
+            }
+            @include hover() {
+                --btn-color: var(--primary-color-3);
+            }
+        }
+
+        &.c-button--navy {
+            --btn-color: var(--primary-color-3);
+            .c-button__inner {
+                color: var(--secondary-color-1);
+            }
+            @include hover() {
+                --btn-color: var(--primary-color-1);
+            }
+        }
+    }
+
+    &--outline {
+        // Solid fill, same treatment as --solid above - kept as its own
+        // modifier (rather than merged into --solid) since call sites
+        // still pass "outline" explicitly; the border stays as a
+        // hairline edge, it's just no longer transparent in between.
+        text-align: center;
+        flex-flow: row;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999rem;
+        border: 1px solid var(--btn-color);
+        background-color: var(--btn-color);
+        transition:
+            var(--transition) background-color,
+            var(--transition) border-color;
+
+        .c-button__icon {
+            display: none;
+        }
+
+        .c-button__inner {
+            position: relative;
+            z-index: 1;
+            // padding: 1.6rem 2rem;
+            transition: var(--transition) color;
+        }
+
+        &.c-button--blue {
+            --btn-color: var(--primary-color-5);
+            .c-button__inner {
+                color: var(--secondary-color-1);
+            }
+            @include hover() {
+                --btn-color: var(--primary-color-1);
+            }
+        }
+
+        &.c-button--white {
+            --btn-color: var(--secondary-color-1);
+            .c-button__inner {
+                color: var(--primary-color-1);
+            }
+            @include hover() {
+                --btn-color: var(--primary-color-1);
+                .c-button__inner {
+                    color: var(--secondary-color-1);
+                }
+            }
+        }
+
+        // Orange variant colours.
+        &.c-button--orange {
+            --btn-color: var(--primary-color-1);
+            .c-button__inner {
+                color: var(--secondary-color-1);
+            }
+            @include hover() {
+                --btn-color: var(--primary-color-3);
+            }
+        }
+
+        &.c-button--navy {
+            --btn-color: var(--primary-color-3);
+            .c-button__inner {
+                color: var(--secondary-color-1);
+            }
+            @include hover() {
+                --btn-color: var(--primary-color-1);
+            }
+        }
+    }
+
+    &--text {
+        width: auto;
+        text-transform: none;
+        align-items: center;
+        font-size: 1.6rem;
+        letter-spacing: -2%;
+        .c-button__icon--start {
+            display: none;
+        }
+        .c-button__icon--end {
+            display: none;
+        }
+        .c-button__inner {
+            position: relative;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            width: auto;
+            height: auto;
+            margin-top: 0;
+            padding-bottom: 0.3rem;
+            text-decoration: none;
+
+            // A real underline element rather than text-decoration - the
+            // latter only draws under text glyphs, not the icon sat
+            // beside it, so this spans the whole inner box (text + icon)
+            // as a single continuous line instead.
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                height: 0.1rem;
+                background-color: currentColor;
+                transition: var(--transition) all ease-in-out;
+            }
+
+            .c-button__arrow {
+                flex: 0 0 auto;
+            }
+        }
+
+        @include hover() {
+            .c-button__inner {
+                &::before {
+                    opacity: 0;
+                }
+            }
+        }
+
+        &.c-button--white {
+            .c-button__inner {
+                color: var(--secondary-color-1);
+            }
+        }
+        &.c-button--blue {
+            .c-button__inner {
+                color: var(--primary-color-5);
+            }
+        }
+        &.c-button--orange {
+            .c-button__inner {
+                color: var(--primary-color-1);
+            }
+        }
+        &.c-button--navy {
+            .c-button__inner {
+                color: var(--primary-color-3);
+            }
+        }
+    }
+}

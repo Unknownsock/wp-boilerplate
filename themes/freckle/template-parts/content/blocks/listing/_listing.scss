@@ -1,0 +1,42 @@
+@use "abstracts/variables" as *;
+@use "abstracts/mixins" as *;
+
+.b-listing {
+	// Background colour comes from the shared "white" class on the
+	// section - see block-listing.php + _default.scss.
+	// padding: 0;
+	// facetwp-template is a required class for the FacetWP plugin's
+	// AJAX refresh - keep the literal class, just apply our own bounds.
+	.facetwp-template {
+		@include block-bounds(100%);
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	// block-bounds() always sets its own padding-inline (see _mixins.scss)
+	// regardless of $max-width, so a plain override here loses the
+	// specificity fight against the mixin's own declaration order - the
+	// triple :not(#\#) is a no-op selector (no element has id="#") used
+	// purely to inflate specificity so this wins without !important.
+	&:not(#\#):not(#\#):not(#\#) .facetwp-template {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	// Cards come from template-parts/articles/article-listing.php
+	// (.c-card--small, src/sass/components/_card.scss) - this
+	// block only owns the grid layout around them.
+	&__grid,
+	.swiper.swiper-related {
+		display: grid;
+		gap: calc(var(--grid-section) / 2);
+		grid-template-columns: repeat(1, 1fr);
+		@media screen and (min-width: $grid-md) {
+			grid-template-columns: repeat(2, 1fr);
+			gap: var(--grid-gutter);
+		}
+		@media screen and (min-width: $grid-lg) {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+}

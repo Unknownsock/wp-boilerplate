@@ -1,0 +1,139 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-testimonials {
+    // Background colour comes from the shared "white" class on the
+    // section - see block-testimonials.php + _default.scss.
+    gap: 2rem;
+    @include block-bounds();
+    .b-instagram__text {
+        text-align: center;
+    }
+    .swiper {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: 4rem;
+        overflow: visible;
+        .swiper-slide {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            text-align: center;
+        }
+    }
+    .swiper-testimonial {
+        width: 100%;
+        max-width: 68rem;
+        margin: 0 auto;
+    }
+
+    .swiper-pagination-bullet {
+        position: relative;
+        width: 1.7rem;
+        height: 1.5rem;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='15' viewBox='0 0 18 15' fill='none'%3E%3Cpath d='M12.3449 0H4.80359C4.43692 0 4.09671 0.195 3.91148 0.51L0.13892 6.99C-0.0463065 7.305 -0.0463065 7.695 0.13892 8.01L3.91148 14.49C4.09671 14.805 4.43314 15 4.80359 15H12.3449C12.7116 15 13.0518 14.805 13.237 14.49L17.0096 8.01C17.1948 7.695 17.1948 7.305 17.0096 6.99L13.237 0.51C13.0518 0.195 12.7154 0 12.3449 0Z' fill='%231C2728' fill-opacity='0.2'/%3E%3C/svg%3E")
+            no-repeat center / contain;
+        opacity: 1;
+    }
+    .swiper-pagination-bullet-active {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='15' viewBox='0 0 18 15' fill='none'%3E%3Cpath d='M12.3449 0H4.80359C4.43692 0 4.09671 0.195 3.91148 0.51L0.13892 6.99C-0.0463065 7.305 -0.0463065 7.695 0.13892 8.01L3.91148 14.49C4.09671 14.805 4.43314 15 4.80359 15H12.3449C12.7116 15 13.0518 14.805 13.237 14.49L17.0096 8.01C17.1948 7.695 17.1948 7.305 17.0096 6.99L13.237 0.51C13.0518 0.195 12.7154 0 12.3449 0Z' fill='%231C2728'/%3E%3C/svg%3E")
+            no-repeat center / contain;
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0.9rem;
+            height: 0.75rem;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='8' viewBox='0 0 9 8' fill='none'%3E%3Cpath d='M1.90055 7.20375L0.0787211 4.04625C-0.0262404 3.8625 -0.0262404 3.6375 0.0787211 3.45375L1.90055 0.29625C2.00551 0.1125 2.20044 0 2.41411 0H6.06152C6.27144 0 6.46637 0.1125 6.57508 0.29625L8.39691 3.45375C8.50187 3.6375 8.50187 3.8625 8.39691 4.04625L6.57508 7.20375C6.47012 7.3875 6.27519 7.5 6.06152 7.5H2.41786C2.20794 7.5 2.01301 7.3875 1.9043 7.20375H1.90055Z' fill='%23E0FF07'/%3E%3C/svg%3E")
+                no-repeat center / contain;
+        }
+    }
+    &__slide {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: 2rem;
+    }
+    &__client {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: 0.5rem;
+        // margin-bottom: 2rem;
+    }
+
+    &__logo {
+        width: auto;
+        max-height: 8rem;
+    }
+    &__details {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+    }
+    &__role {
+        font-size: 1.4rem;
+        font-weight: 500;
+        letter-spacing: 2%;
+        text-transform: uppercase;
+        color: var(--primary-color-1);
+    }
+    &__name {
+        font-size: 1.6rem;
+        font-weight: 300;
+        letter-spacing: -0.32px;
+    }
+
+    &__quote {
+        position: relative;
+        max-width: 80rem;
+        margin-bottom: 0;
+        // padding: 0 3rem;
+        display: flex;
+        gap: 2rem;
+        flex-flow: column;
+        font-family: var(--font-stack-headers);
+        font-size: 1.6rem;
+        font-style: italic;
+        font-weight: 400;
+        line-height: 1.6em;
+        letter-spacing: -2%;
+        color: var(--primary-text-color);
+        @media screen and (min-width: $grid-md) {
+            font-size: 2.2rem;
+        }
+        &::before,
+        &::after {
+            content: '';
+            position: relative;
+            margin: auto;
+            width: 5.4rem;
+            height: 4.5rem;
+            display: flex;
+            aspect-ratio: 6/5;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='45' viewBox='0 0 54 45' fill='none'%3E%3Cpath d='M10.8535 18.561C12.3811 15.4363 14.3642 12.6322 16.8029 10.0951C19.2684 7.55801 21.8411 5.66187 24.521 4.43338L22.9131 0.0268555C18.5449 1.44229 14.5786 3.81914 11.0411 7.10401C7.50367 10.3889 4.79697 14.1277 2.86744 18.3206C0.937909 22.5135 -0.0268555 26.653 -0.0268555 30.739C-0.0268555 34.8251 0.991507 38.4571 3.05503 41.101C5.11855 43.7183 7.93245 45.0536 11.4967 45.0536C15.061 45.0536 17.6605 43.8785 19.8044 41.5016C21.9483 39.1515 23.0203 36.1337 23.0203 32.4749L9.326 22.4868C9.70119 21.2049 10.1836 19.8963 10.8267 18.5877L10.8535 18.561Z' fill='%23FB62B2'/%3E%3Cpath d='M40.3325 18.561C41.8601 15.4363 43.8432 12.6322 46.2819 10.0951C48.7474 7.55801 51.3201 5.66187 54 4.43338L52.3921 0.0268555C48.0239 1.44229 44.0576 3.81914 40.5201 7.10401C36.9827 10.3889 34.276 14.1277 32.3464 18.3206C30.4169 22.5135 29.4521 26.653 29.4521 30.739C29.4521 34.8251 30.4705 38.4571 32.534 41.101C34.5976 43.7183 37.4115 45.0536 40.9757 45.0536C44.54 45.0536 47.1395 43.8785 49.2834 41.5016C51.4273 39.1515 52.4993 36.1337 52.4993 32.4749L38.805 22.4868C39.1802 21.2049 39.6626 19.8963 40.3057 18.5877L40.3325 18.561Z' fill='%23FB62B2'/%3E%3C/svg%3E")
+                no-repeat center / contain;
+            @media screen and (min-width: $grid-md) {
+                position: absolute;
+            }
+        }
+        &::before {
+            @media screen and (min-width: $grid-md) {
+                top: -2.25rem;
+                left: -6.4rem;
+            }
+        }
+        &::after {
+            transform: rotate(180deg);
+            @media screen and (min-width: $grid-md) {
+                bottom: -1.75rem;
+                right: -6.4rem;
+            }
+        }
+    }
+}

@@ -1,0 +1,46 @@
+**/.DS_Store
+/node_modules
+/vendor
+/themes/freckle/vendor/
+/wordpress
+/uploads
+/logs/*
+!logs/.gitkeep
+ssl/*
+/themes/*/assets/css/style*
+/themes/*/assets/js/*bundle*
+/themes/*/assets/hmr/
+
+.env
+
+/backups/*
+!backups/.gitkeep
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+cypress/results/
+cypress.env.json
+
+# Cypress coverage reports
+coverage/
+.nyc_output/
+
+# Cache files
+cypress/.Trash-*/
+.cypress-cache/
+
+# PHPUnit
+/themes/*/.phpunit.cache/
+
+# Vite - ignore all generated JS/CSS/font output (hashed chunks per
+# block, not just the main app bundle), but keep hand-written CSS
+# files that live alongside the build output.
+themes/freckle/hot
+themes/freckle/assets/.vite/
+themes/freckle/assets/js/*
+themes/freckle/assets/css/*
+themes/freckle/assets/fonts/
+!themes/freckle/assets/css/accessibility.css
+!themes/freckle/assets/css/admin.css

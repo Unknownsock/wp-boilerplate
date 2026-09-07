@@ -1,0 +1,292 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+html {
+    height: 100%;
+    font-size: 62.5%;
+    &.is-scroll-locked {
+        overflow: hidden;
+    }
+    * {
+        &::selection {
+            background: var(--primary-color-1);
+            color: var(--secondary-color-1);
+        }
+    }
+}
+
+body,
+button,
+input,
+optgroup,
+select,
+textarea,
+li,
+p,
+a,
+address {
+    font-size: 62.5%;
+    // letter-spacing: -0.02em;
+    color: var(--primary-text-color);
+    font-family: var(--font-stack-body);
+    font-weight: 200;
+
+    background: transparent;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    border-radius: 0;
+    border: 0;
+    outline: 1;
+    text-box: trim-both cap alphabetic;
+    &:focus-visible {
+        outline: 1;
+    }
+    @media screen and (min-width: $grid-nav) {
+        outline: 1;
+    }
+}
+
+a {
+    font-weight: 300;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    // line-height: 1.12em;
+    line-height: 1em;
+    margin: 0;
+    color: var(--primary-text-color);
+    font-family: var(--font-stack-headers);
+    font-weight: 500;
+    font-variation-settings: 'opsz' 160;
+    text-box: trim-both cap alphabetic;
+    a {
+        color: var(--primary-color-1);
+    }
+    br {
+        @include media(md) {
+            display: none;
+        }
+    }
+
+    // Italic runs inside a heading (WYSIWYG "Italic" applied within an
+    // h1-h6) don't actually slant - they swap to the display face instead,
+    // font-style reset back to normal so the browser doesn't fake-oblique
+    // it on top.
+    cite,
+    dfn,
+    em,
+    i {
+        font-style: normal;
+        font-family: var(--font-stack-display);
+    }
+    .u-strong,
+    strong {
+        color: var(--primary-color-1);
+    }
+}
+
+h1 {
+    font-size: 4.6rem;
+    // line-height: 1.2em;
+    letter-spacing: -1.2px;
+    @media screen and (min-width: $grid-md) {
+        font-size: 6rem;
+    }
+}
+
+h2 {
+    font-size: 3.2rem;
+    // line-height: 1.2em;
+
+    @media screen and (min-width: $grid-md) {
+        font-size: 4rem;
+    }
+}
+
+h3 {
+    font-size: 2.2rem;
+    // line-height: 1.2em;
+
+    @media screen and (min-width: $grid-md) {
+        font-size: 4rem;
+    }
+}
+
+h4 {
+    font-size: 2rem;
+    @media screen and (min-width: $grid-md) {
+        font-size: 2.8rem;
+    }
+}
+
+h5 {
+    font-size: betterClamp(2.5rem, 3.6rem);
+}
+
+h6 {
+    font-size: 1.8rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    &.h1 {
+        @extend h1;
+    }
+    &.h2 {
+        @extend h2;
+    }
+    &.h3 {
+        @extend h3;
+    }
+    &.h4 {
+        @extend h4;
+    }
+    &.h5 {
+        @extend h5;
+    }
+    &.h6 {
+        @extend h6;
+    }
+    svg {
+        * {
+            fill: var(--primary-color-1);
+        }
+    }
+    .u-strong,
+    strong {
+        svg {
+            * {
+                fill: var(--primary-color-3);
+            }
+        }
+    }
+    // Set by heading-fullstop.js when the fullstop it converts sits
+    // directly against bold text - a CSS sibling selector can't tell that
+    // apart from "next element after a bold line, several words later".
+    .c-heading-fullstop--bold {
+        --fullstop-color: var(--primary-color-3);
+    }
+}
+
+p {
+    span {
+        display: inline-block;
+    }
+}
+
+address,
+p {
+    font-size: 1.8rem;
+    line-height: 1.55em;
+    font-family: var(--font-stack-body);
+    font-style: normal;
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    a {
+        color: var(--primary-color-1);
+        // display: inline-block;
+        position: relative;
+        @include underline;
+    }
+}
+
+// b,
+// .u-strong,
+// strong {
+//     display: contents;
+//     // font-weight: 300;
+//     font-weight: inherit;
+// }
+
+blockquote {
+    margin: 4rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+a {
+    position: relative;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    opacity: 1;
+    text-decoration: underline;
+    text-decoration: none;
+    transition: var(--transition) all ease-in-out;
+    @include hover() {
+        transition: var(--transition) all ease-in-out;
+    }
+}
+
+cite,
+dfn,
+em,
+i {
+    font-style: italic;
+}
+
+abbr,
+acronym {
+    border-bottom: 1px dotted #666;
+    cursor: help;
+}
+
+ins,
+mark {
+    background: #fff9c0;
+    text-decoration: none;
+}
+
+big {
+    font-size: 125%;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    display: flex;
+    align-self: flex-start;
+}
+
+li {
+    list-style: none;
+    font-size: 1.8rem;
+}
+
+video {
+    width: 100%;
+}
+
+ul,
+ol {
+    margin: 0;
+    padding: 0;
+}
+
+br {
+    // @media screen and (max-width: $grid-md ) {
+    // 	content: "";
+    // 	display: inline-flex;
+    // 	width: 0.3em;
+    // }
+}

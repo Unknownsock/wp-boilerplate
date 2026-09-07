@@ -1,0 +1,300 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+.o-hero {
+    width: 100%;
+    gap: 0;
+    // @media screen and (min-width: $grid-lg) {
+    //     padding-top: 0;
+    //     padding-bottom: 0;
+    // }
+    .single &,
+    .has-sidebar & {
+        width: 100%;
+        @media screen and (max-width: $grid-nav) {
+            width: 100%;
+        }
+    }
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        margin-bottom: 0;
+    }
+
+    &--home {
+        position: relative;
+        isolation: isolate;
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+        @include block-bounds();
+        display: flex;
+        align-items: center;
+        background-color: var(--primary-color-3);
+        box-sizing: border-box;
+        overflow: hidden;
+
+        // __media sits behind __panel as a full-bleed background (see
+        // below) rather than sharing a 50/50 grid column with it - no
+        // viewport-height/aspect-ratio coupling on the section itself,
+        // height follows content, floored at the design's 810px (81rem)
+        // so it never reads as too short; content is vertically centred
+        // within whatever height that ends up being (align-items above).
+        min-height: 81rem;
+
+        @media screen and (min-width: $grid-lg) {
+            padding-top: 8rem;
+            padding-bottom: 0;
+        }
+    }
+
+    &__panel {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        margin: 0;
+    }
+
+    &__intro {
+        width: 100%;
+        // Now that __media is a full-bleed background rather than a
+        // sibling column, __intro has the whole section's width to
+        // stretch across - cap it so the text block stays a readable
+        // measure instead of running edge-to-edge over the image.
+        max-width: 60rem;
+        display: flex;
+        gap: 4rem;
+        flex-flow: column;
+        align-items: flex-start;
+        box-sizing: border-box;
+
+        // :not(.c-eyebrow) - a plain p{} here would otherwise beat the
+        // shared eyebrow component on specificity and override its colour.
+        p:not(.c-eyebrow),
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: var(--secondary-color-1);
+        }
+
+        h1 {
+            // leading-trim/text-edge never shipped under those names in any
+            // browser - text-box-trim/text-box-edge (shorthand: text-box) is
+            // the property that actually landed, so it's the one doing the
+            // work of clipping the font's built-in ascender/descender space.
+            text-box: trim-both cap alphabetic;
+            font-feature-settings: 'calt' off;
+            font-family: Fieldwork;
+            font-size: 8.3rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1em;
+
+            .u-strong,
+            strong {
+                color: var(--primary-color-1);
+                font-weight: inherit;
+            }
+            em {
+                font-style: normal;
+                font-size: 7rem;
+                line-height: 1em;
+            }
+        }
+
+        .c-eyebrow {
+            color: var(--primary-color-1);
+        }
+
+        // Overrides __intro's default white paragraph colour above - more
+        // specific (.o-hero__intro .o-hero__text p) so it wins despite
+        // coming from the same cascade layer.
+        .o-hero__text p {
+            color: var(--primary-color-1);
+        }
+    }
+
+    &__text {
+        // max-width: 46rem;
+        display: flex;
+        gap: 4rem;
+        flex-flow: column;
+        p {
+            font-size: 4.5rem;
+            line-height: 1em;
+            text-box: trim-both cap alphabetic;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        gap: 1.5rem;
+        flex-flow: row wrap;
+        // margin-top: 1rem;
+    }
+
+    // Full-bleed background behind __panel, not a 50/50 column sharing
+    // its own track - covers the entire .o-hero--home section regardless
+    // of where block-bounds() padded that section's content in.
+    &__media {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        box-sizing: border-box;
+
+        // Scrim so __intro's white text stays legible over an arbitrary
+        // photo/video - strongest behind the text on the left, fading
+        // out toward the right edge.
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                90deg,
+                rgba(0, 0, 0, 0.65) 0%,
+                rgba(0, 0, 0, 0.3) 50%,
+                rgba(0, 0, 0, 0.05) 100%
+            );
+            pointer-events: none;
+        }
+    }
+
+    // overflow:hidden lives here, not on __media, so decorative
+    // __floating-shape/__edge siblings are free to spill outside the
+    // image's own box without getting clipped.
+    &__image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        container-type: size;
+
+        > picture {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        // Video alternative to the image - fills the same box.
+        .o-hero__video-el,
+        .o-hero__video-embed {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .o-hero__video-el {
+            object-fit: cover;
+        }
+
+        // object-fit doesn't apply to iframes, so YouTube's fixed 16:9
+        // player letterboxes (black bars + visible player chrome) whenever
+        // this box isn't itself 16:9. Force the iframe to whichever of
+        // width/height is larger to keep a 16:9 frame that always overflows
+        // the container in one axis, then centre + clip via the parent's
+        // overflow:hidden - an object-fit:cover equivalent for iframes.
+        // cqw/cqh read the __image container's size (container-type: size
+        // above), not the viewport, so this tracks the box itself.
+        .o-hero__video-embed {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100cqw;
+            height: 100cqh;
+            min-width: 177.78cqh; // 100 * 16 / 9
+            min-height: 56.25cqw; // 100 * 9 / 16
+            // controls=0 in the embed URL hides YouTube's control bar, but
+            // not its title/channel overlay (top) or "watch on YouTube"
+            // logo (bottom-right) - those have no supported param to
+            // disable and can appear on load/hover/pause regardless.
+            // Scaling past the container pushes that chrome outside the
+            // visible frame so the parent's overflow:hidden crops it off
+            // permanently, no matter what YouTube paints inside.
+            transform: translate(-50%, -50%) scale(1.2);
+            pointer-events: none;
+            user-select: none;
+        }
+    }
+
+    &--standard {
+        // Matches .o-hero--home's dark background rather than the old
+        // pink fill (see __content below for the matching text-colour
+        // update).
+        // padding: 12rem 0;
+        padding-left: 0;
+        padding-right: 0;
+        display: flex;
+        flex-flow: row;
+        background-color: var(--primary-color-3);
+        @media screen and (max-width: $grid-md) {
+            padding: 6rem 0;
+        }
+    }
+
+    &__content {
+        max-width: 100%;
+        display: flex;
+        gap: 1rem;
+        flex-flow: column;
+        flex: 1 0 auto;
+        box-sizing: border-box;
+        @include block-bounds();
+        @media screen and (max-width: $grid-nav) {
+            gap: 1rem;
+            flex-flow: column;
+            align-items: flex-start;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
+            color: var(--secondary-color-1);
+        }
+
+        // Matches .o-hero__intro's home-page treatment - h1 itself stays
+        // white (base rule above), only its .u-strong/strong runs pick
+        // up the lime accent, rather than colouring the whole heading.
+        .o-hero--standard & {
+            h1 {
+                .u-strong,
+                strong {
+                    color: var(--primary-color-1);
+                    font-weight: inherit;
+                }
+            }
+        }
+
+        // "Back to parent" links (hero-standard.php) reuse the shared
+        // eyebrow component - same colour treatment as .o-hero__intro's
+        // .c-eyebrow, so it reads against this dark background too.
+        .c-eyebrow {
+            color: var(--primary-color-1);
+            transition: var(--transition) color;
+            @include hover() {
+                color: var(--primary-color-1);
+            }
+        }
+    }
+}

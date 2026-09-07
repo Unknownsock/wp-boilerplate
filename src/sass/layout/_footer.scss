@@ -1,0 +1,199 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+.o-site-footer {
+    position: relative;
+    padding-inline: betterClamp(3rem, 8rem, 76.8rem, 144rem);
+    padding-block: var(--grid-section);
+    display: flex;
+    gap: 4rem;
+    flex-flow: column;
+    background-color: var(--primary-color-3);
+
+    .site-branding {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        img,
+        svg {
+            width: 17.4rem;
+            max-width: 17.4rem;
+            height: auto;
+            overflow: visible;
+            .logo-outline {
+                stroke-width: 0.6rem;
+                stroke: hsla(0, 0%, 100%, 0.2);
+            }
+        }
+    }
+
+    &__main {
+        width: 100%;
+        display: flex;
+        flex-flow: column;
+        box-sizing: border-box;
+    }
+
+    // Offices, left to right, with the links column trailing them - a
+    // 12-column grid, each #{$block}__menu spanning 4 of them, so
+    // .o-site-footer__menu--links can be pinned to the last 4 without
+    // depending on how many offices come before it.
+    &__top {
+        display: flex;
+        flex-flow: column;
+        gap: 3rem;
+        @media screen and (min-width: $grid-lg) {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: var(--grid-gutter);
+        }
+    }
+
+    // Offices: flag in its own column, address content in the next - see
+    // #{$block}__menu-flag/__menu-text below. The links menu (no flag)
+    // just renders __menu-text-shaped content directly.
+    &__menu {
+        display: flex;
+        flex-flow: column;
+        gap: 1rem;
+        @media screen and (min-width: $grid-lg) {
+            flex-flow: row;
+            grid-column: span 4;
+        }
+
+        // Links column - no address content, so it's pinned to the grid's
+        // last 4 columns rather than just following the offices inline.
+        &--links {
+            @media screen and (min-width: $grid-lg) {
+                grid-column: 9 / -1;
+            }
+        }
+
+        nav {
+            width: 100%;
+        }
+
+        ul {
+            display: flex;
+            flex-flow: column;
+            gap: 2rem;
+        }
+
+        li {
+            line-height: 1.6em;
+        }
+
+        a {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--secondary-color-1);
+            text-decoration: none;
+            @include hover() {
+                color: var(--primary-color-1);
+            }
+        }
+    }
+
+    // Flag's own column - top-aligned with the heading text beside it,
+    // not centred against the whole address block.
+    &__menu-flag {
+        flex: 0 0 auto;
+        padding-top: 0.2rem;
+    }
+
+    &__menu-text {
+        display: flex;
+        gap: 1.5rem;
+        flex-flow: column;
+    }
+
+    &__menu-title {
+        margin-top: 1rem;
+        margin-bottom: 0;
+        font-family: var(--font-stack-headers);
+        font-size: 2.5rem;
+        line-height: 1.4em;
+        font-weight: 500;
+        color: var(--secondary-color-1);
+    }
+
+    &__flag {
+        display: block;
+        width: 3.4rem;
+        height: 3.4rem;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    // Legal entity name - the address block's own first line, so its
+    // margin-top (rather than __menu-text's shared gap above) is what
+    // spaces it away from __menu-title - keeps it snug against the
+    // address lines directly below it.
+    &__legal-name {
+        // margin-top: 1.5rem;
+        margin-bottom: 0;
+        font-size: 1.8rem;
+        font-weight: 500;
+        line-height: 1.6em;
+        color: var(--primary-color-1);
+    }
+
+    &__address {
+        // margin-top: 1.5rem;
+        margin-bottom: 0;
+        font-style: normal;
+        font-size: 1.8rem;
+        line-height: 1.6em;
+        font-weight: 300;
+        color: var(--secondary-color-1);
+        // opacity: 0.8;
+
+        // Stands in for __legal-name (above) when that field's empty -
+        // same accent colour, just the address's own first line instead
+        // of a separate paragraph.
+        // &-first {
+        //     // font-weight: 600;
+        //     color: var(--primary-color-1);
+        // }
+    }
+
+    &__bottom {
+        position: relative;
+        width: 100%;
+        padding-top: 4rem;
+        display: flex;
+        gap: 2rem;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+        border-top: 0.1rem solid rgba(255, 255, 255, 0.1);
+        @media screen and (max-width: $grid-md) {
+            flex-flow: column;
+            align-items: flex-start;
+        }
+    }
+
+    &__copyright {
+        display: flex;
+        flex-flow: column;
+        gap: 0.4rem;
+
+        p {
+            color: var(--secondary-color-1);
+            // opacity: 0.6;
+            font-size: 1.4rem;
+            line-height: 1.6rem;
+            margin-bottom: 0;
+        }
+    }
+
+    &__brand {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        @media screen and (max-width: $grid-md) {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+}

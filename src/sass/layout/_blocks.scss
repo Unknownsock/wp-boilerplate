@@ -1,0 +1,559 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+li {
+    &.eyebrow {
+        font-size: 1.8rem;
+        color: var(--primary-color-1) !important;
+    }
+}
+
+[data-rotate-scroll] {
+    opacity: 0;
+}
+
+.related {
+    .line {
+        width: 100%;
+        height: 0.2rem;
+        display: flex;
+        background: #f088b6;
+        opacity: 0.5;
+    }
+    // Cards come from template-parts/articles/article-listing.php
+    // (.c-card--small, src/sass/components/_card.scss). Layout
+    // here is a Swiper carousel (.swiper-related, initialised in
+    // src/js/modules/swiper.js) rather than a CSS grid, so there's no
+    // grid rule to own - just spacing between slides.
+    .swiper-related .swiper-slide {
+        height: auto;
+    }
+}
+
+.full_image_gallery {
+    // Background colour comes from the shared "white" class on the
+    // section - see block-full-image-gallery.php + _default.scss (which
+    // already special-cases .full_image_gallery in its sibling-padding
+    // rules).
+    padding: 0;
+    // Markup uses a bare `.col` (no numbered .col-N variant, see
+    // _cols.scss) which carries no width constraint of its own - as a
+    // flex child of .row/.container it was sizing to its content's
+    // intrinsic width (the swiper's real image widths) instead of the
+    // viewport, letting the gallery balloon far off-screen.
+    .col {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    .content {
+        display: flex;
+        gap: 1rem;
+        flex-flow: column;
+        width: 100%;
+        max-width: 100%;
+    }
+    &:last-child {
+        padding-bottom: var(--grid-section);
+    }
+    img {
+        border-radius: 0.75rem;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+    }
+    // Rounding each img individually still let the swiper's own square
+    // edge show between/around slides during transitions - round the
+    // track itself too and clip to it so the whole gallery reads as one
+    // rounded surface.
+    .swiper-gallery {
+        border-radius: 0.75rem;
+        overflow: hidden;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+        &:empty {
+            display: none;
+        }
+    }
+    .swiper-gallery-thumbs {
+        .swiper-slide {
+            cursor: pointer !important;
+        }
+    }
+    .swiper-gallery-legacy {
+        gap: 4rem;
+        .swiper-pagination {
+            .swiper-pagination-bullet {
+                background-color: var(--primary-color-3);
+                &.swiper-pagination-bullet-active {
+                    background-color: var(--primary-color-1);
+                }
+            }
+        }
+    }
+}
+
+article {
+    a {
+        position: relative;
+        display: flex;
+        flex-flow: column;
+        box-sizing: border-box;
+        // text-align: center;
+        overflow: hidden;
+        outline: 1;
+        color: var(--secondary-color-1);
+        h3 {
+            color: unset;
+            font-weight: 300;
+            transition: var(--transition) all ease-in-out;
+            #instagram & {
+                text-transform: capitalize;
+            }
+        }
+        h4,
+        h5 {
+            color: var(--secondary-color-1);
+        }
+        h3 {
+            color: var(--primary-color-1);
+        }
+        img {
+            transition: var(--transition) all ease-out;
+        }
+        .overlay {
+            width: 100%;
+            height: 100%;
+            padding: 2rem;
+            display: flex;
+            gap: 2rem;
+            flex-flow: column nowrap;
+            flex: 1 1 auto;
+            justify-content: center;
+            align-items: center;
+            // background-color: hsla($primary-color-2, .9);
+            // background-color: hsla(hsla(var(--primary-color-1), .9);
+            background-color: hsla(var(--primary-color-1), 0.9);
+            opacity: 0;
+            visibility: hidden;
+            box-sizing: border-box;
+            transition: var(--transition) all ease-out;
+            z-index: 9;
+            .tags {
+                .tag {
+                    text-align: center;
+                }
+            }
+        }
+
+        @include hover() {
+            .overlay {
+                opacity: 1;
+                visibility: visible;
+                transition: var(--transition) all ease-in;
+            }
+            img {
+                transform: scale(1.25);
+                transition: var(--transition) all ease-in;
+                filter: blur(0.5rem);
+            }
+        }
+    }
+}
+
+.gallery {
+    &.block-full {
+        padding: 0;
+    }
+    .grid {
+        display: grid;
+
+        &.layout-1 {
+            grid-auto-flow: dense;
+            @media screen and (max-width: $grid-md) {
+                grid-template-columns: repeat(1, 1fr);
+            }
+            @media screen and (min-width: $grid-md) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            @media screen and (min-width: $grid-lg) {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            // @media screen and (min-width: $grid-ql ) {
+            //     grid-template-columns: repeat(8, 1fr);
+            // }
+            .grid-item {
+                aspect-ratio: 1/1;
+                grid-column: span 1;
+                grid-row: span 1;
+                &:nth-of-type(10n-9),
+                &:nth-of-type(10n-2) {
+                    grid-column: span 2;
+                    grid-row: span 2;
+                }
+            }
+        }
+        &.layout-2 {
+            grid-template-columns: repeat(1, 1fr);
+            // grid-template-rows: repeat(auto-fit);
+            grid-auto-flow: dense;
+            @media screen and (min-width: $grid-md) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            @media screen and (min-width: $grid-lg) {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            @media screen and (min-width: $grid-ql) {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .grid-item {
+                grid-column: span 1;
+                grid-row: span 1;
+                aspect-ratio: 1/1;
+                &:nth-of-type(10n-9),
+                &:nth-of-type(10n-2) {
+                    grid-column: span 2;
+                    grid-row: span 2;
+                    @media screen and (max-width: $grid-md) {
+                        grid-column: span 1;
+                        grid-row: span 1;
+                    }
+                    @media screen and (min-width: $grid-lg) {
+                        // grid-column: span 1;
+                        // grid-row: span 1;
+                    }
+                }
+                @media screen and (min-width: $grid-lg) {
+                    &:nth-of-type(1),
+                    &:nth-of-type(8),
+                    &:nth-of-type(13),
+                    &:nth-of-type(19),
+                    &:nth-of-type(26) {
+                        grid-column: span 2;
+                        grid-row: span 2;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.slider {
+    // padding: 4rem 0 0 0;
+    // user-select: none;
+}
+
+.slider-header {
+    padding: 0;
+}
+
+.slider-header {
+    margin-bottom: 4rem;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    p {
+        margin-bottom: 0;
+    }
+    .content {
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.slider,
+.gallery {
+    header {
+        p {
+            a {
+                color: var(--primary-color-1);
+                &:hover {
+                    color: var(--primary-color-1);
+                }
+            }
+        }
+    }
+}
+
+.team {
+    width: 100%;
+    .grid {
+        display: grid;
+        gap: var(--grid-gutter);
+        grid-auto-flow: dense;
+        grid-template-columns: repeat(1, 1fr);
+        @media screen and (min-width: $grid-nav) {
+            gap: calc(var(--grid-gutter) * 3);
+        }
+        &.content {
+            gap: 2rem;
+        }
+        &.layout-1 {
+            @media screen and (min-width: $grid-nav) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        &.layout-2 {
+            @media screen and (min-width: $grid-nav) {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        &.layout-3 {
+            @media screen and (min-width: $grid-nav) {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        &.layout-4 {
+            article {
+                @media screen and (min-width: $grid-nav) {
+                    &:nth-of-type(5n-3),
+                    &:nth-of-type(5n) {
+                        grid-column: 3 / span 1;
+                    }
+                    &:nth-of-type(3n) {
+                        grid-column: 2 / span 1;
+                        grid-row: 2 / span 2;
+                    }
+                    &:nth-of-type(6n) {
+                        grid-row: 4 / span 2;
+                    }
+                    &:nth-of-type(9n) {
+                        grid-row: 6 / span 2;
+                    }
+                }
+            }
+        }
+        article {
+            display: flex;
+            grid-column: span 1;
+            grid-row: span 2;
+            flex-flow: column;
+            align-items: center;
+            text-align: center;
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            p {
+                width: 18rem;
+                max-width: 100%;
+                margin-bottom: 0;
+            }
+            lottie-player,
+            img,
+            svg {
+                width: 18rem;
+                max-width: 100%;
+                margin-bottom: 1.5rem;
+            }
+            h6 {
+            }
+            p {
+                margin-top: 1.5rem;
+                font-size: 1.2rem;
+            }
+        }
+    }
+}
+
+section.content {
+    > div {
+        .c-button-group {
+            margin-top: var(--grid-gutter);
+        }
+    }
+    .text {
+        display: flex;
+        flex-flow: column;
+        gap: var(--grid-gutter);
+        @media (max-width: $grid-md) {
+            gap: calc(var(--grid-gutter) / 2);
+        }
+        * {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+    .images {
+        width: 100%;
+        display: grid;
+        grid-auto-flow: dense;
+        gap: var(--grid-gutter);
+
+        &.grid-one {
+            grid-template-columns: repeat(1, 1fr);
+        }
+        &.grid-two {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        &.grid-three {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        &.grid-four {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        &.grid-five {
+            grid-template-columns: repeat(5, 1fr);
+        }
+        &.grid-six {
+            grid-template-columns: repeat(6, 1fr);
+        }
+        > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+    .testimonial {
+        padding-left: 6rem;
+        display: flex;
+        gap: var(--grid-gutter);
+        flex-flow: column;
+        > svg {
+            position: absolute;
+            left: 0;
+            width: 7.5rem;
+            * {
+                fill: hsla(var(--secondary-color-2), 0.2);
+            }
+        }
+        .text {
+            font-weight: 300;
+            font-style: italic;
+        }
+        .name {
+            color: var(--primary-color-1);
+        }
+        .name,
+        .role,
+        .company {
+            margin-bottom: 0;
+            font-size: 1.4rem;
+        }
+    }
+    .team {
+    }
+}
+
+// Logo carousel is now .b-logos - see
+// template-parts/content/blocks/logos/_logos.scss.
+
+.fifty {
+    .icons {
+        display: flex;
+        flex-flow: row wrap;
+        img {
+            display: flex;
+            flex: 1 1 33%;
+        }
+    }
+    [class*='col'] {
+        > div {
+            margin-bottom: var(--grid-gutter);
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+        }
+    }
+    ul {
+        width: 100%;
+        li {
+            position: relative;
+            padding: var(--grid-gutter) 0;
+            width: 100%;
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: space-between;
+            border-top: 0.2rem solid hsla(var(--secondary-color-3));
+            &:last-of-type {
+                .question {
+                    margin-bottom: 0;
+
+                    &:after {
+                        display: none;
+                    }
+                }
+            }
+
+            .question {
+                display: flex;
+                align-items: flex-start;
+                flex-flow: row nowrap;
+                justify-content: space-between;
+                align-items: center;
+                flex: 1 0 auto;
+                text-align: left;
+                h4 {
+                    margin: 0 auto 0 0;
+                }
+                .plus {
+                    width: 1.4rem;
+                    height: 1.4rem;
+                    margin-left: var(--grid-gutter);
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                    > div {
+                        width: 1.4rem;
+                        height: 0.2rem;
+                        background-color: var(--primary-color-1);
+                        > div {
+                            width: 1.4rem;
+                            height: 0.2rem;
+                            background-color: var(--primary-color-1);
+                            transform: rotate(90deg);
+                            transition: var(--transition) all ease-in-out;
+                        }
+                    }
+
+                    &.active {
+                        > div {
+                            > div {
+                                transform: rotate(0deg);
+                                transition: var(--transition) all ease-in-out;
+                            }
+                        }
+                    }
+
+                    svg {
+                        .st0 {
+                            fill: none;
+                            stroke: var(--primary-color-1);
+                            stroke-width: 2px;
+                        }
+                    }
+                }
+            }
+
+            .answer {
+                margin: var(--grid-gutter) 0 0 0;
+                display: none;
+            }
+        }
+    }
+}
+
+.fourzerofour {
+    gap: 3rem;
+    align-items: flex-start;
+}
+

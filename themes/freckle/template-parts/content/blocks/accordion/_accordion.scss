@@ -1,0 +1,251 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-accordion {
+    $block: '.b-accordion';
+
+    // Background colour comes from the shared "white" class on the
+    // section (see block-accordion.php + _default.scss) rather than
+    // being hardcoded here - that's what keeps the adjacent-same-colour
+    // padding-avoidance rules (_default.scss's `.white + .white`, etc.)
+    // working across different block types.
+    gap: 4rem;
+
+    #{$block}__intro {
+        // Lines live on the wrapper itself, not on the text - keeps the
+        // heading/paragraph completely untouched (normal display, no flex)
+        // so its own wrapping/spacing is never affected.
+        position: relative;
+        display: flex;
+        flex-flow: row;
+        text-align: center;
+        align-items: center;
+        &::before,
+        &::after {
+            content: '';
+            flex: 1 1 auto;
+            height: 0.1rem;
+            background-color: currentColor;
+        }
+        &::before {
+            margin-right: 1rem;
+        }
+        &::after {
+            margin-left: 1rem;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
+            flex: 0 0 auto;
+            white-space: nowrap;
+
+            strong {
+                color: var(--primary-color-1);
+            }
+        }
+    }
+
+    // Accordion list + swappable image side by side from $grid-md up;
+    // stacked (image first) on mobile. Desktop uses the same 10-column
+    // grid as content_grid (_content-grid.scss) - list is 6, image is 3,
+    // with the 10th column left empty between them as a genuine 1-column
+    // gap (not a flat `gap` value) so it scales proportionally with the
+    // other two.
+    #{$block}__layout {
+        display: flex;
+        flex-flow: column;
+        gap: var(--grid-gutter);
+        align-items: flex-start;
+
+        @media screen and (min-width: $grid-md) {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+        }
+    }
+
+    #{$block}__list {
+        width: 100%;
+        display: flex;
+        gap: 2rem;
+        flex-flow: column;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        @media screen and (min-width: $grid-md) {
+            grid-column: 1 / span 6;
+        }
+    }
+
+    // Placeholder for now (placehold.co) - real production asset should
+    // change per open item (see accordion.js js-accordion-image swap);
+    // may warrant a crossfade/animation once real imagery exists.
+    #{$block}__media {
+        width: 100%;
+        order: -1;
+        border-radius: 1.5rem;
+        overflow: hidden;
+
+        @media screen and (min-width: $grid-md) {
+            grid-column: 8 / span 3;
+            order: 0;
+            position: sticky;
+            top: 2rem;
+        }
+    }
+
+    #{$block}__media-image {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+    }
+
+    #{$block}__heading {
+        margin: 0;
+    }
+
+    #{$block}__item {
+        padding: 2.5rem 3rem;
+        display: flex;
+        flex-flow: column;
+        gap: 2rem;
+        // background-color: var(--secondary-color-1);
+        border: 0.1rem solid var(--primary-color-3);
+        // Fully rounded (pill) at rest - a value this large always clips
+        // to the max radius the trigger's own height allows, regardless
+        // of its exact rem value. Once opened, the panel makes the item
+        // taller than a pill should be, so it settles back to a normal
+        // rounded-rect radius.
+        border-radius: 4rem;
+        overflow: hidden;
+        box-sizing: border-box;
+        &:has(#{$block}__trigger[aria-expanded='true']) {
+            border-radius: 4rem;
+        }
+    }
+
+    #{$block}__trigger {
+        width: 100%;
+        // min-height: 6.2rem;
+        // padding: 0 2rem;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        box-sizing: border-box;
+        cursor: pointer;
+        background: none;
+        border: 0;
+        text-align: left;
+        font: inherit;
+
+        @include hover() {
+            #{$block}__trigger-text {
+                color: var(--primary-color-1);
+                transition: 300ms color;
+            }
+        }
+
+        &[aria-expanded='true'] {
+            #{$block}__trigger-text {
+                color: var(--primary-color-1);
+            }
+
+            #{$block}__icon::after {
+                transform: rotate(0deg);
+            }
+        }
+    }
+
+    #{$block}__trigger-text {
+        font-size: 2.4rem;
+    }
+
+    #{$block}__icon {
+        width: 1.5rem;
+        height: 1.5rem;
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: var(--transition) transform ease-in-out;
+
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            width: 2rem;
+            min-width: 2rem;
+            height: 0.1rem;
+            min-height: 0.1rem;
+            border-radius: 0.1rem;
+            background-color: var(--primary-color-3);
+        }
+
+        &::after {
+            transform: rotate(90deg);
+            transition: var(--transition) all ease-in-out;
+        }
+    }
+
+    #{$block}__panel {
+        max-height: 0;
+        overflow: hidden;
+        transition: var(--transition) max-height ease-in-out;
+    }
+
+    #{$block}__panel-inner {
+        // padding: 0 6rem 2rem 2rem;
+        display: flex;
+        gap: 2rem;
+        flex-flow: column;
+
+        * {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        ol,
+        ul {
+            position: relative;
+            margin-bottom: 4rem;
+
+            > li {
+                margin-bottom: 2rem;
+                padding-left: 5rem;
+                font-size: 1.4rem;
+
+                &:last-of-type {
+                    margin-bottom: 0;
+                }
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    left: 2rem;
+                    width: 1rem;
+                    height: 1rem;
+                    margin-top: 0.4rem;
+                    display: flex;
+                    flex: 0 0 auto;
+                    background-color: var(--primary-color-1);
+                    border-radius: 50%;
+                }
+            }
+
+            ul {
+                margin-top: 2rem;
+            }
+        }
+    }
+}

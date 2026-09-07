@@ -1,0 +1,77 @@
+:root {
+    // Colours - placeholder brand palette. Swap these for the real client
+    // brand hex codes at the start of each new project; every consumer in
+    // the theme reads through these custom properties (accent/light/dark),
+    // never a hardcoded hex, so a rebrand is a one-file edit.
+    --primary-color-1: #e35b30; // orange accent
+    --primary-color-2: #f4efe6; // cream / off-white light bg
+    --primary-color-3: #12212a; // navy / dark
+    --primary-color-4: #e6e5e3; // light grey bg
+    --primary-color-5: #57859f; // lighter blue accent
+    --primary-color-6: #b1cad6; // lighter blue accent
+
+    // Gradient background_colour option (stats block) - three-stop
+    // slate/navy gradient, distinct from the flat --primary-color-3 navy.
+    --gradient-color-1: #2b3b4b;
+    --gradient-color-2: #24303c;
+    --gradient-color-3: #1e262f;
+
+    // --secondary-color-1: 0, 0%, 100%;
+    --secondary-color-1: #fff;
+    // --secondary-color-2: 0, 0%, 0%;
+    --secondary-color-2: #000;
+    --primary-text-color: var(--primary-color-3);
+
+    // Typography
+    --font-stack-headers: fieldwork, sans-serif;
+    --font-stack-body: fieldwork, sans-serif;
+    // Stand-in for italics inside headings - em/i/cite/dfn there swap to
+    // this display face instead of actually slanting (see _base.scss).
+    --font-stack-display: lores-9-plus-wide, sans-serif;
+
+    // Layout
+    --container: 116rem;
+    --grid-gutter-small: 10px;
+    --grid-gutter: 3rem;
+    --grid-gutter-large: 8rem;
+    --grid-section: 10rem;
+    --grid-section-small: 8rem;
+    --grid-section-mobile: 6rem;
+    // Rough rendered height of .b-services - subtracted from the home
+    // hero's height so the two together fill the viewport and the
+    // services bar docks at the bottom of the screen on first load.
+    --services-bar-height: 5rem;
+
+    --transition: 150ms;
+    --transition-long: 300ms;
+
+    --nav-height-sm: 8rem;
+    --nav-height-md: 10rem;
+    --nav-height-xl: 12rem;
+    --nav-height-xxl: 18rem;
+
+    --sticky-mob-height: 4rem;
+    --side-nav-width: 10.5rem;
+
+    --font-size: 62.5%;
+
+    --hamburger-size: 6rem;
+
+    --sidebar-width: 32rem;
+}
+
+$grid-columns: 12;
+
+$grid-xs: 480px; // 30rem
+$grid-sm: 576px; // 36rem
+$grid-md: 768px; // 48rem
+$grid-lg: 992px; // 62rem
+$grid-xl: 1280px; // 75rem
+$grid-xxl: 1400px; // 87.5rem
+$grid-ql: 1920px; // 120rem
+$grid-qll: 2420px; // 120rem
+$grid-qhd: 3840px; // 240rem
+
+$grid-custom-1: 1575px;
+
+$grid-nav: $grid-lg;

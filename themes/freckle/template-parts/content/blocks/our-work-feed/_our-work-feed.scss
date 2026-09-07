@@ -1,0 +1,79 @@
+@use "abstracts/variables" as *;
+@use "abstracts/mixins" as *;
+
+.b-our-work-feed {
+	// Background colour comes from the shared "white" class on the
+	// section - see block-our-work-feed.php + _default.scss.
+	overflow: visible;
+	overflow-x: clip;
+	padding-bottom: 4rem;
+	@include block-bounds();
+
+	&__shape {
+		position: absolute;
+		top: -25vh;
+		height: 175vh;
+		width: 100vw;
+		right: -29vh;
+		@media screen and (max-width: $grid-md) {
+			right: -50vw;
+			width: 200vw;
+		}
+		> svg {
+			width: 100%;
+			height: 100%;
+			user-select: none;
+			pointer-events: none;
+			* {
+				fill: var(--primary-color-3);
+			}
+		}
+	}
+
+	&__grid {
+		width: 100%;
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: center;
+		gap: 2rem;
+		a {
+			width: calc(20% - 1.6rem);
+			@media screen and (max-width: $grid-md) {
+				width: calc(50% - 1rem);
+			}
+			@media screen and (max-width: $grid-sm) {
+				width: 100%;
+			}
+			img {
+				padding: 2rem;
+				box-sizing: border-box;
+			}
+			@include hover() {
+				.b-our-work-feed__overlay {
+					opacity: 1;
+				}
+			}
+		}
+	}
+
+	&__overlay {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		padding: 2rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		background-color: var(--primary-color-1);
+		opacity: 0;
+		box-sizing: border-box;
+		border-radius: .75rem;
+		transition: var(--transition) all;
+		overflow: hidden;
+		p {
+			color: var(--secondary-color-1);
+		}
+	}
+}
