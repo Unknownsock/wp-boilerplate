@@ -1,0 +1,201 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.b-feature-grid {
+    $block: '.b-feature-grid';
+
+    // Background colour comes from the shared "white" class on the
+    // section - see block-feature-grid.php + _default.scss.
+    display: flex;
+    flex-flow: column;
+    gap: 6rem;
+    @include block-bounds();
+
+    #{$block}__intro {
+        max-width: 70rem;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    #{$block}__grid {
+        // width: 100%;
+        display: flex;
+        // Layout-2's items are direct children of this element (layout-1's
+        // own items live in #{$block}__items below instead, inside the
+        // white panel) - without a gap here they stack flush against each
+        // other on mobile, where #{$block}__item is full-width and wraps
+        // onto its own row.
+        gap: 6rem;
+        flex-flow: row wrap;
+        align-items: stretch;
+        @media screen and (min-width: $grid-md) {
+            gap: var(--grid-gutter-large);
+        }
+
+        // Layout 1 - "Our Advantages": two layers, not one flat box -
+        // this outer __grid is a thin light-grey frame (just enough
+        // padding to show as a border/mat around the panel below), and
+        // #{$block}__panel is the actual white content area the items
+        // sit on. Matches the reference design, which turned out to
+        // centre this layout too, not just layout-2.
+        &--layout-1 {
+            display: block;
+            // background-color: var(--primary-color-4);
+            border: 0.2rem solid rgba(0, 0, 0, 0.1);
+            border-radius: 2rem;
+            padding: 1.5rem;
+        }
+
+        // Layout 2 - "Applications": centred items, no contained box
+        // (section's own bg carries the panel look).
+        &--layout-2 {
+            justify-content: center;
+
+            #{$block}__item {
+                gap: 4rem;
+            }
+
+            #{$block}__icon {
+                width: 100%;
+                max-width: 24rem;
+                aspect-ratio: 1 / 1;
+            }
+        }
+
+        // Centred item content - shared by both layouts (see above).
+        &--layout-1,
+        &--layout-2 {
+            #{$block}__item {
+                align-items: center;
+                text-align: center;
+            }
+            #{$block}__item-text,
+            #{$block}__item-actions {
+                align-items: center;
+            }
+        }
+    }
+
+    // White inner panel (layout-1 only) - the items actually live in
+    // here, not directly in __grid--layout-1, so the grey frame's
+    // padding above has genuine white showing through it, not more grey.
+    // The title and the row dividers are direct children of this panel
+    // (full width, stacked), with #{$block}__items as the only 3-up grid
+    // row inside it - that's what lets a single divider span the whole
+    // panel rather than being three per-column borders.
+    #{$block}__panel {
+        display: flex;
+        flex-flow: column;
+        // gap: 4rem;
+        background-color: var(--primary-color-4);
+        border-radius: 1rem;
+        padding: 2rem;
+        @media screen and (min-width: $grid-md) {
+            // gap: 6rem;
+            padding: 6rem var(--grid-gutter-large);
+        }
+    }
+
+    #{$block}__title {
+        max-width: 70rem;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    // Full-width rule - used both under the title and after every row of
+    // 3 items (see block-feature-grid.php). Spacing above/below comes
+    // from #{$block}__panel's own gap, not margin here.
+    #{$block}__divider {
+        // Items already stack full-width on mobile (see #{$block}__items'
+        // own gap above), so the row divider - meant to separate rows of
+        // 3 - has nothing to actually divide there; every item already
+        // reads as its own row.
+        display: none;
+        @media screen and (min-width: $grid-md) {
+            display: block;
+        }
+        width: 100%;
+        height: 1px;
+        margin: 6rem 3rem;
+        background-color: var(--primary-color-5);
+    }
+
+    #{$block}__items {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        align-items: stretch;
+        // gap, not column-gap - #{$block}__item is full-width and wraps
+        // to its own row below $grid-md, where a column-only gap leaves
+        // stacked items touching.
+        gap: var(--grid-gutter);
+        @media screen and (min-width: $grid-md) {
+            column-gap: var(--grid-gutter-large);
+        }
+    }
+
+    // 3-up by default from $grid-lg (matches the reference design for
+    // both layouts) - no per-item divider lines, neither reference shows
+    // them between columns.
+    #{$block}__item {
+        display: flex;
+        flex-flow: column;
+        gap: 2rem;
+        align-items: center;
+        width: 100%;
+        box-sizing: border-box;
+        @media screen and (min-width: $grid-md) {
+            width: calc(50% - (8rem / 2));
+        }
+        @media screen and (min-width: $grid-lg) {
+            width: calc(33.333% - (8rem * 2 / 3));
+        }
+    }
+
+    // Layout 1's plain icon - fills its own natural size, no frame.
+    // No fixed width/height - capped by max-width, the container (flex
+    // item) controls how much room it actually gets. Layout 2 overrides
+    // this with its own circular frame, see &--layout-2 above.
+    #{$block}__icon {
+        width: 100%;
+        max-width: 20rem;
+        height: auto;
+        margin: 0 auto;
+    }
+
+    #{$block}__icon-el {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    // Optional second wysiwyg, rendered above #{$block}__icon (see
+    // block-feature-grid.php's "text_top" field) - layout-2's "title
+    // above the image" style. Shares #{$block}__item-text's own look.
+    #{$block}__item-text-top,
+    #{$block}__item-text {
+        display: flex;
+        flex-flow: column;
+        gap: 2rem;
+        // align-items: flex-start;
+
+        // No hardcoded colour here any more - inherits from the section's
+        // own bg-aware colour rule (_default.scss's `section.grey-dark`
+        // etc). Hardcoding var(--primary-text-color) here used to make
+        // this text invisible on a grey-dark background specifically,
+        // since --primary-text-color *is* --primary-color-3, the same
+        // colour grey-dark uses for its own background.
+        p {
+            font-size: 1.8rem;
+        }
+    }
+
+    #{$block}__item-actions {
+        .c-button-group {
+            width: auto;
+            flex: 0 0 auto;
+            flex-flow: column;
+            align-items: flex-start;
+        }
+    }
+}

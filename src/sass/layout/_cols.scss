@@ -31,7 +31,6 @@
 	width: 100%;
 	max-width: 100%;
 	padding: 0 calc(var(--grid-gutter-large)/2);
-	// gap: 0 calc(var(--grid-gutter-large)/2);
 	display: flex;
 	flex-flow: column;
 	justify-content: center;
@@ -50,31 +49,6 @@
 		padding: 0;
 	}
 }
-
-// [class*="col"] {
-// 	position: relative;
-// 	max-width: 100%;
-// 	padding: 0 calc(var(--grid-gutter-large)/2);
-// 	display: flex;
-// 	flex: 1;
-// 	// flex-grow: 0;
-//     // flex-shrink: 1;
-// 	flex-flow: row wrap;
-// 	align-content: flex-start;
-// 	box-sizing: border-box;
-// 	@media (max-width: $grid-md) {
-// 		width: 100%;
-// 		padding: 0 calc(var(--grid-gutter)/2);
-// 		flex-basis: 100%;
-// 	}
-//     .block-full &,
-//     .block-edge & {
-//         padding: 0;
-//     }
-// 	.block-gutter & {
-// 		padding: 0 .5rem;
-// 	}
-// }
 
 $breakpoints: (
 	"xs": 480px,
@@ -108,9 +82,4 @@ $breakpoints: (
 }
 
 @include generate-columns();
-
-// Specific column breaks
-// [class*="col-"] {
-
-// }
 

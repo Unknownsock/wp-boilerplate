@@ -196,19 +196,21 @@
             // White against the transparent/dark hero on mobile (__inner
             // has no background of its own there any more) - once
             // .is-scrolled below, flip back to navy for the pinwheel logo's
-            // own dark-on-white contrast.
-            .top,
-            .middle,
-            .bottom {
+            // own dark-on-white contrast. :not(#\#) beats components/
+            // _hamburger.scss's own same-specificity, later-loaded default
+            // (--primary-color-3) that would otherwise win on source order.
+            .top:not(#\#),
+            .middle:not(#\#),
+            .bottom:not(#\#) {
                 background-color: var(--secondary-color-1);
             }
         }
     }
 
     &.is-scrolled &__inner .hamburger {
-        .top,
-        .middle,
-        .bottom {
+        .top:not(#\#),
+        .middle:not(#\#),
+        .bottom:not(#\#) {
             background-color: var(--primary-color-3);
         }
     }
@@ -216,7 +218,6 @@
     // Pill-shaped CTA buttons, scoped to the header - doesn't touch the
     // site-wide .c-button--solid/--outline styles used elsewhere.
     &__actions {
-        // margin-left: auto;
         gap: 3rem;
         display: flex;
         align-items: center;
@@ -227,6 +228,35 @@
         .c-button__inner {
             svg {
                 display: none;
+            }
+        }
+    }
+
+    // Minimal variant: only the logo + hamburger show in the bar itself -
+    // both the nav and the "Contact us" action live inside the off-canvas
+    // panel (.o-primary-nav__cta, appended by wp_nav_menu's items_wrap in
+    // site-header-minimal.php) at every width, not just on mobile.
+    &--minimal &__actions {
+        display: none;
+    }
+    // Extra :not(#\#) specificity to outrank &__inner .hamburger's own
+    // min-width $grid-nav "display: none" above at the same class count.
+    &--minimal &__inner .hamburger:not(#\#) {
+        @media screen and (min-width: $grid-nav) {
+            display: flex;
+        }
+    }
+
+    // Centered variant: the logo lives inside .o-primary-nav--centered
+    // itself (between its two link halves), not as __inner's own direct
+    // child, so __inner only has [nav, actions, hamburger] here - nav
+    // takes the remaining space and centers its own content within it.
+    &--centered &__inner {
+        .o-primary-nav--centered {
+            @media screen and (min-width: $grid-nav) {
+                flex: 1;
+                margin-left: 0;
+                justify-content: center;
             }
         }
     }

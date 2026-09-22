@@ -12,8 +12,8 @@
         "build": "vite build",
         "dev": "vite",
         "prod": "vite build --mode production",
-        "lint:php": "cd themes/freckle && composer lint",
-        "fix:php": "cd themes/freckle && composer lint:fix",
+        "lint:php": "cd themes/boilerplate && composer lint",
+        "fix:php": "cd themes/boilerplate && composer lint:fix",
         "format:php-all": "prettier --write \"**/*.php\"",
         "format:php": "prettier --write",
         "format:all": "prettier --write src/**/*.{js,scss,php}",
@@ -28,6 +28,7 @@
         "db:restore": "node bin/db/restore.js",
         "db:import": "node bin/db/import.js",
         "wp": "docker compose exec wp-cli wp",
+        "wp:seed": "docker compose exec wp-cli wp eval-file /workspace/bin/wp/seed-content.php --path=/var/www/html",
         "wp:update": "docker compose exec wp-cli wp core update && docker compose exec wp-cli wp plugin update --all",
         "wp:install-plugin": "docker compose exec wp-cli wp plugin install",
         "wp:search-replace": "docker compose exec wp-cli wp search-replace",
@@ -38,7 +39,7 @@
         "type": "git",
         "url": "git+https://github.com/unknownsock/wp-boilerplate.git"
     },
-    "author": "",
+    "author": "Unknownsock",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/unknownsock/wp-boilerplate/issues"

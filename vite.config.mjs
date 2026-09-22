@@ -8,7 +8,7 @@ dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const themeName = 'freckle';
+const themeName = 'boilerplate';
 const themeDir = path.resolve(__dirname, 'themes', themeName);
 const outDir = path.resolve(themeDir, 'assets');
 const blocksDir = path.resolve(themeDir, 'template-parts/content/blocks');

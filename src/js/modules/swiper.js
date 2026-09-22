@@ -1,10 +1,6 @@
 import Swiper from 'swiper';
 
-import { Autoplay, Pagination, Navigation, Thumbs, FreeMode, EffectFade } from 'swiper/modules';
-
-// modules: [Pagination, Autoplay],
-
-// import 'swiper/css';
+import { Autoplay, Pagination, Thumbs, FreeMode, EffectFade } from 'swiper/modules';
 
 const swiper_gallery = () => {
 	// Find all thumbs sliders first and store their instances
@@ -87,10 +83,6 @@ window.addEventListener('load', swiper_gallery_legacy);
 const swiper_related = () => {
 	var swiper = new Swiper(".js-swiper-related", {
 		loop: true,
-		// modules: [Autoplay],
-		// autoplay: {
-		// 	delay: 2500,
-		// },
 		speed: 500,
 		spaceBetween: 30,
 		breakpoints: {
@@ -106,9 +98,6 @@ const swiper_related = () => {
 			1024: {
 				slidesPerView: 4,
 			},
-			// 2100: {
-			// 	slidesPerView: 5,
-			// }
 		},
 		disableOnInteraction: true,
 	});

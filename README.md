@@ -1,7 +1,7 @@
 # WP Boilerplate
 
 A starting point for WordPress theme projects: an ACF Pro flexible-content theme
-(`themes/freckle`) with a per-block Vite build (SCSS + JS, code-split per block), a Dockerised
+(`themes/boilerplate`) with a per-block Vite build (SCSS + JS, code-split per block), a Dockerised
 local dev environment, and CI-ready linting/testing config already wired up.
 
 This repo is meant to be **used as a template**, not developed on directly — see
@@ -14,7 +14,7 @@ you're adding a new block or touching the build.
 - Docker Desktop
 - Node.js (see `.browserslistrc`/`package.json` for supported ranges) + npm
 - PHP 8.3+ and Composer, if you want to run the theme's own lint/test/analyze scripts outside
-  Docker (`themes/freckle/composer.json`)
+  Docker (`themes/boilerplate/composer.json`)
 
 ## Local development
 
@@ -31,8 +31,14 @@ Other useful commands:
 npm run stop                 # docker compose down
 npm run shell                 # shell into the wordpress container
 npm run wp -- <cmd>           # wp-cli, e.g. npm run wp -- plugin list
-npm run build                 # production build → themes/freckle/assets/
+npm run wp:seed               # create starter pages, home content, and the main menu
+npm run build                 # production build → themes/boilerplate/assets/
 ```
+
+`npm run wp:seed` is safe to run more than once. It creates Home, About, and Contact pages,
+adds placeholder hero and WYSIWYG content to a new Home page, creates a Main Menu, and assigns it
+to the primary menu location. Existing pages, menu items, front-page settings, and menu assignments
+are left unchanged.
 
 See [CLAUDE.md](CLAUDE.md) for the full command reference (linting, PHP tests, Cypress, ACF
 field-group sync, etc).
@@ -40,17 +46,19 @@ field-group sync, etc).
 ## What's included
 
 - **Flexible-content block system** — drop a new folder under
-  `themes/freckle/template-parts/content/blocks/<name>/`, and it's automatically routed, built,
+  `themes/boilerplate/template-parts/content/blocks/<name>/`, and it's automatically routed, built,
   and enqueued. No dispatcher/build-config edits needed for a new block.
 - **BEM + shared panel-colour palette** — a consistent naming and colour-token convention across
   blocks (see CLAUDE.md).
 - **CSS custom properties for brand palette** — `src/sass/abstracts/_variables.scss` holds
   placeholder brand colours; swap them for the client's real brand hex codes and every block
   picks it up.
-- **ACF Pro field group JSON** already version-controlled (`themes/freckle/acf-json/`) — sync into
+- **ACF Pro field group JSON** already version-controlled (`themes/boilerplate/acf-json/`) — sync into
   the DB via wp-admin or the `wp eval` snippet in CLAUDE.md.
-- **A handful of example content types** (team, testimonials, clients, carousels) to show the
+- **A handful of example content types** (team, testimonials, portfolio) to show the
   pattern — delete or rename what a given project doesn't need.
+- **Three swappable header styles** (standard mega-menu, centered logo, minimal off-canvas) —
+  pick one via Options → Header, or delete the two you don't need.
 - **Docker Compose** local WordPress + MySQL + phpMyAdmin + wp-cli stack.
 - **CI-ready tooling**: PHPCS/PHPCBF (WPCS), PHPStan, PHPUnit, ESLint, Stylelint, Prettier,
   Husky + lint-staged pre-commit hooks, Cypress E2E scaffold, and GitHub Actions deploy workflows
@@ -62,8 +70,8 @@ field-group sync, etc).
 1. Click **"Use this template"** on the GitHub repo (or `git clone` + re-`git init` if you'd
    rather not link history at all) to create a new repo for the client project.
 2. Rename things that are still boilerplate-generic:
-   - `themes/freckle/style.css` — `Theme Name`
-   - `themes/freckle/composer.json` — `name`, PSR-4 namespace if you want one specific to the
+   - `themes/boilerplate/style.css` — `Theme Name`
+   - `themes/boilerplate/composer.json` — `name`, PSR-4 namespace if you want one specific to the
      project
    - `package.json` — `name`, `repository`/`bugs`/`homepage`
    - `src/sass/abstracts/_variables.scss` — swap placeholder brand colours for the real ones

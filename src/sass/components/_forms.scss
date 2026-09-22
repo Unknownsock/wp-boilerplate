@@ -11,12 +11,6 @@
     display: none;
 }
 
-// .wpcf7-acceptance {
-//     @media screen and (max-width: $grid-md) {
-//         margin-bottom: 2.5rem;
-//     }
-// }
-
 .wpcf7-spinner {
     display: none;
 }
@@ -33,44 +27,6 @@
             color: var(--secondary-color-1);
             border-radius: 5px;
         }
-        // &.sent {
-        // 	.wpcf7-response-output {
-        // 		padding: 2rem;
-        // 		margin: var(--grid-gutter) 0 0 0;
-        // 		color: var(--secondary-color-1);
-        // 		font-size: 1.6rem;
-        // 		text-align: center;
-        // 		border: unset;
-        // 		border-color: unset;
-        // 		background: var(--primary-color-1);
-        // 	}
-        // }
-        // &.invalid {
-        // 	.wpcf7-response-output {
-        // 		padding: 2rem;
-        // 		margin: var(--grid-gutter) 0 0 0;
-        // 		color: var(--secondary-color-1);
-        // 		font-size: 1.6rem;
-        // 		text-align: center;
-        // 		border: unset;
-        // 		border-color: unset;
-        // 		background: hsla(var(--tertiary-color-1));
-
-        // 		padding: 2rem;
-        // 		margin: 0;
-        // 		// width: calc( 100% - var(--grid-gutter) );
-        // 		// margin: var(--grid-gutter) 0 math.div(var(--grid-gutter), 2) 0;
-        // 		color: var(--primary-color-1);
-        // 		font-size: 1.6rem;
-        // 		text-align: center;
-        // 		border: unset;
-        // 		border-color: unset;
-        // 		font-weight: 300;
-        // 		// background: var(--primary-color-1);
-        // 		box-sizing: border-box;
-
-        // 	}
-        // }
     }
 }
 
@@ -223,55 +179,6 @@
     transition: 0ms all !important;
 }
 
-.facetwp-type-radio {
-    display: flex;
-    gap: 1.5rem;
-    flex-flow: column;
-    align-items: flex-start;
-    .facetwp-radio {
-        position: relative;
-        color: var(--primary-color-1);
-        height: 4rem;
-        padding: 0 2.5rem;
-        border: 0.2rem solid hsla(var(--secondary-color-3));
-        border-radius: 2rem;
-        display: inline-flex;
-        flex-flow: column;
-        justify-content: center;
-        align-items: flex-start;
-        font-size: 1.4rem;
-        line-height: 1em;
-        letter-spacing: -0.02em;
-        box-sizing: border-box;
-        cursor: pointer;
-        transition: var(--transition) all ease-in-out;
-        &.checked {
-            border-color: var(--primary-color-1);
-            background-color: var(--primary-color-1);
-            color: var(--secondary-color-1);
-        }
-        @include hover() {
-            border-color: var(--primary-color-1);
-            background-color: var(--primary-color-1);
-            color: var(--secondary-color-1);
-            transition: var(--transition) all ease-in-out;
-        }
-        &:last-of-type {
-            margin-bottom: 0;
-        }
-        p {
-            margin-bottom: var(--grid-gutter);
-            font-size: 2rem;
-        }
-        .facetwp-counter {
-            display: none;
-        }
-    }
-}
-// input {
-// 	border: .2rem solid var(--primary-color-1);
-// }
-
 //
 // Contact Form 7 BEM Structure
 //
@@ -323,10 +230,6 @@ form {
             [data-name='news-updates'] {
                 margin-top: -1.5rem;
             }
-
-            // label[for] {
-            //     font-weight: bold;
-            // }
         }
         &__footer {
             margin-top: 1rem;
@@ -339,7 +242,9 @@ form {
         }
     }
 
-    // Legacy support (keep these for backward compatibility)
+    // CF7 form HTML is typed directly into the admin editor per-project, so
+    // some forms may still use the old .split/.col classes instead of
+    // .c-form__row/.c-form__field - keep both working.
     .split {
         @extend .c-form__row;
         @extend .c-form__row--split;
@@ -403,7 +308,7 @@ textarea {
     display: inline-flex;
     gap: 2rem;
     align-items: center;
-    flex-flow: row !important; // ???
+    flex-flow: row !important;
     cursor: pointer;
     input[type='checkbox'] {
         position: absolute;
@@ -457,7 +362,6 @@ textarea {
 }
 
 .wpcf7-list-item-label {
-    // color: var(--base-color-4);
     font-size: fluid(1.4rem);
     line-height: 1.4em;
 }
@@ -474,8 +378,6 @@ textarea {
         width: 0.1rem;
         height: 0.1rem;
         user-select: none;
-        // pointer-events: none;
-        // display: none;
     }
 }
 
@@ -529,9 +431,6 @@ textarea {
         font-weight: 300;
         opacity: 1;
         user-select: none;
-        .dark-mode-enabled & {
-            // color: white;
-        }
         img {
             width: fluid(2rem);
             height: fluid(2rem);
@@ -545,7 +444,6 @@ textarea {
         width: 25rem;
         min-width: 10rem;
         height: auto;
-        // padding: 2rem;
         display: flex;
         flex-flow: column;
         font-size: 1.4rem;
@@ -558,7 +456,6 @@ textarea {
         visibility: hidden;
         overflow-y: scroll;
         user-select: none;
-        // overflow: hidden;
         &:-webkit-scrollbar {
             width: 1rem;
         }
@@ -677,7 +574,6 @@ textarea {
         font-size: 1.4rem;
         color: var(--base-color-5);
         cursor: pointer;
-        // display: none;
     }
     .custom-file-input-button {
         position: absolute;
@@ -693,7 +589,6 @@ textarea {
         text-transform: uppercase;
         font-weight: bold;
         background-color: var(--base-color-4);
-        // border-left: 0.3rem solid transparent;
         color: white;
         box-sizing: border-box;
         pointer-events: none;
@@ -717,12 +612,6 @@ textarea {
     border: 0;
     word-wrap: normal !important;
 }
-
-// .wpcf7-spinner {
-//     &:empty {
-//         display: none;
-//     }
-// }
 
 .wpcf7-response-output {
     padding: 1.8rem;
@@ -752,15 +641,7 @@ textarea {
 .wpcf7-submit {
     width: 100%;
     max-width: 100%;
-    // align-self: flex-start;
 }
-
-// .wpcf7-acceptance {
-//     cursor: pointer;
-//     label {
-//         color: var(--base-color-4);
-//     }
-// }
 
 .wpcf7-radio {
     display: grid;
@@ -822,23 +703,18 @@ textarea {
         font-size: fluid(2.4rem);
         font-weight: 500;
         line-height: 1em;
-        // transition: var(--transition);
     }
     &.selected {
         .custom-radio {
             background-color: var(--secondary-color-1);
             &:after {
                 background-image: url("data:image/svg+xml;utf8,<svg width='26' height='18' viewBox='0 0 26 18' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M1.5 8L9.5 16L24.5 1' stroke='%23FF4F59' stroke-width='3'/></svg>");
-                // background-color: var(--base-color-1);
                 box-shadow: 0 0 0 0.2rem var(--secondary-color-1);
             }
             svg {
                 opacity: 1;
                 visibility: visible;
             }
-        }
-        .custom-radio-text {
-            // color: var(--secondary-color-1);
         }
     }
 }

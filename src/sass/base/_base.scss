@@ -203,19 +203,10 @@ h6,
 p {
     a {
         color: var(--primary-color-1);
-        // display: inline-block;
         position: relative;
         @include underline;
     }
 }
-
-// b,
-// .u-strong,
-// strong {
-//     display: contents;
-//     // font-weight: 300;
-//     font-weight: inherit;
-// }
 
 blockquote {
     margin: 4rem 0;
@@ -281,12 +272,4 @@ ul,
 ol {
     margin: 0;
     padding: 0;
-}
-
-br {
-    // @media screen and (max-width: $grid-md ) {
-    // 	content: "";
-    // 	display: inline-flex;
-    // 	width: 0.3em;
-    // }
 }

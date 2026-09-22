@@ -701,3 +701,277 @@ $site-nav-transition: 150ms;
         line-height: 1em;
     }
 }
+
+// Shared list styling for the simple (non-mega) dropdown that
+// Simple_Menu_Walker renders for the centered and minimal header
+// variants - a plain nested <ul>, not the standard header's mega-menu
+// columns/CTA card.
+@mixin simple-nav-list {
+    display: flex;
+    flex: 1 0 auto;
+    flex-flow: column;
+    gap: 0;
+    list-style-type: none;
+    box-sizing: border-box;
+    @media screen and (min-width: $grid-nav) {
+        flex-flow: row;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    > li {
+        position: relative;
+        @media screen and (min-width: $grid-nav) {
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        > a,
+        > span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.5rem 4rem;
+            color: var(--primary-color-3);
+            font-size: 1.8rem;
+            font-family: var(--font-stack-body);
+            text-decoration: none;
+            transition: var(--transition) color;
+            @media screen and (min-width: $grid-nav) {
+                padding: 0;
+                color: var(--secondary-color-1);
+                font-size: 1.6rem;
+            }
+            @include hover() {
+                color: var(--primary-color-1);
+            }
+        }
+
+        .o-primary-nav__arrow {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            svg {
+                width: 1rem;
+                height: 0.4rem;
+                * {
+                    stroke: currentColor;
+                    stroke-width: 0.1rem;
+                }
+            }
+        }
+
+        &.is-active .o-primary-nav__arrow svg {
+            transform: rotate(180deg);
+        }
+
+        // Depth-1 dropdown - hover/focus on desktop, click-to-expand
+        // accordion on mobile (menuDropdown() in navigation.js toggles
+        // max-height inline, same mechanism the standard header uses).
+        .o-primary-nav__dropdown {
+            list-style-type: none;
+            @media screen and (max-width: $grid-nav) {
+                max-height: 0;
+                overflow: hidden;
+                padding-left: 2rem;
+                transition: var(--transition) max-height;
+            }
+            @media screen and (min-width: $grid-nav) {
+                position: fixed;
+                top: var(--nav-height-md);
+                display: flex;
+                flex-flow: column;
+                gap: 0.5rem;
+                padding: 2rem;
+                min-width: 20rem;
+                border-radius: 0 0 1rem 1rem;
+                background-color: var(--secondary-color-1);
+                box-shadow: 0 0.4rem 0.6rem 0 rgba(0, 0, 0, 0.25);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-0.5rem);
+                transition:
+                    var(--transition) opacity,
+                    var(--transition) visibility,
+                    var(--transition) transform;
+            }
+
+            a {
+                padding: 0.8rem 0;
+                color: var(--primary-color-3);
+                font-size: 1.5rem;
+                text-decoration: none;
+                @include hover() {
+                    color: var(--primary-color-1);
+                }
+            }
+        }
+
+        @media screen and (min-width: $grid-nav) {
+            &:hover,
+            &:focus-within,
+            &.is-nav-open {
+                .o-primary-nav__dropdown {
+                    opacity: 1;
+                    visibility: visible;
+                    transform: translateY(0);
+                }
+            }
+        }
+    }
+
+    // "Get in touch" CTA, appended as the list's last item - the centered
+    // header already has its own "Contact us" copy in
+    // .o-site-header__actions on desktop, so this copy is mobile-only
+    // there; the minimal header has no __actions bar at all, so its
+    // .o-primary-nav--offcanvas override below re-shows this at every width.
+    > li.o-primary-nav__cta {
+        display: none;
+        @media screen and (max-width: $grid-nav) {
+            display: block;
+            margin-top: 2rem;
+            padding: 0 4rem;
+        }
+        .c-button {
+            width: 100%;
+        }
+    }
+}
+
+// Centered header: nav renders as [half--left, site-branding, half--right]
+// - a plain flex row on desktop (DOM order already matches visual order,
+// no CSS order needed), collapsing to the standard off-canvas panel below
+// $grid-nav (inherited from the base .o-primary-nav rule above), where
+// both halves plus the logo simply stack in that same order.
+.o-primary-nav--centered {
+    @media screen and (min-width: $grid-nav) {
+        display: flex;
+        align-items: center;
+        gap: 4rem;
+    }
+    @media screen and (max-width: $grid-nav) {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: 2rem;
+        padding-top: 2rem;
+    }
+
+    .site-branding {
+        @media screen and (max-width: $grid-nav) {
+            margin-bottom: 2rem;
+        }
+    }
+
+    .o-primary-nav__half {
+        @include simple-nav-list;
+    }
+}
+
+// Minimal header: the entire nav (both the links and the "Contact us"
+// action) lives off-canvas at every width, toggled only by .is-toggled on
+// <body> (menu_toggle() in navigation.js) - unlike the base .o-primary-nav,
+// which switches out of that fixed panel into an inline desktop row at
+// min-width $grid-nav. :not(#\#) beats that same-specificity min-width
+// rule on source order alone, re-applying the base rule's own <$grid-nav
+// fixed-panel positioning (duplicated here, not shared via a mixin, since
+// the base rule is itself un-mixin'd) regardless of viewport width.
+.o-primary-nav--offcanvas:not(#\#) {
+    position: fixed;
+    padding: 2rem 0;
+    top: var(--nav-height-sm);
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: calc(100dvh - var(--nav-height-sm));
+    margin-left: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    background-color: var(--secondary-color-1);
+    background: linear-gradient(
+        0deg,
+        var(--secondary-color-1, #fff) 0%,
+        var(--primary-color-2, #f2f0ed) 100%
+    );
+
+    opacity: 0;
+    visibility: hidden;
+    user-select: none;
+    pointer-events: none;
+    transform: translateY(-1rem);
+    box-sizing: border-box;
+
+    .is-toggled & {
+        opacity: 1;
+        visibility: visible;
+        user-select: auto;
+        pointer-events: all;
+        transform: translateY(0);
+    }
+}
+// Styles the <ul> itself (via menu_class in site-header-minimal.php's
+// wp_nav_menu() call, with container: false) rather than requiring <li> to
+// be a direct child of the outer .o-primary-nav--offcanvas <nav> above -
+// wp_nav_menu() always renders its own <ul>, one level further in, even
+// with no wrapping container div.
+.o-primary-nav__offcanvas-list {
+    @include simple-nav-list;
+    padding: 2rem 0;
+
+    // :not(#\#) beats simple-nav-list's own min-width $grid-nav
+    // "flex-flow: row" - always a vertical stack here, at every width.
+    &:not(#\#) {
+        flex-flow: column;
+        align-items: flex-start;
+    }
+
+    // :not(#\#) beats the mixin's own min-width $grid-nav "display: flex;
+    // align-items: center" (meant for the standard/centered inline row,
+    // where label/arrow/dropdown sit side by side) - here the dropdown
+    // must stack below the label instead, so the <li> stays block-level.
+    > li:not(#\#) {
+        display: block;
+        height: auto;
+    }
+    > li {
+        width: 100%;
+        // :not(#\#) beats the mixin's own min-width $grid-nav padding/
+        // color/font-size for the same reason as above.
+        > a:not(#\#),
+        > span:not(#\#) {
+            width: 100%;
+            padding: 1rem 4rem;
+            color: var(--primary-color-3);
+            font-size: 2rem;
+        }
+        // :not(#\#) beats simple-nav-list's own min-width $grid-nav
+        // "position: fixed" dropdown styling - the build's CSS minifier
+        // reorders/merges same-breakpoint media blocks, so a same-
+        // specificity override can't rely on source order surviving the
+        // build to still win here.
+        .o-primary-nav__dropdown:not(#\#) {
+            position: relative;
+            top: 0;
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 0 0 2rem;
+            background: none;
+            box-shadow: none;
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+        }
+        &.is-nav-open .o-primary-nav__dropdown:not(#\#),
+        &:focus-within .o-primary-nav__dropdown:not(#\#) {
+            max-height: 30rem;
+        }
+    }
+
+    > li.o-primary-nav__cta {
+        display: block;
+        margin-top: 2rem;
+        padding: 0 4rem;
+    }
+}

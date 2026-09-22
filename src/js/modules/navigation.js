@@ -1,80 +1,51 @@
 import { throttle } from 'lodash';
 
-// var $ = require("jquery");
-// require("jquery/package.json");
-
-import { isMobile } from './functions.js';
-
 function menu_toggle() {
-	// Get the hamburger button
 	const menu_toggle = document.querySelector(".js-menu-toggle");
 	const html = document.querySelectorAll("html");
 	const body = document.querySelectorAll("body");
 
-	// Get the controlled navigation element using aria-controls
 	const controlsId = menu_toggle.getAttribute('aria-controls');
-	const mobileMenu = controlsId ? document.getElementById(controlsId) : document.getElementById('primary-menu');
+	const navigationMenu = ( controlsId ? document.getElementById(controlsId) : null ) || document.getElementById('primary-menu');
 
-	// If the mobileMenu doesn't exist, default to primary-menu ID
-	const navigationMenu = mobileMenu || document.getElementById('primary-menu');
-
-	// All focusable elements outside the menu
 	const allElementsExceptMenu = document.querySelectorAll('a:not(.js-site-header a), button:not(.js-menu-toggle), input, select, textarea, [tabindex]:not([tabindex="-1"])');
 
-	// Store the element that had focus before opening menu
-	let previouslyFocusedElement = null;
-
-	// Add keyboard event for Escape key handling
 	function handleKeyDown(e) {
 		if (e.key === 'Escape' && menu_toggle.getAttribute('aria-expanded') === 'true') {
 			closeMenu();
 		}
 	}
 
-	// Function to close the menu
 	function closeMenu() {
 		menu_toggle.setAttribute('aria-expanded', 'false');
 		body[0].classList.remove("is-toggled");
 		menu_toggle.classList.remove("is-toggled");
 		html[0].classList.remove("is-scroll-locked");
 
-		// Restore tabindex on elements outside the menu
 		allElementsExceptMenu.forEach(element => {
 			element.tabIndex = '0';
 		});
-
-		// Make the menu tabbable again
 		navigationMenu.setAttribute('tabindex', '1');
 
-		// Remove keyboard event listener when menu is closed
 		document.removeEventListener('keydown', handleKeyDown);
-
-		// Return focus to the menu toggle button
 		menu_toggle.focus();
 	}
 
-	// Function to open the menu
 	function openMenu() {
-		// Save the currently focused element
-		previouslyFocusedElement = document.activeElement;
-
 		menu_toggle.setAttribute('aria-expanded', 'true');
 		body[0].classList.add("is-toggled");
 		menu_toggle.classList.add("is-toggled");
 		html[0].classList.add("is-scroll-locked");
 
-		// Make elements outside menu non-tabbable
 		allElementsExceptMenu.forEach(element => {
 			element.tabIndex = '-1';
 		});
-
-		// Make the menu tabbable
 		navigationMenu.setAttribute('tabindex', '0');
 
-		// Add keyboard event listener when menu is open
 		document.addEventListener('keydown', handleKeyDown);
 
-		// Focus the first focusable element in the menu after a short delay
+		// Delay matches the menu's own open transition, so focus doesn't
+		// jump before it's visible.
 		setTimeout(() => {
 			const firstFocusableElement = navigationMenu.querySelector('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
 			if (firstFocusableElement) {
@@ -87,17 +58,13 @@ function menu_toggle() {
 		e.preventDefault();
 
 		var value = menu_toggle.getAttribute('aria-expanded');
-
-		// Toggle the menu state
 		if (value === 'true') {
 			closeMenu();
 		} else {
 			openMenu();
 		}
-
 	});
 }
-// window.addEventListener('DOMContentLoaded', menu_toggle);
 menu_toggle();
 
 function menuDropdown() {
@@ -197,29 +164,12 @@ function menuDropdown() {
 		}
 	});
 
-	// // Event listener for mouseenter and mouseleave on menu items
-	// menuItems.forEach(item => {
-	// 	const menuItemLink = item.querySelector('a');
-
-	// 	menuItemLink.addEventListener('click', event => {
-	// 		event.stopPropagation(); // Prevent the click on the link from triggering the click outside handler
-	// 	});
-	// });
-
-	// // Resize handler to recalculate height only for the active dropdown
-	// window.addEventListener('resize', () => {
-	// 	if (activeDropdown && activeDropdown.getAttribute('aria-sub-expanded') === 'true') {
-	// 		activeDropdown.style.maxHeight = 'none';
-	// 		const newHeight = activeDropdown.getBoundingClientRect().height;
-	// 		activeDropdown.style.maxHeight = newHeight + 'px';
-	// 	}
-	// });
 }
 document.addEventListener('DOMContentLoaded', menuDropdown);
 
 // Mega-menu CTA card - same fixed-height/growing-content hover lift as
-// .c-card--large (see themes/imp/template-parts/content/blocks/cards/
-// cards.js, which this mirrors): the card's own height is locked to its
+// .c-card--large (see template-parts/content/blocks/cards/cards.js,
+// which this mirrors): the card's own height is locked to its
 // rest-state rendered height via --cta-height, and -reveal's hidden text
 // grows open by exactly --cta-lift (its own natural, un-collapsed
 // height) while -body translates up by that same amount (_navigation.scss)
@@ -379,61 +329,20 @@ function headerScrollState() {
 }
 document.addEventListener('DOMContentLoaded', headerScrollState);
 
-
-// var lastScrollTop = 0;
-// function header_check() {
-// 	const header = document.querySelector(".site-header");
-// 	const hero_height = document.querySelector(".hero").offsetHeight;
-// 	const body = document.querySelectorAll("body");
-// 	var scroll = window.pageYOffset,
-// 		content = 1,
-// 		st = scroll;
-
-// 	// header.style.transition = '0ms';
-
-// 	if (scroll >= hero_height/4) {
-// 		body[0].classList.add("active-nav");
-// 	}
-// 	if (st > lastScrollTop) {
-// 		// downscroll code
-// 		if (scroll >= hero_height/4) {
-// 			body[0].classList.add("active-nav");
-// 		} else {
-// 			// console.log('NAV');
-// 			body[0].classList.remove("active-nav");
-// 		}
-// 	} else {
-// 		// upscroll code
-// 		if (scroll >= hero_height/4) {
-// 			body[0].classList.add("active-nav");
-// 		} else {
-// 			body[0].classList.remove("active-nav");
-// 		}
-// 	}
-// 	lastScrollTop = st;
-// }
-// window.addEventListener('load', header_check);
-// document.addEventListener('scroll', header_check);
-
-
-// Smooth scroll
-// Handle anchor links
+// Smooth-scrolls same-page anchor links (150px offset for the fixed header),
+// then moves focus to the target for keyboard/screen-reader users.
 var anchorLinks = document.querySelectorAll('a[href*="#"]');
 for (var i = 0; i < anchorLinks.length; i++) {
 	var link = anchorLinks[i];
 	if (link.getAttribute('href') !== '#' && link.getAttribute('href') !== '#0') {
 		link.addEventListener('click', function(event) {
-			// On-page links
 			if (
 				location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') &&
 				location.hostname == this.hostname
 			) {
-			// Figure out element to scroll to
 			var target = document.querySelector(this.hash);
 			target = target ? target : document.querySelector('[name=' + this.hash.slice(1) + ']');
-			// Does a scroll target exist?
 			if (target) {
-				// Only prevent default if animation is actually gonna happen
 				event.preventDefault();
 				var scrollTop = target.getBoundingClientRect().top + window.pageYOffset - 150;
 				var duration = 1000;
@@ -451,17 +360,11 @@ for (var i = 0; i < anchorLinks.length; i++) {
 				window.scrollTo(0, newScrollTop);
 				if (time < duration) {
 					window.requestAnimationFrame(animateScroll);
-				} else {
-					// Callback after animation
-					// Must change focus!
-					var $target = $(target);
-					$target.focus();
-					if ($target.is(":focus")) { // Checking if the target was focused
-					return false;
-					} else {
-					$target.attr('tabindex', '-1'); // Adding tabindex for elements not focusable
-					$target.focus(); // Set focus again
-					};
+				} else if (document.activeElement !== target) {
+					if (!target.hasAttribute('tabindex')) {
+						target.setAttribute('tabindex', '-1');
+					}
+					target.focus();
 				}
 				};
 				animateScroll();

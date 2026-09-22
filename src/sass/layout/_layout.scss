@@ -314,7 +314,6 @@ footer {
                 }
             }
 
-            // Keep this for backward compatibility
             ul {
                 margin-top: 2.5rem;
                 margin-left: 2.5rem;
@@ -370,14 +369,6 @@ footer {
 .anchor {
     position: absolute;
     top: -10rem;
-}
-
-.facetwp-template {
-    width: 100%;
-    // opacity: 0;
-    display: flex;
-    flex-flow: row wrap;
-    transition: var(--transition-long) opacity;
 }
 
 .no-results {

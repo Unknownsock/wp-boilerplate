@@ -96,22 +96,6 @@ function parallax() {
 window.addEventListener('scroll', throttle(parallax, 1));
 
 //
-// Facetwp refresh
-//
-document.addEventListener('facetwp-refresh', function() {
-	const x = document.querySelectorAll("html");
-	const z = document.querySelector(".facetwp-template");
-	x[0].classList.remove("is-scroll-locked");
-	z.style.opacity = '0';
-});
-document.addEventListener('facetwp-loaded', function() {
-	const x = document.querySelectorAll("html");
-	const z = document.querySelector(".facetwp-template");
-	x[0].classList.remove("is-scroll-locked");
-	z.style.opacity = '1';
-});
-
-//
 // Modal
 //
 function modal() {
@@ -264,22 +248,3 @@ function modal() {
     }
 }
 window.addEventListener('DOMContentLoaded', modal);
-
-function share() {
-	const share = document.querySelectorAll('.share .share-button');
-	// const svg = el.parentNode.querySelectorAll('ff');
-	share.forEach((el, i) => {
-		el.addEventListener('click', (e) => {
-
-			// e.preventDefault();
-			console.log('dog');
-			var value = el.getAttribute('aria-share-expanded');
-			var aria = value === 'true' ? 'false' : 'true';
-			el.setAttribute('aria-share-expanded', aria);
-
-			el.classList.toggle('active');
-
-		})
-	})
-}
-// window.addEventListener('DOMContentLoaded', share);

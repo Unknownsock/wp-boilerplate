@@ -1,7 +1,6 @@
 // Screen-reader-only utility + skip link. Migrated from the old
 // assets/css/accessibility.css, which defined the same .sr-only /
-// .sr-only-focusable classes but was never actually enqueued anywhere in
-// the theme - see AUDIT_perf_seo_a11y.md item #7.
+// .sr-only-focusable classes but was never actually enqueued anywhere.
 .sr-only {
     position: absolute;
     width: 1px;
