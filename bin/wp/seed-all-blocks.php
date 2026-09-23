@@ -114,6 +114,61 @@ function seed_example_post( $post_type, $title, $extra_field_updates = array() )
 	return (int) $post_id;
 }
 
+/**
+ * Creates several posts of the given type, one per $items entry, reusing
+ * any that already exist with the same title (so reruns don't pile up
+ * duplicates). Returns the IDs in the same order as $items.
+ *
+ * @param string $post_type Post type slug.
+ * @param array  $items     List of ['title' => ..., 'content' => '', 'excerpt' => '', 'fields' => []].
+ * @return int[]
+ */
+function seed_example_posts( $post_type, $items ) {
+	$ids = array();
+
+	foreach ( $items as $item ) {
+		$existing = get_posts(
+			array(
+				'post_type'      => $post_type,
+				'post_status'    => 'publish',
+				'title'          => $item['title'],
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+			)
+		);
+
+		if ( $existing ) {
+			WP_CLI::log( sprintf( 'Reusing existing %s post: %s (%d).', $post_type, $item['title'], $existing[0] ) );
+			$ids[] = (int) $existing[0];
+			continue;
+		}
+
+		$post_id = wp_insert_post(
+			array(
+				'post_title'   => $item['title'],
+				'post_content' => $item['content'] ?? '',
+				'post_excerpt' => $item['excerpt'] ?? '',
+				'post_type'    => $post_type,
+				'post_status'  => 'publish',
+			),
+			true
+		);
+
+		if ( is_wp_error( $post_id ) ) {
+			WP_CLI::error( $post_id->get_error_message() );
+		}
+
+		foreach ( $item['fields'] ?? array() as $field_name => $value ) {
+			update_field( $field_name, $value, $post_id );
+		}
+
+		WP_CLI::success( sprintf( 'Created example %s post: %s (%d).', $post_type, $item['title'], $post_id ) );
+		$ids[] = (int) $post_id;
+	}
+
+	return $ids;
+}
+
 $portfolio_id = seed_example_post( 'portfolio', 'Example Portfolio Item' );
 
 $testimonial_id = seed_example_post(
@@ -130,12 +185,66 @@ $testimonial_id = seed_example_post(
 	)
 );
 
-$team_member_id = seed_example_post(
+$team_member_ids = seed_example_posts(
 	'team_member',
-	'Example Team Member',
 	array(
-		'role'          => 'Founder',
-		'read_bio_mode' => 'none',
+		array(
+			'title'  => 'Example Team Member One',
+			'fields' => array(
+				'role'          => 'Founder',
+				'read_bio_mode' => 'none',
+			),
+		),
+		array(
+			'title'  => 'Example Team Member Two',
+			'fields' => array(
+				'role'          => 'Creative Director',
+				'read_bio_mode' => 'modal',
+			),
+		),
+		array(
+			'title'  => 'Example Team Member Three',
+			'fields' => array(
+				'role'          => 'Head of Delivery',
+				'read_bio_mode' => 'modal',
+			),
+		),
+	)
+);
+
+$blog_post_ids = seed_example_posts(
+	'post',
+	array(
+		array(
+			'title'   => 'Example Blog Post One',
+			'content' => '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. This is placeholder blog content.</p>',
+			'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+		),
+		array(
+			'title'   => 'Example Blog Post Two',
+			'content' => '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. This is placeholder blog content.</p>',
+			'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+		),
+		array(
+			'title'   => 'Example Blog Post Three',
+			'content' => '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. This is placeholder blog content.</p>',
+			'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+		),
+		array(
+			'title'   => 'Example Blog Post Four',
+			'content' => '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. This is placeholder blog content.</p>',
+			'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+		),
+		array(
+			'title'   => 'Example Blog Post Five',
+			'content' => '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. This is placeholder blog content.</p>',
+			'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+		),
+		array(
+			'title'   => 'Example Blog Post Six',
+			'content' => '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. This is placeholder blog content.</p>',
+			'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+		),
 	)
 );
 
@@ -168,7 +277,7 @@ $content_blocks = array(
 	),
 	array(
 		'acf_fc_layout'     => 'stats',
-		'background_colour' => 'white',
+		'background_colour' => 'orange',
 		'stats'             => array(
 			array(
 				'text_position' => 'below',
@@ -188,7 +297,7 @@ $content_blocks = array(
 	),
 	array(
 		'acf_fc_layout'     => 'cards',
-		'background_colour' => 'grey-light',
+		'background_colour' => 'navy',
 		'items'             => array(
 			array(
 				'background_colour' => 'none',
@@ -226,7 +335,7 @@ $content_blocks = array(
 	),
 	array(
 		'acf_fc_layout'     => 'content_grid',
-		'background_colour' => 'white',
+		'background_colour' => 'orange',
 		'eyebrow'           => 'Content grid',
 		'rows'              => array(
 			array(
@@ -273,7 +382,7 @@ $content_blocks = array(
 	),
 	array(
 		'acf_fc_layout' => 'accordion',
-		'background_colour' => 'white',
+		'background_colour' => 'navy',
 		'wysiwyg'       => '<h2>Accordion block</h2>',
 		'accordion'     => array(
 			array(
@@ -304,7 +413,7 @@ $content_blocks = array(
 	array(
 		'acf_fc_layout' => 'team',
 		'text'          => '<h2>The Team</h2>',
-		'team_members'  => $team_member_id ? array( $team_member_id ) : array(),
+		'team_members'  => $team_member_ids,
 	),
 	array(
 		'acf_fc_layout' => 'testimonials',
@@ -326,7 +435,7 @@ $content_blocks = array(
 	),
 	array(
 		'acf_fc_layout'     => 'contact',
-		'background_colour' => 'navy',
+		'background_colour' => 'orange',
 		'eyebrow'           => 'Contact',
 		'text'              => '<h2>Get in touch</h2>',
 		'force_stack'       => 0,
@@ -357,6 +466,7 @@ $content_blocks = array(
 update_field( 'field_5b9931063bbb3', $content_blocks, $home_id );
 
 WP_CLI::success( sprintf( 'Seeded all %d flexible-content layouts onto Home (%d).', count( $content_blocks ), $home_id ) );
+WP_CLI::success( sprintf( 'Seeded %d example blog posts and %d example team members.', count( $blog_post_ids ), count( $team_member_ids ) ) );
 
 WP_CLI::log( '' );
 WP_CLI::log( 'Notes:' );

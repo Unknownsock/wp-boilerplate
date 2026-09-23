@@ -3,26 +3,21 @@
 @use 'sass:map';
 @use 'variables' as *;
 
-// Shared four-colour "panel" palette - the same White/Blue/Orange/Navy
-// choice editors get on cards (block-cards.php), content-grid columns
+// Shared three-colour "panel" palette - the same White/Orange/Navy choice
+// editors get on cards (block-cards.php), content-grid columns
 // (block-content-grid.php), and section backgrounds (the "Background
 // Colour" clone field, field_617ea04499fac). Single source of truth for
 // which name maps to which token, so all three stay in sync instead of
-// each hand-copying the same four colours and silently drifting apart
-// if the palette ever changes. Each consumer still decides HOW to apply
-// these (custom properties for a card's coordinated bg/text/accent vs a
-// flat background-color for a section) - see panel-colour-vars() below
-// for the former; the latter just calls panel-colour() directly.
+// each hand-copying the same colours and silently drifting apart if the
+// palette ever changes. Each consumer still decides HOW to apply these
+// (custom properties for a card's coordinated bg/text/accent vs a flat
+// background-color for a section) - see panel-colour-vars() below for the
+// former; the latter just calls panel-colour() directly.
 $panel-colours: (
     white: (
         bg: var(--secondary-color-1),
         fg: var(--primary-color-3),
         accent: var(--primary-color-1),
-    ),
-    blue: (
-        bg: var(--primary-color-5),
-        fg: var(--secondary-color-1),
-        accent: var(--primary-color-3),
     ),
     orange: (
         bg: var(--primary-color-1),
@@ -36,18 +31,12 @@ $panel-colours: (
     ),
 );
 
-// Looks up one token from $panel-colours above, e.g.
-// panel-colour(orange, bg) => var(--primary-color-1).
 @function panel-colour($name, $key) {
     @return map.get(map.get($panel-colours, $name), $key);
 }
 
-// Sets custom properties from $panel-colours above, for a component that
-// coordinates several inner parts (background + text + one accent) off
-// a single colour choice - e.g. .c-card--large's own
-// --card-bg/--card-fg/--card-accent. $bg/$fg/$accent name the custom
-// properties to set, defaulting to the card component's own names so its
-// `&.white { @include panel-colour-vars(white); }` stays a one-liner.
+// $bg/$fg/$accent default to the card component's own custom-property
+// names so `&.white { @include panel-colour-vars(white); }` stays a one-liner.
 @mixin panel-colour-vars(
     $name,
     $bg: '--card-bg',
@@ -136,11 +125,9 @@ $panel-colours: (
             }
         }
     }
-    // Disable hover effect on mobile devices (where pointer is coarse)
     @media (pointer: coarse) {
         &:focus,
         &:hover {
-            // pointer-events: none; // Disable hover interaction
         }
     }
 }
@@ -168,24 +155,6 @@ $panel-colours: (
 }
 
 @mixin underline() {
-    // &:after {
-    //     content: '';
-    //     position: absolute;
-    //     width: 100%;
-    //     transform: scaleX(0);
-    //     height: 0.3rem;
-    //     bottom: 0;
-    //     left: 0;
-    //     background-color: var(--primary-color-1);
-    //     transform-origin: bottom right;
-    //     transition: transform 0.25s ease-out;
-    // }
-    // @include hover() {
-    //     &:after {
-    //         transform: scaleX(1);
-    //         transform-origin: bottom left;
-    //     }
-    // }
 }
 
 // Underline driven by a --active custom property (0→1 on hover) rather
@@ -215,11 +184,9 @@ $panel-colours: (
     $minWidth: 76.8rem,
     $maxWidth: 192rem
 ) {
-    // do calculations
     $slope: math.div($maxSize - $minSize, $maxWidth - $minWidth);
     $yAxisIntersection: -$minWidth * $slope + $minSize;
 
-    // output as rem
     @return clamp(
         #{$minSize},
         #{$yAxisIntersection} + #{$slope} * 100vw,
@@ -227,14 +194,9 @@ $panel-colours: (
     );
 }
 
-// Fluid edge padding that caps out at $max-width instead of growing forever
-// on ultra-wide screens. Pass a narrower $max-width per block in its own
-// partial (e.g. @include block-bounds(100rem)) when it needs a tighter
-// column than the site default.
-//
-// The gutter itself is fluid too: flat at $min-pad below $min-vw (mobile),
-// scaling linearly up to $max-pad by $max-vw (1440px), then flat at
-// $max-pad beyond that — via betterClamp, so no extra media query needed.
+// Caps out at $max-width instead of growing forever on ultra-wide screens.
+// Pass a narrower $max-width per block (e.g. @include block-bounds(100rem))
+// for a tighter column than the site default.
 @mixin block-bounds(
     $max-width: var(--container),
     $min-pad: 3rem,
@@ -374,7 +336,6 @@ $panel-colours: (
     textarea,
     select {
         background-color: var(--primary-color-1);
-        border-radius: 5px;
         border: 0.1rem solid transparent;
         // Was "&:placeholder" - not a real pseudo-class, so this never
         // actually applied. Fixed to "::placeholder".

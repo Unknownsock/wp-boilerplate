@@ -19,9 +19,9 @@
 
 	// Background colour used to be editor-selectable (background_colour
 	// field, removed from this layout in the ACF JSON) - this block is
-	// always light grey now, hardcoded in _sticky.scss.
+	// always white now, hardcoded in _sticky.scss.
 ?>
-<section class="<?php echo esc_attr( $block . ' grey-light' ); ?>">
+<section class="<?php echo esc_attr( $block ); ?>">
 	<div class="<?php echo $block; ?>__intro">
 		<?php if ( $eyebrow ) { ?>
 			<p class="c-eyebrow c-eyebrow--default"><?php echo esc_html( $eyebrow ); ?></p>

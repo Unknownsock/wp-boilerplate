@@ -87,7 +87,7 @@
         width: 100%;
         height: 1px;
         margin: 6rem 3rem;
-        background-color: var(--primary-color-5);
+        background-color: color-mix(in srgb, var(--primary-color-3) 20%, transparent);
     }
 
     #{$block}__items {

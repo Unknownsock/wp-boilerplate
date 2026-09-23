@@ -56,8 +56,7 @@
         width: 100%;
         box-sizing: border-box;
         padding: var(--grid-gutter);
-        border-radius: 1rem;
-        background-color: #fb62b2;
+        background-color: var(--secondary-color-1);
         @media screen and (min-width: $grid-md) {
             padding: 4rem;
         }

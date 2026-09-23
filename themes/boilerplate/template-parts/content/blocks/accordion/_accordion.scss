@@ -71,17 +71,8 @@
         gap: 2rem;
         // background-color: var(--secondary-color-1);
         border: 0.1rem solid var(--primary-color-3);
-        // Fully rounded (pill) at rest - a value this large always clips
-        // to the max radius the trigger's own height allows, regardless
-        // of its exact rem value. Once opened, the panel makes the item
-        // taller than a pill should be, so it settles back to a normal
-        // rounded-rect radius.
-        border-radius: 4rem;
         overflow: hidden;
         box-sizing: border-box;
-        &:has(#{$block}__trigger[aria-expanded='true']) {
-            border-radius: 4rem;
-        }
     }
 
     #{$block}__trigger {
@@ -140,7 +131,6 @@
             min-width: 2rem;
             height: 0.1rem;
             min-height: 0.1rem;
-            border-radius: 0.1rem;
             background-color: var(--primary-color-3);
         }
 

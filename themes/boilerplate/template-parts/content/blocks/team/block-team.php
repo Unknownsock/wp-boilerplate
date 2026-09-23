@@ -26,7 +26,7 @@
 	<?php if ( $members ) { ?>
 		<div class="<?php echo $block; ?>__grid">
 			<?php
-			foreach ( $members as $member ) {
+			foreach ( $members as $member_index => $member ) {
 				$member_id = $member->ID;
 				$name      = get_the_title( $member_id );
 				$role      = get_field( 'role', $member_id );
@@ -49,7 +49,7 @@
 				}
 				$modal_id    = 'team-modal-' . $member_id;
 				?>
-				<div class="<?php echo $block; ?>__item">
+				<div class="<?php echo $block; ?>__item" data-scroll-animation="fadeIn" data-scroll-delay="<?php echo esc_attr( $member_index * 100 ); ?>">
 					<div class="<?php echo $block; ?>__image">
 						<?php if ( $photo ) { ?>
 							<?php echo $photo; ?>

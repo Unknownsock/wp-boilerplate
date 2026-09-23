@@ -3,7 +3,6 @@ import Swiper from 'swiper';
 import { Autoplay, Pagination, Thumbs, FreeMode, EffectFade } from 'swiper/modules';
 
 const swiper_gallery = () => {
-	// Find all thumbs sliders first and store their instances
 	let thumbsSliders = document.querySelectorAll('.swiper-gallery-thumbs');
 	let thumbsInstances = [];
 
@@ -34,7 +33,6 @@ const swiper_gallery = () => {
 		thumbsInstances.push(thumbsSwiper);
 	});
 
-	// Now initialize main galleries
 	let galleries = document.querySelectorAll('.swiper-gallery');
 	galleries.forEach((gallery, index) => {
 		const mainSwiper = new Swiper(gallery, {

@@ -119,7 +119,7 @@ if ( $created_pages['home'] && function_exists( 'update_field' ) ) {
 			),
 			array(
 				'acf_fc_layout'     => 'cards',
-				'background_colour' => 'grey-light',
+				'background_colour' => 'white',
 				'items'             => array(
 					array(
 						'background_colour' => 'none',
@@ -323,3 +323,63 @@ seed_nav_menu( 'Footer Menu 1', 'menu-2', array( 'about', 'contact' ), $page_ids
 seed_nav_menu( 'Footer Menu 2', 'menu-3', array( 'services', 'approach' ), $page_ids, $pages );
 
 seed_menu_item_children( 'Main Menu', 'about', array( 'services', 'approach' ), $page_ids, $pages );
+
+/**
+ * Sets the mega-menu CTA card fields (group_68b9a001megacta, menu_level
+ * 0 items only) on a top-level menu item - the standard header's
+ * mega-menu otherwise has no seeded item with a CTA card configured, so
+ * that half of the dropdown is never exercised.
+ *
+ * @param string $menu_name   Nav menu name, e.g. 'Main Menu'.
+ * @param string $parent_slug Page slug (key into $page_ids) of the top-level item to set the CTA on.
+ * @param array  $page_ids    Map of slug => page ID.
+ */
+function seed_mega_menu_cta( $menu_name, $parent_slug, $page_ids ) {
+	if ( ! function_exists( 'update_field' ) ) {
+		return;
+	}
+
+	$menu = wp_get_nav_menu_object( $menu_name );
+
+	if ( ! $menu ) {
+		WP_CLI::warning( sprintf( 'Menu "%s" not found - skipped mega-menu CTA.', $menu_name ) );
+		return;
+	}
+
+	$menu_items = wp_get_nav_menu_items( (int) $menu->term_id );
+	$parent_id  = $page_ids[ $parent_slug ];
+	$item_id    = 0;
+
+	foreach ( (array) $menu_items as $menu_item ) {
+		if ( 0 === (int) $menu_item->menu_item_parent && 'page' === $menu_item->object && (int) $menu_item->object_id === $parent_id ) {
+			$item_id = $menu_item->ID;
+		}
+	}
+
+	if ( ! $item_id ) {
+		WP_CLI::warning( sprintf( 'Top-level menu item for "%s" not found in "%s" - skipped mega-menu CTA.', $parent_slug, $menu_name ) );
+		return;
+	}
+
+	if ( get_field( 'mega_cta_title', $item_id ) ) {
+		WP_CLI::log( 'Skipped mega-menu CTA - already set on this menu item.' );
+		return;
+	}
+
+	update_field( 'mega_cta_tag', 'Featured', $item_id );
+	update_field( 'mega_cta_title', 'See our approach', $item_id );
+	update_field( 'mega_cta_text', 'A look at how we work, from first conversation to delivery.', $item_id );
+	update_field(
+		'mega_cta_link',
+		array(
+			'title'  => 'Learn more',
+			'url'    => '#',
+			'target' => '',
+		),
+		$item_id
+	);
+
+	WP_CLI::success( sprintf( 'Set mega-menu CTA card on the "%s" menu item.', $parent_slug ) );
+}
+
+seed_mega_menu_cta( 'Main Menu', 'about', $page_ids );

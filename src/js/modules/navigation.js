@@ -75,7 +75,6 @@ function menuDropdown() {
 	// max-height toggle below must not run there.
 	const NAV_BREAKPOINT = '(max-width: 991px)';
 
-	// const menuItems = document.querySelectorAll('.menu-item-has-children');
 	const menuItems = document.querySelectorAll('#primary-menu > .menu-item');
 
 	menuItems.forEach(el => {
@@ -93,7 +92,6 @@ function menuDropdown() {
 				}
 			});
 
-			// open dropdown menu on click + transforms
 			arrow.addEventListener('click', (e) => {
 				if (!window.matchMedia(NAV_BREAKPOINT).matches) {
 					// Desktop: let CSS hover/focus handle the dropdown, don't
@@ -147,7 +145,6 @@ function menuDropdown() {
 
 					dropdownMenu.style.maxHeight = height + 'px';
 					el.classList.add('is-active');
-					// Focus on the first link when the dropdown is opened
 					const firstLink = el.querySelector('ul a');
 					if (firstLink) {
 						firstLink.focus();

@@ -10,21 +10,11 @@
 // boosts these just enough to reliably beat a plain block-wrapper class
 // regardless of which stylesheet's <link> happens to load first, now that
 // block CSS is split into separate per-block chunks instead of one bundle.
-// $panel-colours (abstracts/_mixins.scss) is the shared White/Blue/
-// Orange/Navy palette also used by cards and content-grid columns - the
-// bg/--section-bg pairs below just look the colour name up there instead
-// of hardcoding the same four tokens a third time.
+// $panel-colours (abstracts/_mixins.scss) is the shared White/Orange/Navy
+// palette also used by cards and content-grid columns - the bg/
+// --section-bg pairs below just look the colour name up there instead of
+// hardcoding the same tokens a second time.
 section {
-    &.blue:not(#\#) {
-        background-color: panel-colour(blue, bg);
-        --section-bg: #{panel-colour(blue, bg)};
-    }
-    &.blue:not(&.full_image_gallery) {
-        + .blue {
-            padding-top: 0;
-        }
-    }
-
     &.white:not(.full_image_gallery):not(#\#) {
         background-color: panel-colour(white, bg);
         --section-bg: #{panel-colour(white, bg)};
@@ -63,31 +53,6 @@ section {
             padding-top: 0;
         }
     }
-
-    &.gradient:not(#\#) {
-        background: linear-gradient(
-            280deg,
-            var(--gradient-color-1) 0%,
-            var(--gradient-color-2) 38.94%,
-            var(--gradient-color-3) 100%
-        );
-        --section-bg: var(--gradient-color-3);
-    }
-    &.gradient:not(&.full_image_gallery) {
-        + .gradient {
-            padding-top: 0;
-        }
-    }
-
-    &.grey-light:not(#\#) {
-        background-color: var(--primary-color-4);
-        --section-bg: var(--primary-color-4);
-    }
-    &.grey-light:not(&.full_image_gallery) {
-        + .grey-light {
-            padding-top: 0;
-        }
-    }
 }
 
 // Anything in this layer loses to ANY unlayered rule (e.g. block partials),
@@ -113,9 +78,7 @@ section {
 section {
     // Dark backgrounds - headings/copy need to flip to white.
     &.orange,
-    &.navy,
-    &.gradient,
-    &.blue {
+    &.navy {
         h1,
         h2,
         h3,
@@ -130,8 +93,7 @@ section {
     // Light backgrounds - all light enough for the default dark grey
     // heading/copy colour, so this only needs setting once.
     &.white,
-    &.transparent,
-    &.grey-light {
+    &.transparent {
         h1,
         h2,
         h3,
@@ -154,7 +116,6 @@ section {
             }
         }
         p {
-            // font-weight: 600;
         }
     }
 }

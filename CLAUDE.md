@@ -61,49 +61,99 @@ which are detailed enough to stand in for a longer recap here.
   `app.js`, minimal `src/sass/base/_anim.scss` (`will-change` + `[data-lottie]` sizing). **Nothing
   in any template actually uses these data attributes yet** - the system is wired up and builds
   clean, but is currently inert until someone adds `data-scroll-animation="..."` to real markup.
+- **Wireframe/colour system pass, done**: cut the primary palette from 6 colours down to 3
+  (`--primary-color-1` accent, `--primary-color-3` dark, `--secondary-color-1` light -
+  `_variables.scss`) and dropped `--primary-color-2/4/5/6`, the 3 `--gradient-color-*` stops, and
+  `--secondary-color-2`. `$panel-colours` (`abstracts/_mixins.scss`) is now White/Orange/Navy only
+  (dropped Blue) and the `background_colour`/`button_colour` ACF choice lists (both `group-
+  618080750e91b.json` fields, plus content-grid's and cards' per-item colour fields in
+  `group-5b9930d7812e5.json`) were trimmed to match - `gradient` and `grey-light` are gone as
+  choices too, `_default.scss`'s `.gradient`/`.grey-light` section rules deleted along with them.
+  Fixed up every consumer of a removed variable (nav mega-menu gradients simplified to flat white,
+  slider nav buttons, feature-grid's row divider, a couple of pre-existing broken
+  `rgba(var(--secondary-color-2), ...)`/`hsla(...)` calls in `_modal.scss`/`_blocks.scss` that were
+  no-ops even before this pass) and every block that hardcoded a `grey-light`/`gradient` class or
+  default (`sticky`, `latest-blogs`, `cards`, `stats`, plus the two `bin/wp/seed-*.php` scripts).
+  Removed `border-radius` everywhere it was purely decorative corner-rounding (~35 declarations
+  across `src/sass/**` and per-block SCSS) - kept the ones that form a shape rather than soften a
+  corner (`50%` circles: avatars, dots, slider controls; `999rem`/`9999px` pills: buttons, the
+  underline-active mixin), per your call when asked. `npm run build` is clean.
+- **Seed alternating background colours, done**: `bin/wp/seed-all-blocks.php`'s 8 blocks with a
+  `background_colour` field (separator, stats, cards, feature_grid, content_grid, accordion,
+  buttons, contact) now round-robin white/orange/navy in source order instead of all defaulting to
+  white (contact used to be hardcoded navy) - no two adjacent ones repeat the same colour. Only
+  this file - `seed-content.php`'s two `background_colour` rows weren't in scope (it's the
+  idempotent starter-content script, not the "see every block" testing tool this task was about).
+- **Off-palette pink hex, done** - turned out to be bigger than just `_contact.scss`/`_modal.scss`
+  (`#fb62b2`/`#FB62B2`/`#DF0E7B` were scattered across 6 files, not 2). Fixed all of them:
+  `.b-contact__form`'s panel is now white (`--secondary-color-1`) and the contact modal's `__panel`
+  stays orange (`--primary-color-1`, already on-palette) with its label/input override swapped from
+  pink to white - preserves the original "light panel / dark-accent panel, inverted" two-tone design
+  intent from the comments, just with on-palette colours instead of a stray pink. Inline SVG
+  `fill`/`stroke` attributes in live-DOM markup (social icons in `component-social-sticky.php` +
+  `component-socials.php`, the mega-menu dropdown arrow in `class-custom-menu-walker.php`) now use
+  `var(--primary-color-1)` directly. Data-URI-encoded SVGs (`_forms.scss`'s checkbox tick,
+  `_testimonials.scss`'s quote-mark decoration) can't reference a CSS custom property, so those got
+  the literal `--primary-color-1` hex (`#e35b30`) hardcoded instead, with a comment noting they need
+  to be kept in sync by hand if the accent colour ever changes.
+- **More placeholder content, done**: `seed-all-blocks.php` now seeds 3 example Team Member posts
+  (was 1, varied roles/bio modes) and 6 example blog posts (`post` type, real WP posts so both the
+  `listing` block's query mode and `latest_blogs` have enough to show) via a new
+  `seed_example_posts()` helper (title-deduped, safe to rerun).
+- **Mega-menu CTA card, done**: `seed-content.php` now sets the `group_68b9a001megacta` fields
+  (tag/title/text/link) on the "About" item in Main Menu, so the standard header's mega-menu has at
+  least one CTA card configured to check. No image set (seed-content.php has no media-import
+  plumbing the way seed-all-blocks.php does) - optional field, left blank.
+- **GSAP anim system, lightly exercised**: added `data-scroll-animation="slideUp"` (staggered by
+  index) to each card in `block-cards.php`, and `data-scroll-animation="fadeIn"` (staggered) to each
+  item in `block-stats.php` and `block-team.php`, so the system isn't 100% inert any more. Not
+  browser-tested this session (no confirmed running Docker stack) - check these three blocks in the
+  browser before relying on the effect; the rest of the block templates still have no
+  `data-scroll-animation` attributes at all.
 
-**Still open / not yet done:**
-- **Wireframe/colour system**: strip the primary palette down to a max of 3 colours and restyle
-  toward a neutral wireframe look - not started. Also asked: remove `border-radius` everywhere
-  (explicitly called out as "a theme style" that shouldn't be baked into the generic boilerplate).
-  This is the single biggest remaining task - touches `abstracts/_variables.scss`'s
-  `--primary-color-1` through `-6`, the `$panel-colours` map in `abstracts/_mixins.scss`
-  (White/Blue/Orange/Navy section-colour choices - CLAUDE.md's own documented "Shared panel
-  colour palette" section describes this system), and `border-radius` declarations scattered
-  across most component/block SCSS files. Do this as its own focused pass, not mixed with other
-  edits - it's cross-cutting and easy to half-finish.
-- **Seed alternating background colours**: `bin/wp/seed-all-blocks.php` should cycle each block's
-  `background_colour` field (white/grey-light/blue/navy/gradient) through the seeded rows instead
-  of leaving most at their default, purely so adjacent sections are visually distinguishable when
-  testing. Only blocks that actually have a `background_colour` field: separator, stats, cards,
-  feature_grid, content_grid, accordion, buttons, contact.
-- **More placeholder content**: add more example Team Member posts (currently only one) and more
-  example blog posts (`post` type - needed for the `listing` block's query mode and
-  `latest_blogs` to have more than a couple of items to show).
-- **Broad SCSS/JS comment audit**: asked twice this session ("too many comments... AI-like") -
-  only partially addressed as a side effect of other edits. Needs a dedicated pass over
-  `src/sass/**` and `src/js/**` specifically looking for over-explained/narrative comments, per
-  the WHY-only rule already in this file's top-level instructions. Don't touch the comments
-  CLAUDE.md itself calls out as deliberately load-bearing (the `:not(#\#)` specificity hack, the
-  unlayered background-colour rationale, the header-dispatch pattern, the `simple-nav-list`
-  same-specificity `@media` gotcha below) - those exist because the mistake was already made once.
-- **CI / testing**: discussed but not built. Offered and the user was interested in: (1) a GitHub
-  Actions workflow running `composer qa` + eslint + stylelint + build on push/PR, with the local
-  pre-commit hook loosened to formatting-only; (2) a Cypress suite (already a devDependency,
-  zero spec files currently) for horizontal-scroll detection, broken-internal-link crawling, and
-  console-error assertions across the main templates. Neither exists yet - both are concrete,
-  well-scoped next steps if asked for.
-- The GSAP anim system (above) needs someone to actually add `data-scroll-animation` attributes
-  to real block templates to be useful - right now it's dead weight in the bundle until used.
-- The standard header's mega-menu CTA-card feature (`mega_cta_*` fields) remains untouched/
-  unverified - no seeded menu item has one configured.
-- `client_logo` is still not a registered ACF field on the `portfolio` CPT (the `logos` block
-  reads it via `get_field('client_logo', $client)` but nothing defines it) - pre-existing gap,
-  flagged repeatedly, never fixed.
-- The `--sidebar-width` variable removal and the two ACF-field-with-no-JSON-definition gaps
-  (`field_617e9fb9b4fbc`, used by map/accordion's "Block Width" clone) are cosmetic/minor and
-  probably not worth a dedicated pass on their own - only worth fixing if you're already touching
-  those specific blocks.
+**Newly found, not fixed (bigger than expected, flagged rather than guessed at):**
+- **`client_logo` gap turned out to be part of a much bigger hole**: `single-portfolio.php` calls
+  `get_field()` for `content_mode_toggle`, `above_gallery_text`, `gallery_layout`, `gallery`,
+  `before_image`, `after_image`, `below_before_after_text`, `related_articles`, and `custom_title` -
+  **none of these have an ACF field group defining them anywhere in `acf-json/`** (confirmed via
+  grep - `content_mode_toggle` doesn't appear in any JSON file). `includes/theme-settings.php`
+  still has a `content_mode_toggle`-driven field-hiding hook (~line 352) referencing this same
+  missing group. This means the entire portfolio single template's field UI is currently
+  unavailable in wp-admin on a fresh site - a much bigger pre-existing gap than the single missing
+  `client_logo` field originally flagged. Didn't attempt to reconstruct the field group blind -
+  needs your call on what that group should actually contain before anyone builds it.
+- **Undefined `--base-color-*` custom properties**: `src/sass/components/_forms.scss` references
+  `var(--base-color-1)` through `-5` (and `--base-color-4-60`) about 31 times (`.custom-dropdown`,
+  `.custom-file-input-wrapper`, `.custom-radio-group`, `.wpcf7-response-output`, the plain
+  `input[type=text]`/`textarea` rules) - **none of these are defined anywhere in
+  `_variables.scss`**, so all of that styling currently resolves to nothing/inherited, not the
+  colours the rules imply. Predates this session; not touched, since it's a separate rename/mapping
+  decision (what should `--base-color-1..5` even become in the new 3-colour system?), not a
+  border-radius/palette-reduction task.
+
+- **Broad SCSS/JS comment audit, done**: asked twice this session ("too many comments... AI-like").
+  Swept `src/sass/**` and `src/js/**` (21 files touched), ~60+ individual removals/trims - deleted
+  commented-out dead code (`_mixins.scss`'s `underline()` mixin, swiper pagination styles, one-line
+  `// property: value;` leftovers across `_navigation.scss`/`_hero.scss`/`_layout.scss`/
+  `_blocks.scss`/`_card.scss`/`_modal.scss`/`_single.scss`/`_header.scss`), trimmed multi-sentence
+  WHY comments to one line (`_card.scss`, `_mixins.scss`, `_buttons.scss`, `_navigation.scss`), and
+  removed WHAT-only comments restating the next line (heaviest in `layout.js`'s `modal()` function
+  and `forms.js`'s `customforms_select()`). Left alone: genuinely non-obvious WHY content (browser
+  quirks, specificity ties, JS timing bugs, hover-intent debounce logic in `navigation.js`), and
+  `_reset.scss` (a normalize.css-style file where every comment documents a real cross-browser
+  quirk). Verified after the fact - re-grepped `:not(#\#)` (still the same 6 files: `_default.scss`,
+  `_header.scss`, `_navigation.scss`, `_modal.scss`, `_card.scss`, `_mixins.scss`), and the
+  `@layer theme` rationale comment at the top of `_default.scss` is untouched byte-for-byte. `npm
+  run build` clean.
+- **CI / testing**: discussed but not built (explicitly deferred this session). Offered and the
+  user was interested in: (1) a GitHub Actions workflow running `composer qa` + eslint + stylelint
+  + build on push/PR, with the local pre-commit hook loosened to formatting-only; (2) a Cypress
+  suite (already a devDependency, zero spec files currently) for horizontal-scroll detection,
+  broken-internal-link crawling, and console-error assertions across the main templates.
+- The two ACF-field-with-no-JSON-definition gaps (`field_617e9fb9b4fbc`, used by map/accordion's
+  "Block Width" clone) are cosmetic/minor - only worth fixing if you're already touching those
+  specific blocks. (The `--sidebar-width` variable this bullet used to also list has since been
+  confirmed already gone - no longer referenced anywhere in the codebase.)
 - Environment notes: the Docker `uploads/` permission fix (`chmod 777`, wp-cli container's
   `www-data` is UID 82 vs the wordpress container's UID 33) is session-only, not persisted in
   `docker-compose.yml` - it'll need redoing after a container rebuild if image uploads via wp-cli
@@ -260,7 +310,7 @@ still backs pages/parts that predate this convention (`single-portfolio.php`, `s
 ### Shared "panel colour" palette
 
 `$panel-colours` (a Sass map in [abstracts/_mixins.scss](src/sass/abstracts/_mixins.scss)) is the
-single source of truth for the White/Blue/Orange/Navy colour choice offered on cards, content-grid
+single source of truth for the White/Orange/Navy colour choice offered on cards, content-grid
 columns, and section backgrounds — `panel-colour($name, bg|fg|accent)` looks up a token,
 `panel-colour-vars($name, ...)` sets a component's custom properties from it. Each consumer still
 owns _how_ it applies the colour (custom properties for a card's coordinated bg/text/accent vs a
@@ -287,11 +337,13 @@ individual layouts rather than redefined per layout.
 
 ### CSS custom properties, not Sass variables, for the brand palette
 
-`--primary-color-1` through `-6`, `--secondary-color-1/2`, etc. are defined as **CSS** custom
-properties on `:root` in [abstracts/_variables.scss](src/sass/abstracts/_variables.scss) (not Sass
-`$variables`) — deliberately, so they resolve at runtime and could in principle be themed/overridden
-per-scope. Values are currently eyeballed from a rebrand screenshot, not final brand hex — expect
-these to change.
+`--primary-color-1` (accent), `--primary-color-3` (dark), and `--secondary-color-1` (light) — a
+deliberately-capped 3-colour palette, see this file's own session log above for the reduction from
+6 — are defined as **CSS** custom properties on `:root` in
+[abstracts/_variables.scss](src/sass/abstracts/_variables.scss) (not Sass `$variables`) —
+deliberately, so they resolve at runtime and could in principle be themed/overridden per-scope.
+Values are currently eyeballed from a rebrand screenshot, not final brand hex — expect these to
+change.
 
 ### WordPress plumbing specifics
 

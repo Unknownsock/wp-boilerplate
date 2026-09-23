@@ -34,24 +34,18 @@ function dropDownImage(image, el) {
 function customforms_select() {
     const selects = document.querySelectorAll('select');
     selects.forEach((select) => {
-        // add class to the select
         select.classList.add('dropdown-select');
 
-        // create custom dropdown wrapper
         const dropdownParent = document.createElement('div');
-        // dropdownParent.className = 'custom-dropdown ' + select.className;
         dropdownParent.className = 'custom-dropdown ';
 
-        // get data from select field
         const options = select.querySelectorAll('option');
 
-        // custom dropdown text
         const customDropdownText = document.createElement('div');
         customDropdownText.className = 'custom-dropdown-text';
         dropdownParent.appendChild(customDropdownText);
         customDropdownText.textContent = options[0].textContent;
 
-        // Set the selected value in the new custom dropdown
         const selectedOption = select.querySelector('option:checked');
         if (selectedOption) {
             customDropdownText.textContent = selectedOption.textContent;
@@ -70,27 +64,23 @@ function customforms_select() {
         dropdownParent.appendChild(customArrow);
 
         options.forEach((option, index) => {
-            // create <li> list
             const listItem = document.createElement('li');
             dropdown.appendChild(listItem);
 
-            // set values of each item list from <option>
             listItem.textContent = option.textContent;
             listItem.setAttribute('data-value', option.value);
 
-            // Add image to custom dropdown <li>, data url grabbed from data-image=""
             dropDownImage(option, listItem);
 
             listItem.addEventListener('click', () => {
                 const value = listItem.getAttribute('data-value');
-                customDropdownText.textContent = listItem.textContent; // change custom-dropdown-text value
+                customDropdownText.textContent = listItem.textContent;
 
-                // Update the selected option value of the associated <select>
                 select.value = value;
 
                 dispatchChangeEvent(select);
 
-                // add selected class to parent when clicking listitem but the first placeholder
+                // index 0 is the placeholder, not a real selection
                 if (index > 0) {
                     dropdownParent.classList.add('selected');
                 } else {
@@ -113,7 +103,6 @@ function dispatchChangeEvent(element) {
 
 customforms_select();
 
-// Close dropdowns when clicking outside them
 document.addEventListener('click', (event) => {
     const dropdowns = document.querySelectorAll('.custom-dropdown');
     dropdowns.forEach((dropdown) => {
@@ -195,27 +184,22 @@ function handleFileChange() {
 
         const defaultLabel = 'No file chosen';
 
-        // Build wrapper
         const wrapper = document.createElement('div');
         wrapper.className = 'custom-file-input-wrapper';
 
-        // Label (shows filename / placeholder)
         const fileLabel = document.createElement('span');
         fileLabel.className = 'custom-file-input-label';
         fileLabel.textContent = defaultLabel;
 
-        // Button
         const button = document.createElement('span');
         button.className = 'custom-file-input-button';
         button.textContent = 'Upload File';
 
-        // Insert wrapper before the input, move input inside
         input.parentNode.insertBefore(wrapper, input);
         wrapper.appendChild(input);
         wrapper.appendChild(fileLabel);
         wrapper.appendChild(button);
 
-        // Update label on file select
         input.addEventListener('change', function () {
             fileLabel.textContent =
                 this.files.length > 0 ? this.files[0].name : defaultLabel;

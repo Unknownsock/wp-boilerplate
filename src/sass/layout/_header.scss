@@ -2,12 +2,10 @@
 @use '../abstracts/mixins' as *;
 
 // Optional animated-logo hook (component-site-branding.php) - if a client
-// logo SVG has a group with this class, it spins continuously. Shared by
-// header and footer, so this is deliberately top-level rather than nested
-// under .o-site-header. transform-box: fill-box + origin: center means the
-// browser rotates around the group's own bounding box centre - no need to
-// hand-calculate the pinwheel's centre point in SVG user units. Unused
-// (no-op) until a logo SVG actually tags a group with this class.
+// logo SVG has a group with this class, it spins continuously. Top-level
+// since it's shared by header and footer. transform-box: fill-box + origin:
+// center rotates around the group's own bounding box, no manual centring.
+// Unused (no-op) until a logo SVG actually tags a group with this class.
 .c-logo__spin {
     transform-box: fill-box;
     transform-origin: center;
@@ -149,16 +147,13 @@
         // padding (3rem at mobile, scaling up to 8rem by 1440px, flat above).
         padding-inline: betterClamp(2rem, 4rem, 76.8rem, 144rem);
         @media screen and (max-width: $grid-md) {
-            // padding-inline: var(--grid-gutter);
             height: 100%;
-            // background: var(--secondary-color-1);
         }
 
         .site-branding {
             display: flex;
             align-items: center;
             pointer-events: all;
-            // transform: translateY(1.5rem);
             a {
                 display: flex;
                 img,

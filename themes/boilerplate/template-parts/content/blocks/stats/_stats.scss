@@ -7,8 +7,8 @@
     padding-left: var(--grid-gutter);
     padding-bottom: var(--grid-gutter);
     // Background colour comes from the `background_colour` ACF field via
-    // the shared .gradient/.navy/etc classes in _default.scss, not a
-    // hardcoded value here (defaults to `gradient` - see block-stats.php).
+    // the shared .white/.orange/.navy classes in _default.scss, not a
+    // hardcoded value here (defaults to `navy` - see block-stats.php).
     @include block-bounds();
     @media screen and (min-width: $grid-md) {
         padding-top: 8rem;

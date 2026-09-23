@@ -17,13 +17,13 @@
 
 	// Singles.
 	$items              = $content['items'] ?? null;
-	$background_colour  = $content['background_colour'] ?? 'grey-light';
+	$background_colour  = $content['background_colour'] ?? 'white';
 ?>
 <section class="<?php echo esc_attr( $block . ' ' . $background_colour ); ?>">
 	<?php if ( $items ) { ?>
 		<div class="<?php echo $block; ?>__grid">
 			<?php
-			foreach ( $items as $item ) {
+			foreach ( $items as $index => $item ) {
 				$image        = boilerplate_image( $item['image'] ?? null, 600, 400, wp_strip_all_tags( $item['title'] ?? 'Card image' ) );
 				$title        = $item['title'] ?? null;
 				$eyebrow      = $item['eyebrow'] ?? null;
@@ -38,6 +38,8 @@
 				?>
 				<<?php echo tag_escape( $tag ); ?>
 					class="<?php echo esc_attr( $card_classes ); ?>"
+					data-scroll-animation="slideUp"
+					data-scroll-delay="<?php echo esc_attr( $index * 100 ); ?>"
 					<?php if ( $link_url ) : ?>
 						href="<?php echo esc_url( $link_url ); ?>"
 						<?php echo $link_target ? ' target="' . esc_attr( $link_target ) . '" rel="noopener"' : ''; ?>

@@ -13,7 +13,7 @@
 
 	// Singles.
 	$stats             = $content['stats'] ?? null;
-	$background_colour = $content['background_colour'] ?? 'gradient';
+	$background_colour = $content['background_colour'] ?? 'navy';
 ?>
 
 <section class="<?php echo esc_attr( $block . ' ' . $background_colour ); ?>">
@@ -53,7 +53,7 @@
 					<?php
 				};
 				?>
-				<div class="<?php echo $block; ?>__item">
+				<div class="<?php echo $block; ?>__item" data-scroll-animation="fadeIn" data-scroll-delay="<?php echo esc_attr( $i * 100 ); ?>">
 					<?php if ( 'above' === $text_position ) { $render_text(); } ?>
 					<div class="<?php echo $block; ?>__image">
 						<img class="<?php echo $block; ?>__image-el" src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" loading="lazy" width="120" height="120" />

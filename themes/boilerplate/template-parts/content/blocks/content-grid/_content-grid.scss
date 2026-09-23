@@ -40,7 +40,6 @@
         // below (can be combined with it or used alone).
         &--border {
             border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 2rem;
             padding: 2rem;
         }
     }
@@ -57,15 +56,14 @@
         // Per-column background colour ("panel" - block-content-grid.php
         // only adds this modifier + the plain colour class, e.g. "navy",
         // when the column's own colour isn't left at "None"). Same
-        // shared White/Blue/Orange/Navy palette as cards and section
+        // shared White/Orange/Navy palette as cards and section
         // backgrounds - see $panel-colours in abstracts/_mixins.scss for
         // the name -> token mapping this loop pulls from.
         &--panel {
             padding: var(--grid-gutter);
-            border-radius: 1rem;
             box-sizing: border-box;
 
-            @each $name in white, blue, orange, navy {
+            @each $name in white, orange, navy {
                 &.#{$name} {
                     background-color: panel-colour($name, bg);
                     color: panel-colour($name, fg);

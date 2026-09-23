@@ -153,7 +153,7 @@ class Custom_Menu_Walker extends Walker_Nav_Menu {
 			// the dropdown's own open/closed state in JS. The svg arrow inside
 			// it is now purely decorative given the label below.
 			$arrow =
-				'<svg width="12" height="5" viewBox="0 0 12 5" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0.5 0.500023L4.76649 3.83703C5.33028 4.15702 6.0312 4.15702 6.59499 3.83703L10.8615 0.500023" stroke="#DF0E7B" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+				'<svg width="12" height="5" viewBox="0 0 12 5" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0.5 0.500023L4.76649 3.83703C5.33028 4.15702 6.0312 4.15702 6.59499 3.83703L10.8615 0.500023" stroke="var(--primary-color-1)" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 			$output .=
 				'<div class="o-primary-nav__arrow js-nav-arrow" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-label="' .

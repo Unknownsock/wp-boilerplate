@@ -29,8 +29,6 @@ if ( $content ) {
 	// Blog-listing block - titles here are usually much shorter, so
 	// the card title's normal 3-line clamp/min-height (_card.scss)
 	// leaves an oversized gap; this modifier scopes it down to 2.
-	// No colour modifier needed here anymore - .b-latest-blogs itself
-	// is light grey now, which this variant always was anyway.
 	$modifier     = 'b-latest-blogs--compact';
 	$eyebrow      = null;
 	$title        = $args['title'] ?? null;
@@ -41,7 +39,7 @@ if ( $content ) {
 	$given_posts = array_slice( $args['posts'] ?? array(), 0, 3 );
 }
 
-	$classes = implode( ' ', array_filter( array( $block, 'grey-light', $modifier ) ) );
+	$classes = implode( ' ', array_filter( array( $block, $modifier ) ) );
 
 	// wysiwyg wraps its output in <p> tags - strip them so they don't
 	// nest invalidly inside the <h2> below.

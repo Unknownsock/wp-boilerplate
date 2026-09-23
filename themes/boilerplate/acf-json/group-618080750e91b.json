@@ -125,11 +125,8 @@
             },
             "choices": {
                 "white": "White",
-                "blue": "Blue",
                 "orange": "Orange",
-                "navy": "Navy",
-                "gradient": "Gradient",
-                "grey-light": "Light Grey"
+                "navy": "Navy"
             },
             "default_value": "white",
             "return_format": "value",
@@ -143,7 +140,7 @@
             "name": "button_colour",
             "aria-label": "",
             "type": "button_group",
-            "instructions": "Choose the colour of the button - mostly the same set as the section Background Colour options (minus Cream, not offered as a button colour), so a button can usually match (or deliberately contrast with) its section.",
+            "instructions": "Choose the colour of the button - the same set as the section Background Colour options, so a button can usually match (or deliberately contrast with) its section.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -153,7 +150,6 @@
             },
             "choices": {
                 "white": "White",
-                "blue": "Blue",
                 "orange": "Orange",
                 "navy": "Navy"
             },

@@ -32,13 +32,11 @@
         .swiper-slide {
             position: relative;
             height: 100%;
-            // height: min-content;
             width: 100%;
             flex-shrink: 0;
             cursor: grab;
             backface-visibility: hidden;
             transform: translateZ(0);
-            // transition-property: transform;
             box-sizing: border-box;
         }
     }
@@ -47,8 +45,6 @@
 .swiper {
     width: 100%;
     max-width: 100%;
-    // border-radius: 0.75rem;
-    // user-select: none;
 }
 
 .swiper-button-prev,
@@ -79,14 +75,6 @@
         background-color: #36393a25;
         cursor: pointer;
         transition: var(--transition);
-        // @include hover() {
-        // 	background-color: var(--primary-color-1);
-        // }
-        // &.swiper-pagination-bullet-active {
-        // 	&:after {
-        // 		// background-color: var(--primary-color-3);
-        // 	}
-        // }
     }
 }
 
@@ -108,8 +96,8 @@
         flex: 0 0 auto;
         justify-content: center;
         align-items: center;
-        border: 0.2rem solid var(--primary-color-2);
-        background-color: var(--primary-color-2) !important;
+        border: 0.2rem solid var(--secondary-color-1);
+        background-color: var(--secondary-color-1) !important;
         border-radius: 50%;
         line-height: unset;
         opacity: 1;

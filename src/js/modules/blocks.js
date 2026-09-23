@@ -13,7 +13,6 @@ function socialStickyFooterVisibility() {
         const footerRect = footer.getBoundingClientRect();
         const windowHeight = window.innerHeight;
 
-        // Check if footer is in view (top of footer is visible)
         if (footerRect.top <= windowHeight) {
             socialSticky.classList.add('active');
         } else {
@@ -21,10 +20,7 @@ function socialStickyFooterVisibility() {
         }
     }
 
-    // Check on scroll
     window.addEventListener('scroll', checkFooterVisibility);
-
-    // Check on initial load
     checkFooterVisibility();
 }
 socialStickyFooterVisibility();

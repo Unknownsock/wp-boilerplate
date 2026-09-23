@@ -108,9 +108,6 @@
     }
 
     &--solid {
-        // Simple rounded pill - a single flat background colour + border
-        // radius, no hex/mask artwork. Colour variants below just set
-        // --btn-color (fill) and the inner text colour; hover swaps both.
         text-align: center;
         flex-flow: row;
         align-items: center;
@@ -129,16 +126,6 @@
             transition: var(--transition) color;
         }
 
-        &.c-button--blue {
-            --btn-color: var(--primary-color-5);
-            .c-button__inner {
-                color: var(--secondary-color-1);
-            }
-            @include hover() {
-                --btn-color: var(--primary-color-1);
-            }
-        }
-
         &.c-button--white {
             --btn-color: var(--secondary-color-1);
             .c-button__inner {
@@ -152,7 +139,6 @@
             }
         }
 
-        // Orange variant colours.
         &.c-button--orange {
             --btn-color: var(--primary-color-1);
             .c-button__inner {
@@ -174,11 +160,9 @@
         }
     }
 
+    // Kept as its own modifier rather than merged into --solid, since call
+    // sites still pass "outline" explicitly.
     &--outline {
-        // Solid fill, same treatment as --solid above - kept as its own
-        // modifier (rather than merged into --solid) since call sites
-        // still pass "outline" explicitly; the border stays as a
-        // hairline edge, it's just no longer transparent in between.
         text-align: center;
         flex-flow: row;
         align-items: center;
@@ -197,18 +181,7 @@
         .c-button__inner {
             position: relative;
             z-index: 1;
-            // padding: 1.6rem 2rem;
             transition: var(--transition) color;
-        }
-
-        &.c-button--blue {
-            --btn-color: var(--primary-color-5);
-            .c-button__inner {
-                color: var(--secondary-color-1);
-            }
-            @include hover() {
-                --btn-color: var(--primary-color-1);
-            }
         }
 
         &.c-button--white {
@@ -224,7 +197,6 @@
             }
         }
 
-        // Orange variant colours.
         &.c-button--orange {
             --btn-color: var(--primary-color-1);
             .c-button__inner {
@@ -301,11 +273,6 @@
         &.c-button--white {
             .c-button__inner {
                 color: var(--secondary-color-1);
-            }
-        }
-        &.c-button--blue {
-            .c-button__inner {
-                color: var(--primary-color-5);
             }
         }
         &.c-button--orange {

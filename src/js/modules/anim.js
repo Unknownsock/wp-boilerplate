@@ -100,7 +100,6 @@ function applyAnimations() {
 }
 applyAnimations();
 
-// Lottie animations - <div data-lottie="/path/to/file.json" data-lottie-loop="false">
 function initLottieAnimations() {
     document.querySelectorAll('[data-lottie]').forEach((el) => {
         lottie.loadAnimation({

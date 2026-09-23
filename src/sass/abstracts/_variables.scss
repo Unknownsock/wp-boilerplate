@@ -1,25 +1,12 @@
 :root {
-    // Colours - placeholder brand palette. Swap these for the real client
+    // Colours - wireframe placeholder palette, deliberately capped at 3:
+    // one accent, one dark, one light. Swap these for the real client
     // brand hex codes at the start of each new project; every consumer in
-    // the theme reads through these custom properties (accent/light/dark),
-    // never a hardcoded hex, so a rebrand is a one-file edit.
-    --primary-color-1: #e35b30; // orange accent
-    --primary-color-2: #f4efe6; // cream / off-white light bg
-    --primary-color-3: #12212a; // navy / dark
-    --primary-color-4: #e6e5e3; // light grey bg
-    --primary-color-5: #57859f; // lighter blue accent
-    --primary-color-6: #b1cad6; // lighter blue accent
-
-    // Gradient background_colour option (stats block) - three-stop
-    // slate/navy gradient, distinct from the flat --primary-color-3 navy.
-    --gradient-color-1: #2b3b4b;
-    --gradient-color-2: #24303c;
-    --gradient-color-3: #1e262f;
-
-    // --secondary-color-1: 0, 0%, 100%;
-    --secondary-color-1: #fff;
-    // --secondary-color-2: 0, 0%, 0%;
-    --secondary-color-2: #000;
+    // the theme reads through these custom properties, never a hardcoded
+    // hex, so a rebrand is a one-file edit.
+    --primary-color-1: #e35b30; // accent
+    --primary-color-3: #12212a; // dark
+    --secondary-color-1: #fff; // light
     --primary-text-color: var(--primary-color-3);
 
     // Typography

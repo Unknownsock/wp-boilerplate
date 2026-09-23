@@ -1,9 +1,7 @@
 @use '../abstracts/variables' as *;
 @use '../abstracts/mixins' as *;
 
-// Shared eyebrow label - small text with a line drawn in CSS, not typed
-// as a dash into the field. Used above headings/paragraphs throughout
-// the theme (hero, block-title, sticky, content-grid, etc.)
+// Line is drawn in CSS, not typed as a dash into the field.
 // --default sits before the text only, --centre sits either side.
 .c-eyebrow {
     display: flex;

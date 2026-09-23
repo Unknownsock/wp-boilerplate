@@ -192,7 +192,7 @@ function add_button( $href, $text, $css_class = '', $id = '', $target = '', $ico
 	// group-618080750e91b.json) - a button can always be set to the same
 	// colour as any section background. Legacy previous-client colours
 	// (pink/pink-light/grey-dark/grey-light) removed from the palette.
-	$modifiers = array( 'solid', 'outline', 'text', 'white', 'blue', 'orange', 'navy', 'eyebrow' );
+	$modifiers = array( 'solid', 'outline', 'text', 'white', 'orange', 'navy', 'eyebrow' );
 	$tokens    = array_filter( explode( ' ', $css_class ) );
 	$classes   = array( 'c-button' );
 	foreach ( $tokens as $token ) {

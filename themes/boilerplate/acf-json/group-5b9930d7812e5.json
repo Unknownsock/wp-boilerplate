@@ -1058,7 +1058,6 @@
                                             "choices": {
                                                 "none": "None",
                                                 "white": "White",
-                                                "blue": "Blue",
                                                 "orange": "Orange",
                                                 "navy": "Navy"
                                             },
@@ -1427,7 +1426,6 @@
                                     "choices": {
                                         "none": "None",
                                         "white": "White",
-                                        "blue": "Blue",
                                         "orange": "Orange",
                                         "navy": "Navy"
                                     },
