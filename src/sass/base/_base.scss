@@ -171,12 +171,6 @@ p {
             }
         }
     }
-    // Set by heading-fullstop.js when the fullstop it converts sits
-    // directly against bold text - a CSS sibling selector can't tell that
-    // apart from "next element after a bold line, several words later".
-    .c-heading-fullstop--bold {
-        --fullstop-color: var(--primary-color-3);
-    }
 }
 
 p {

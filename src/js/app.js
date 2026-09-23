@@ -5,8 +5,6 @@ import './modules/navigation.js';
 import './modules/blocks.js';
 import './modules/forms.js';
 import './modules/layout.js';
-import './modules/heading-fullstop.js';
-import './modules/strong-to-span.js';
 
 // FAQ schema is rendered server-side by boilerplate_add_faq_schema() in
 // includes/asset-management.php, not generated here.

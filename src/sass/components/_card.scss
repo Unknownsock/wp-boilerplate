@@ -406,21 +406,6 @@
             .c-card__title {
                 color: var(--primary-color-1);
             }
-            .c-card__content {
-                transform: translateY(-2rem);
-            }
-            // __cta lives inside __content here - a plain descendant of
-            // a transformed element rides along with it, so this
-            // cancels __content's own translateY above right back out,
-            // keeping __cta fixed in place.
-            .c-card__cta {
-                transform: translateY(2rem);
-            }
-            .c-card__image {
-                img {
-                    transform: scale(1.05);
-                }
-            }
         }
     }
 
@@ -432,15 +417,6 @@
         &--small:focus-within {
             .c-card__title {
                 color: var(--primary-color-1);
-            }
-            .c-card__content {
-                transform: translateY(-2rem);
-            }
-            .c-card__cta {
-                transform: translateY(2rem);
-            }
-            .c-card__image img {
-                transform: scale(1.05);
             }
         }
     }

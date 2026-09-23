@@ -19,6 +19,7 @@ enough to restyle per client, and make the common structural choices (header lay
 types) swappable rather than hardcoded.
 
 **Done this session:**
+
 - Renamed the whole theme slug `freckle` → `boilerplate` (folder, text-domain, every `freckle_*`
   function, Vite/Docker/docs paths) — see git history for the full list of touched files.
 - Stripped real leaked client data: a hardcoded Google Analytics ID, Pinterest tag ID, and Adobe
@@ -34,8 +35,8 @@ types) swappable rather than hardcoded.
   specifics — this was a broad pass, not itemized here).
 - Added three swappable header styles (`header_style` option: standard mega-menu / centered logo /
   minimal off-canvas) — see "Header style dispatch" below. Visually verified all three at desktop
-  + mobile widths, with a real nested dropdown, via a throwaway Playwright script (not committed;
-  Playwright itself was installed only in the session scratchpad, not added to `package.json`).
+    - mobile widths, with a real nested dropdown, via a throwaway Playwright script (not committed;
+      Playwright itself was installed only in the session scratchpad, not added to `package.json`).
 - Extended `bin/wp/seed-content.php`: seeds two more example content blocks (stats, cards) on
   Home, a Footer Menu, and two extra pages (Services, Our Approach) nested under About so there's
   always at least one real dropdown to look at.
@@ -44,6 +45,7 @@ types) swappable rather than hardcoded.
   caught via `git status` and restored from git before anything was lost.
 
 **Still open / not yet done:**
+
 - Nothing has been committed yet as of writing this — everything above is working-tree changes.
 - ACF JSON → DB sync (the `wp eval` snippet further down) needs re-running after every ACF JSON
   edit, including the `header_style` field and the `clients`→`portfolio` relationship-field
@@ -61,17 +63,22 @@ types) swappable rather than hardcoded.
 ## Commands
 
 **Local WordPress (Docker, `localhost:8000`; phpMyAdmin on `:8080`):**
+
 ```
 npm run start          # docker compose up -d
 npm run stop           # docker compose down
 npm run shell          # shell into the wordpress container
 npm run wp -- <cmd>    # wp-cli via the wp-cli service, e.g. npm run wp -- plugin list
 npm run wp:seed        # seed starter pages/home content/main menu (idempotent, see README)
+npm run wp:seed:blocks # overwrite Home's content_blocks with every flexible-content layout, for
+                        # visually testing all blocks at once (NOT idempotent - always overwrites)
 ```
+
 `wp-cli` is a long-running compose service (`sleep 9999` entrypoint) — always invoke it via
 `docker compose exec wp-cli wp ...` / `npm run wp --`, never expect a one-shot container.
 
 **Frontend build (Vite):**
+
 ```
 npm install
 npm run dev            # dev server, HMR — writes themes/boilerplate/hot so PHP knows to load from it
@@ -80,6 +87,7 @@ npm run prod           # vite build --mode production
 ```
 
 **Linting / formatting:**
+
 ```
 npm run lint:scss      # stylelint "**/*.scss"
 npm run lint:fix       # stylelint --fix
@@ -90,18 +98,22 @@ npm run format:php-all # prettier --write "**/*.php"
 npm run lint:php       # cd themes/boilerplate && composer lint   (phpcs, WPCS standard)
 npm run fix:php        # phpcbf
 ```
+
 Pre-commit (`husky` + `lint-staged`) runs prettier/eslint/stylelint on staged JS/SCSS and
 phpcbf+prettier on staged theme PHP automatically.
 
 **PHP tests / static analysis** (run from `themes/boilerplate/`, needs `composer install` there first):
+
 ```
 composer test          # phpunit (config: phpunit.xml, bootstrap: tests/bootstrap.php)
 composer analyze        # phpstan analyse --level=5 includes/
 composer qa             # lint + analyze + test
 ```
+
 Only `tests/FunctionsTest.php` exists currently — PHPUnit tests live in `themes/boilerplate/tests/`.
 
 **E2E (Cypress)**, baseUrl `http://localhost:8000` (needs the Docker stack running):
+
 ```
 npx cypress open        # interactive
 npx cypress run         # headless, all specs in cypress/e2e/**/*.cy.js
@@ -109,6 +121,7 @@ npx cypress run         # headless, all specs in cypress/e2e/**/*.cy.js
 
 **ACF field group sync** — after hand-editing any `themes/boilerplate/acf-json/*.json`, sync it into
 the DB (ACF has no bundled wp-cli command for this, so it goes through `wp eval`):
+
 ```
 docker compose exec wp-cli wp eval '
 $files = acf_get_local_json_files();
@@ -118,6 +131,7 @@ foreach ( $files as $path ) {
 }
 ' --path=/var/www/html
 ```
+
 Or via wp-admin: Custom Fields → Field Groups → "Sync available".
 
 ## Architecture
@@ -186,7 +200,7 @@ still backs pages/parts that predate this convention (`single-portfolio.php`, `s
 single source of truth for the White/Blue/Orange/Navy colour choice offered on cards, content-grid
 columns, and section backgrounds — `panel-colour($name, bg|fg|accent)` looks up a token,
 `panel-colour-vars($name, ...)` sets a component's custom properties from it. Each consumer still
-owns *how* it applies the colour (custom properties for a card's coordinated bg/text/accent vs a
+owns _how_ it applies the colour (custom properties for a card's coordinated bg/text/accent vs a
 flat `background-color`/`color` for a section) — only the name→token mapping is shared.
 
 ### Section background colour vs. block-local overrides
@@ -199,7 +213,7 @@ unlayered to reliably beat a block's own hardcoded default background. The `:not
 appears throughout this file and elsewhere (`_modal.scss`, `_forms.scss`) purely to add
 CSS-specificity weight without changing what a selector matches — used whenever a rule needs to
 outrank another selector of otherwise-equal class count (a plain class-count tie is broken by
-element count, which silently favours the *wrong* rule more than once in this codebase — check for
+element count, which silently favours the _wrong_ rule more than once in this codebase — check for
 this class of bug first when a colour/text override "isn't applying").
 
 ### `background_colour` field

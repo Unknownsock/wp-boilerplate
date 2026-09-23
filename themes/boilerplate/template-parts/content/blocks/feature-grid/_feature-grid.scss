@@ -32,18 +32,9 @@
             gap: var(--grid-gutter-large);
         }
 
-        // Layout 1 - "Our Advantages": two layers, not one flat box -
-        // this outer __grid is a thin light-grey frame (just enough
-        // padding to show as a border/mat around the panel below), and
-        // #{$block}__panel is the actual white content area the items
-        // sit on. Matches the reference design, which turned out to
-        // centre this layout too, not just layout-2.
+        // Layout 1 - "Our Advantages": flat, no bordered panel.
         &--layout-1 {
             display: block;
-            // background-color: var(--primary-color-4);
-            border: 0.2rem solid rgba(0, 0, 0, 0.1);
-            border-radius: 2rem;
-            padding: 1.5rem;
         }
 
         // Layout 2 - "Applications": centred items, no contained box
@@ -76,26 +67,6 @@
         }
     }
 
-    // White inner panel (layout-1 only) - the items actually live in
-    // here, not directly in __grid--layout-1, so the grey frame's
-    // padding above has genuine white showing through it, not more grey.
-    // The title and the row dividers are direct children of this panel
-    // (full width, stacked), with #{$block}__items as the only 3-up grid
-    // row inside it - that's what lets a single divider span the whole
-    // panel rather than being three per-column borders.
-    #{$block}__panel {
-        display: flex;
-        flex-flow: column;
-        // gap: 4rem;
-        background-color: var(--primary-color-4);
-        border-radius: 1rem;
-        padding: 2rem;
-        @media screen and (min-width: $grid-md) {
-            // gap: 6rem;
-            padding: 6rem var(--grid-gutter-large);
-        }
-    }
-
     #{$block}__title {
         max-width: 70rem;
         margin: 0 auto;
@@ -103,8 +74,7 @@
     }
 
     // Full-width rule - used both under the title and after every row of
-    // 3 items (see block-feature-grid.php). Spacing above/below comes
-    // from #{$block}__panel's own gap, not margin here.
+    // 3 items (see block-feature-grid.php).
     #{$block}__divider {
         // Items already stack full-width on mobile (see #{$block}__items'
         // own gap above), so the row divider - meant to separate rows of

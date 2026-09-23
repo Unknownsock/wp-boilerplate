@@ -70,7 +70,7 @@
 					?>
 						<div class="content no-results">
 							<h3>No search results...</h3>
-							<p>Please try another search term or pick a category from the list in the sidebar</p>
+							<p>Please try another search term or category.</p>
 						</div>
 					<?php
 				}

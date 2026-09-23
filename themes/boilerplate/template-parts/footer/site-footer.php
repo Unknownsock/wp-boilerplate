@@ -13,6 +13,8 @@
 
 	// Singles.
 	$company_name = $company_details['company_name'] ?? null;
+	$phone        = $company_details['company_telephone'] ?? null;
+	$email        = $company_details['company_email'] ?? null;
 	$offices      = $company_details['offices'] ?? null;
 
 	// Falls back to the single legacy "company_address" repeater as one
@@ -37,26 +39,34 @@
 <section class="o-site-footer js-site-footer">
 	<div class="o-site-footer__main">
 		<div class="o-site-footer__top">
-			<?php if ( $offices ) : ?>
-				<?php foreach ( $offices as $office ) : ?>
-					<?php
-					$country       = $office['country'] ?? '';
-					$flag          = $office['flag'] ?? null;
-					$legal_name    = $office['legal_name'] ?? '';
-					$address_lines = $office['address_lines'] ?? null;
-					if ( ! $address_lines ) {
-						continue;
-					}
+			<div class="o-site-footer__brand-col">
+				<?php
+					get_template_part(
+						'template-parts/components/component',
+						'site-branding'
+					);
 					?>
-					<div class="o-site-footer__menu">
-						<?php if ( ! empty( $flag['url'] ) ) : ?>
-							<div class="o-site-footer__menu-flag">
-								<img class="o-site-footer__flag" src="<?php echo esc_url( $flag['url'] ); ?>" alt="" loading="lazy">
-							</div>
-						<?php endif; ?>
-						<div class="o-site-footer__menu-text">
-							<?php if ( $country ) : ?>
-								<p class="o-site-footer__menu-title">In the <?php echo esc_html( $country ); ?></p>
+				<?php if ( $offices ) : ?>
+					<?php foreach ( $offices as $office ) : ?>
+						<?php
+						$country       = $office['country'] ?? '';
+						$flag          = $office['flag'] ?? null;
+						$legal_name    = $office['legal_name'] ?? '';
+						$address_lines = $office['address_lines'] ?? null;
+						if ( ! $address_lines ) {
+							continue;
+						}
+						?>
+						<div class="o-site-footer__address-block">
+							<?php if ( ! empty( $flag['url'] ) || $country ) : ?>
+								<div class="o-site-footer__address-block-head">
+									<?php if ( ! empty( $flag['url'] ) ) : ?>
+										<img class="o-site-footer__flag" src="<?php echo esc_url( $flag['url'] ); ?>" alt="" loading="lazy">
+									<?php endif; ?>
+									<?php if ( $country ) : ?>
+										<p class="o-site-footer__menu-title">In the <?php echo esc_html( $country ); ?></p>
+									<?php endif; ?>
+								</div>
 							<?php endif; ?>
 							<?php if ( $legal_name ) : ?>
 								<p class="o-site-footer__legal-name"><?php echo esc_html( $legal_name ); ?></p>
@@ -82,9 +92,19 @@
 								?>
 							</address>
 						</div>
-					</div>
-				<?php endforeach; ?>
-			<?php endif; ?>
+					<?php endforeach; ?>
+				<?php endif; ?>
+				<?php if ( $phone || $email ) : ?>
+					<p class="o-site-footer__contact-details">
+						<?php if ( $phone ) : ?>
+							<a href="tel:<?php echo esc_attr( preg_replace( '/\s+/', '', $phone ) ); ?>"><?php echo esc_html( $phone ); ?></a><br>
+						<?php endif; ?>
+						<?php if ( $email ) : ?>
+							<a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a>
+						<?php endif; ?>
+					</p>
+				<?php endif; ?>
+			</div>
 
 			<div class="o-site-footer__menu o-site-footer__menu--links">
 				<nav>
@@ -100,6 +120,21 @@
 						?>
 				</nav>
 			</div>
+
+			<div class="o-site-footer__menu o-site-footer__menu--links">
+				<nav>
+					<?php
+						wp_nav_menu(
+							array(
+								'theme_location' => 'menu-3',
+								'menu_id'        => 'footer-menu-2',
+								'container'      => false,
+								'fallback_cb'    => false,
+							)
+						);
+						?>
+				</nav>
+			</div>
 		</div>
 	</div>
 	<div class="o-site-footer__bottom">
@@ -108,12 +143,6 @@
 		</div>
 		<div class="o-site-footer__brand">
 			<?php get_template_part( 'template-parts/components/component', 'socials' ); ?>
-			<?php
-				get_template_part(
-					'template-parts/components/component',
-					'site-branding'
-				);
-				?>
 		</div>
 	</div>
 </section>

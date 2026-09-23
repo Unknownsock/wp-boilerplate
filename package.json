@@ -29,6 +29,7 @@
         "db:import": "node bin/db/import.js",
         "wp": "docker compose exec wp-cli wp",
         "wp:seed": "docker compose exec wp-cli wp eval-file /workspace/bin/wp/seed-content.php --path=/var/www/html",
+        "wp:seed:blocks": "docker compose exec wp-cli wp eval-file /workspace/bin/wp/seed-all-blocks.php --path=/var/www/html",
         "wp:update": "docker compose exec wp-cli wp core update && docker compose exec wp-cli wp plugin update --all",
         "wp:install-plugin": "docker compose exec wp-cli wp plugin install",
         "wp:search-replace": "docker compose exec wp-cli wp search-replace",
@@ -48,18 +49,14 @@
     "dependencies": {
         "cssnano": "^5.1.12",
         "dotenv": "^17.2.3",
-        "jcf": "^1.2.3",
         "jquery": "^3.6.3",
         "jquery-validation": "^1.19.5",
         "leaflet": "^1.9.4",
-        "ll": "^1.2.0",
         "lodash": "^4.17.21",
         "lodash.throttle": "^4.1.1",
-        "pace-js": "^1.2.4",
         "postcss-import": "^14.1.0",
         "postcss-preset-env": "^7.7.2",
         "postcss-sort-media-queries": "^5.2.0",
-        "sass-fluid": "^2.0.0",
         "swiper": "^14.1.0"
     },
     "devDependencies": {

@@ -320,5 +320,6 @@ function seed_menu_item_children( $menu_name, $parent_slug, $child_slugs, $page_
 
 seed_nav_menu( 'Main Menu', 'menu-1', array( 'home', 'about', 'contact' ), $page_ids, $pages );
 seed_nav_menu( 'Footer Menu 1', 'menu-2', array( 'about', 'contact' ), $page_ids, $pages );
+seed_nav_menu( 'Footer Menu 2', 'menu-3', array( 'services', 'approach' ), $page_ids, $pages );
 
 seed_menu_item_children( 'Main Menu', 'about', array( 'services', 'approach' ), $page_ids, $pages );

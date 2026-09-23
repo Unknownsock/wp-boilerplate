@@ -45,43 +45,6 @@
             font-size: 2rem;
             opacity: 0.7;
         }
-        .b-sticky__shapes {
-            position: absolute;
-            height: 100%;
-            z-index: -1;
-            @media screen and (min-width: $grid-md) {
-                position: relative;
-            }
-            svg {
-                * {
-                    stroke-width: 0.8rem;
-                    vector-effect: non-scaling-stroke;
-                }
-            }
-        }
-        .b-sticky__shape_1 {
-            position: absolute;
-            bottom: -163rem;
-            left: -44rem;
-            width: 90rem;
-            @media screen and (min-width: $grid-md) {
-                bottom: -108rem;
-                left: -57rem;
-                width: 103rem;
-                height: auto;
-            }
-        }
-        .b-sticky__shape_2 {
-            position: absolute;
-            bottom: -123rem;
-            left: -11rem;
-            width: 101rem;
-            @media screen and (min-width: $grid-md) {
-                bottom: -69rem;
-                left: -11rem;
-                width: 101rem;
-            }
-        }
     }
 
     &__text {

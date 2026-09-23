@@ -116,29 +116,6 @@
         }
     }
 
-    // Swap the default round jcf-checkbox for a small hexagon, reusing
-    // the same masked-pseudo-element technique as the hex social icons
-    // (see hex-icon() in abstracts/_mixins.scss) instead of a border-radius circle.
-    .jcf-checkbox {
-        @include hex-icon(
-            $border-color: rgba(255, 255, 255, 0.3),
-            $fill-color: rgba(255, 255, 255, 0.15),
-            $icon-color: transparent
-        );
-        width: 1.8rem;
-        min-width: 1.8rem;
-        height: auto;
-        border: 0;
-        border-radius: 0;
-        background: none;
-        span {
-            display: none;
-        }
-        &.jcf-checked::after {
-            background-color: var(--primary-color-1);
-        }
-    }
-
     // Dark hexagon submit button - same clip-path pill shape as
     // .o-site-footer__phone, with the arrow as a background-image since
     // ::after doesn't render on a native <input>.

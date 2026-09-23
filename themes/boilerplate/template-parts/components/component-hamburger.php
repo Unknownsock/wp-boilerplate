@@ -8,7 +8,7 @@
 	defined( 'ABSPATH' ) || exit;
 ?>
 
-<button class="hamburger menu-toggle jcf-ignore js-menu-toggle" type="button" aria-label="Toggle main menu" aria-controls="primary-menu" aria-expanded="false">
+<button class="hamburger menu-toggle js-menu-toggle" type="button" aria-label="Toggle main menu" aria-controls="primary-menu" aria-expanded="false">
 	<div class="inner">
 		<span class="top"></span>
 		<span class="middle"></span>

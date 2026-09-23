@@ -24,14 +24,12 @@
 	<?php endif; ?>
 	<?php if ( $items ) { ?>
 		<div class="<?php echo $block; ?>__grid <?php echo $block; ?>__grid--<?php echo esc_attr( $layout ); ?>">
-			<?php // Layout 1's card is two layers - a light grey frame (this outer __grid) with a white inner panel the items actually sit on, not flush against the outer border. ?>
 			<?php if ( 'layout-1' === $layout ) : ?>
-				<div class="<?php echo $block; ?>__panel">
-					<?php if ( $text ) : ?>
-						<div class="<?php echo $block; ?>__title u-wysiwyg"><?php echo $text; ?></div>
-						<div class="<?php echo $block; ?>__divider"></div>
-					<?php endif; ?>
-					<div class="<?php echo $block; ?>__items">
+				<?php if ( $text ) : ?>
+					<div class="<?php echo $block; ?>__title u-wysiwyg"><?php echo $text; ?></div>
+					<div class="<?php echo $block; ?>__divider"></div>
+				<?php endif; ?>
+				<div class="<?php echo $block; ?>__items">
 			<?php endif; ?>
 			<?php
 			$total = count( $items );
@@ -77,7 +75,6 @@
 			}
 			?>
 			<?php if ( 'layout-1' === $layout ) : ?>
-					</div>
 				</div>
 			<?php endif; ?>
 		</div>
