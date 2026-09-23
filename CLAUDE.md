@@ -228,12 +228,31 @@ docker compose exec wp-cli wp eval '
 $files = acf_get_local_json_files();
 foreach ( $files as $path ) {
     $fg = json_decode( file_get_contents( $path ), true );
-    if ( $fg ) acf_import_field_group( $fg );
+    if ( ! $fg ) continue;
+    // Without this lookup, acf_import_field_group() always inserts a new
+    // acf-field-group post (the JSON has no "ID", only "key") - running
+    // this snippet more than once silently piles up duplicate DB rows per
+    // group, which then confuses ACFs own key lookup and makes future
+    // syncs duplicate too. Resolving the real post ID first makes the
+    // import idempotent (update in place, not insert).
+    $existing = acf_get_field_group( $fg["key"] );
+    if ( $existing && ! empty( $existing["ID"] ) ) {
+        $fg["ID"] = $existing["ID"];
+    }
+    acf_import_field_group( $fg );
 }
 ' --path=/var/www/html
 ```
 
 Or via wp-admin: Custom Fields → Field Groups → "Sync available".
+
+**Known exception**: `group_5b8ea458deea0_home` ("Hero Options - Home") still duplicates even with
+the ID lookup above - `acf_get_field_group('group_5b8ea458deea0_home')` returns `ID => 0` for it
+even when a DB post with that exact `post_name` already exists (root cause not tracked down -
+this key predates the sync-idempotency fix and is the one group whose DB post carries no `key`
+postmeta at all, unlike every other group, which may be related). After any sync, check
+`wp post list --post_type=acf-field-group` for a second "Hero Options - Home" row and
+`wp post delete <id> --force` the older one if so.
 
 ## Architecture
 

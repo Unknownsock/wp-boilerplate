@@ -118,4 +118,19 @@
             display: block;
         }
     }
+
+    // __number/__label/__arrow default to white text, matching the
+    // block's own navy/orange default backgrounds - but that hardcoded
+    // colour otherwise always wins over _default.scss's section-level
+    // light/dark text rule (2 classes here vs 1 class + element count
+    // there), so on a white/transparent section they'd stay invisible
+    // white-on-white unless flipped back explicitly here too.
+    section.white &,
+    section.transparent & {
+        #{$block}__number,
+        #{$block}__label,
+        #{$block}__arrow {
+            color: var(--primary-color-3);
+        }
+    }
 }

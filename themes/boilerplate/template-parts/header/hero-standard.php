@@ -36,7 +36,7 @@
 				esc_html( $parent_title )
 			);
 		} elseif ( 'portfolio' === $post_type ) {
-			echo '<a href="/portfolio/" class="c-eyebrow c-eyebrow--default" aria-label="Back to Our Work">Case Study</a>';
+			echo '<a href="/portfolio/" class="c-eyebrow c-eyebrow--default" aria-label="Back to Portfolio">Case Study</a>';
 		} elseif ( 'post' === $post_type ) {
 			echo '<a href="/blog/" class="c-eyebrow c-eyebrow--default" aria-label="Back to all Blogs">Blog</a>';
 		}

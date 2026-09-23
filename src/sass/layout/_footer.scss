@@ -67,21 +67,6 @@
         margin-bottom: 1.5rem;
     }
 
-    &__address-block-head {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    &__menu-title {
-        margin: 0;
-        font-family: var(--font-stack-headers);
-        font-size: 2.5rem;
-        line-height: 1.4em;
-        font-weight: 500;
-        color: var(--secondary-color-1);
-    }
-
     &__contact-details {
         display: flex;
         flex-flow: column;
@@ -130,22 +115,6 @@
                 color: var(--primary-color-1);
             }
         }
-    }
-
-    &__flag {
-        display: block;
-        width: 3.4rem;
-        height: 3.4rem;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    &__legal-name {
-        margin-bottom: 0;
-        font-size: 1.8rem;
-        font-weight: 500;
-        line-height: 1.6em;
-        color: var(--primary-color-1);
     }
 
     &__address {

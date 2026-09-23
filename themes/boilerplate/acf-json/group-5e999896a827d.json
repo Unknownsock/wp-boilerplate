@@ -259,12 +259,12 @@
                     ]
                 },
                 {
-                    "key": "field_68c00off0001",
-                    "label": "Offices",
-                    "name": "offices",
+                    "key": "field_68e00add0001",
+                    "label": "Addresses",
+                    "name": "addresses",
                     "aria-label": "",
                     "type": "repeater",
-                    "instructions": "One row per office (e.g. UK, Netherlands) - shown side by side in the footer. Falls back to Company Address above (single office) if empty.",
+                    "instructions": "One row per address (e.g. separate offices\/locations) - shown below the logo in the footer. Falls back to Company Address above (single address) if empty.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -275,82 +275,12 @@
                     "layout": "block",
                     "min": 0,
                     "max": 0,
-                    "collapsed": "field_68c00off0002",
-                    "button_label": "Add Office",
+                    "collapsed": "",
+                    "button_label": "Add Address",
                     "rows_per_page": 20,
                     "sub_fields": [
                         {
-                            "key": "field_68c00off0002",
-                            "label": "Country",
-                            "name": "country",
-                            "aria-label": "",
-                            "type": "text",
-                            "instructions": "e.g. UK, Netherlands.",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "maxlength": "",
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "parent_repeater": "field_68c00off0001"
-                        },
-                        {
-                            "key": "field_68c00off0006",
-                            "label": "Flag",
-                            "name": "flag",
-                            "aria-label": "",
-                            "type": "image",
-                            "instructions": "Small round flag icon shown next to \"In the...\" - e.g. 40x40px.",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "return_format": "array",
-                            "library": "all",
-                            "min_width": "",
-                            "min_height": "",
-                            "min_size": "",
-                            "max_width": "",
-                            "max_height": "",
-                            "max_size": "",
-                            "mime_types": "",
-                            "preview_size": "thumbnail",
-                            "parent_repeater": "field_68c00off0001",
-                            "uploader": "",
-                            "acfe_thumbnail": 0
-                        },
-                        {
-                            "key": "field_68c00off0007",
-                            "label": "Legal Entity Name",
-                            "name": "legal_name",
-                            "aria-label": "",
-                            "type": "text",
-                            "instructions": "e.g. \"Acme Limited\" - shown in the footer's accent colour above this office's address.",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "maxlength": "",
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "parent_repeater": "field_68c00off0001"
-                        },
-                        {
-                            "key": "field_68c00off0003",
+                            "key": "field_68e00add0002",
                             "label": "Address Lines",
                             "name": "address_lines",
                             "aria-label": "",
@@ -369,10 +299,10 @@
                             "collapsed": "",
                             "button_label": "Add Line",
                             "rows_per_page": 20,
-                            "parent_repeater": "field_68c00off0001",
+                            "parent_repeater": "field_68e00add0001",
                             "sub_fields": [
                                 {
-                                    "key": "field_68c00off0004",
+                                    "key": "field_68e00add0003",
                                     "label": "Line",
                                     "name": "address_line",
                                     "aria-label": "",
@@ -390,7 +320,7 @@
                                     "placeholder": "",
                                     "prepend": "",
                                     "append": "",
-                                    "parent_repeater": "field_68c00off0003"
+                                    "parent_repeater": "field_68e00add0002"
                                 }
                             ]
                         }
@@ -461,8 +391,8 @@
             "label": "Social Media",
             "name": "social_media",
             "aria-label": "",
-            "type": "group",
-            "instructions": "",
+            "type": "repeater",
+            "instructions": "One row per social link - any platform, not a fixed list.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -470,20 +400,20 @@
                 "class": "",
                 "id": ""
             },
-            "layout": "block",
-            "acfe_seamless_style": 0,
-            "acfe_group_modal": 0,
-            "acfe_group_modal_close": 0,
-            "acfe_group_modal_button": "",
-            "acfe_group_modal_size": "large",
+            "layout": "table",
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Add Social Link",
+            "rows_per_page": 20,
             "sub_fields": [
                 {
-                    "key": "field_64776c82b53f9",
-                    "label": "Tiktok",
-                    "name": "tiktok",
+                    "key": "field_68e00soc0001",
+                    "label": "Icon",
+                    "name": "icon",
                     "aria-label": "",
-                    "type": "link",
-                    "instructions": "",
+                    "type": "image",
+                    "instructions": "A single-colour SVG works best - it's shown at a small fixed size.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -491,12 +421,22 @@
                         "class": "",
                         "id": ""
                     },
-                    "return_format": "array"
+                    "return_format": "array",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "svg,png",
+                    "preview_size": "thumbnail",
+                    "parent_repeater": "field_60bd29777bd88"
                 },
                 {
-                    "key": "field_64776c97b53fa",
-                    "label": "Facebook",
-                    "name": "facebook",
+                    "key": "field_68e00soc0002",
+                    "label": "Link",
+                    "name": "link",
                     "aria-label": "",
                     "type": "link",
                     "instructions": "",
@@ -507,71 +447,8 @@
                         "class": "",
                         "id": ""
                     },
-                    "return_format": "array"
-                },
-                {
-                    "key": "field_63f232391718a",
-                    "label": "Instagram",
-                    "name": "instagram",
-                    "aria-label": "",
-                    "type": "link",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": ""
-                },
-                {
-                    "key": "field_6234a30362825",
-                    "label": "Linkedin",
-                    "name": "linkedin",
-                    "aria-label": "",
-                    "type": "link",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": "array"
-                },
-                {
-                    "key": "field_65ccedb19f0a9",
-                    "label": "Twitter",
-                    "name": "twitter",
-                    "aria-label": "",
-                    "type": "link",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": "array"
-                },
-                {
-                    "key": "field_66f56b79990a2",
-                    "label": "Pinterest",
-                    "name": "pinterest",
-                    "aria-label": "",
-                    "type": "link",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": "array"
+                    "return_format": "array",
+                    "parent_repeater": "field_60bd29777bd88"
                 }
             ]
         }
@@ -595,5 +472,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1790122796
+    "modified": 1790167630
 }

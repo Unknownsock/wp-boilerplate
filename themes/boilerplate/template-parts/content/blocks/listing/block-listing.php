@@ -27,6 +27,7 @@
 	$relationship      = $content['relationship'] ?? null;
 	$number_of_queries = $content['number_of_queries'] ?? null;
 	$view_all_link     = $content['view_all_link'] ?? null;
+	$post_type         = $content['post_type'] ?? 'post';
 
 	$enable_carousel = $content['enable_carousel'] ?? null;
 ?>
@@ -58,7 +59,7 @@
 					$posts = $relationship;
 				} else {
 					$args  = array(
-						'post_type'      => 'post',
+						'post_type'      => $post_type,
 						'orderby'        => array(
 							'date' => 'DESC', // Primary sort: by post date.
 							'ID'   => 'DESC',  // Secondary, fallback sort: by post ID.

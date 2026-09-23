@@ -743,8 +743,15 @@ $site-nav-transition: 150ms;
                 transition: var(--transition) max-height;
             }
             @media screen and (min-width: $grid-nav) {
-                position: fixed;
-                top: var(--nav-height-md);
+                // Anchored to the trigger <li> (position: relative, set
+                // above) rather than position: fixed - fixed positioning
+                // has no relationship to its trigger without an explicit
+                // left/right, so without one it fell back to the browser's
+                // "static position" guess and could land anywhere,
+                // including off the right edge of the viewport.
+                position: absolute;
+                top: 100%;
+                left: 0;
                 display: flex;
                 flex-flow: column;
                 gap: 0.5rem;

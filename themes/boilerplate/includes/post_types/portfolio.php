@@ -15,7 +15,7 @@ function create_portfolio_posttype() {
 		'portfolio',
 		array(
 			'labels'             => array(
-				'name'          => __( 'Our Work' ),
+				'name'          => __( 'Portfolio' ),
 				'singular_name' => __( 'Portfolio Item' ),
 			),
 			'public'             => true,

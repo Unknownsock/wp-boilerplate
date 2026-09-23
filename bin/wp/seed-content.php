@@ -383,3 +383,52 @@ function seed_mega_menu_cta( $menu_name, $parent_slug, $page_ids ) {
 }
 
 seed_mega_menu_cta( 'Main Menu', 'about', $page_ids );
+
+/**
+ * Seeds the footer's "Company Details" options group (group_5dea200a6ee51)
+ * with a couple of example addresses, so the footer isn't blank below the
+ * logo out of the box. Only fills in fields that are still empty.
+ */
+function seed_company_details() {
+	if ( ! function_exists( 'update_field' ) ) {
+		return;
+	}
+
+	$existing = get_field( 'company_details', 'option' );
+
+	if ( ! empty( $existing['addresses'] ) ) {
+		WP_CLI::log( 'Skipped company details - addresses already set.' );
+		return;
+	}
+
+	update_field(
+		'company_details',
+		array(
+			'company_name'      => 'Boilerplate Ltd',
+			'company_telephone' => '01234 567890',
+			'company_email'     => 'hello@example.com',
+			'addresses'         => array(
+				array(
+					'address_lines' => array(
+						array( 'address_line' => 'Boilerplate Ltd' ),
+						array( 'address_line' => 'Crown House' ),
+						array( 'address_line' => '94 Armley Rd' ),
+						array( 'address_line' => 'Leeds LS12 2EJ' ),
+					),
+				),
+				array(
+					'address_lines' => array(
+						array( 'address_line' => 'Boilerplate BV' ),
+						array( 'address_line' => 'Herengracht 100' ),
+						array( 'address_line' => '1015 BS Amsterdam' ),
+					),
+				),
+			),
+		),
+		'option'
+	);
+
+	WP_CLI::success( 'Seeded company details (name, addresses, phone, email).' );
+}
+
+seed_company_details();

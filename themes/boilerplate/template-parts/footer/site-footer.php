@@ -15,19 +15,16 @@
 	$company_name = $company_details['company_name'] ?? null;
 	$phone        = $company_details['company_telephone'] ?? null;
 	$email        = $company_details['company_email'] ?? null;
-	$offices      = $company_details['offices'] ?? null;
+	$addresses    = $company_details['addresses'] ?? null;
 
 	// Falls back to the single legacy "company_address" repeater as one
-	// unlabelled office if the newer multi-office "offices" field is
-	// empty - keeps older content working without a forced re-entry.
-	if ( ! $offices ) {
+	// address if the newer multi-address "addresses" field is empty -
+	// keeps older content working without a forced re-entry.
+	if ( ! $addresses ) {
 		$legacy_address = $company_details['company_address'] ?? null;
 		if ( $legacy_address ) {
-			$offices = array(
+			$addresses = array(
 				array(
-					'country'       => '',
-					'flag'          => null,
-					'legal_name'    => '',
 					'address_lines' => $legacy_address,
 				),
 			);
@@ -46,31 +43,15 @@
 						'site-branding'
 					);
 					?>
-				<?php if ( $offices ) : ?>
-					<?php foreach ( $offices as $office ) : ?>
+				<?php if ( $addresses ) : ?>
+					<?php foreach ( $addresses as $address ) : ?>
 						<?php
-						$country       = $office['country'] ?? '';
-						$flag          = $office['flag'] ?? null;
-						$legal_name    = $office['legal_name'] ?? '';
-						$address_lines = $office['address_lines'] ?? null;
+						$address_lines = $address['address_lines'] ?? null;
 						if ( ! $address_lines ) {
 							continue;
 						}
 						?>
 						<div class="o-site-footer__address-block">
-							<?php if ( ! empty( $flag['url'] ) || $country ) : ?>
-								<div class="o-site-footer__address-block-head">
-									<?php if ( ! empty( $flag['url'] ) ) : ?>
-										<img class="o-site-footer__flag" src="<?php echo esc_url( $flag['url'] ); ?>" alt="" loading="lazy">
-									<?php endif; ?>
-									<?php if ( $country ) : ?>
-										<p class="o-site-footer__menu-title">In the <?php echo esc_html( $country ); ?></p>
-									<?php endif; ?>
-								</div>
-							<?php endif; ?>
-							<?php if ( $legal_name ) : ?>
-								<p class="o-site-footer__legal-name"><?php echo esc_html( $legal_name ); ?></p>
-							<?php endif; ?>
 							<address class="o-site-footer__address">
 								<?php
 								$line_index = 0;
@@ -79,10 +60,9 @@
 									if ( ! $line ) {
 										continue;
 									}
-									// The first address line stands in for the legal
-									// entity name (orange) when that field's left
-									// empty - avoids two orange lines when it's set.
-									if ( 0 === $line_index && ! $legal_name ) {
+									// First line stands in for a heading (orange) -
+									// matches the rest of the footer's accent styling.
+									if ( 0 === $line_index ) {
 										echo '<span class="o-site-footer__address-first">' . esc_html( $line ) . '</span><br>';
 									} else {
 										echo esc_html( $line ) . '<br>';

@@ -207,6 +207,26 @@
             "maxlength": ""
         },
         {
+            "key": "field_68e00adm0001",
+            "label": "Admin Label",
+            "name": "admin_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Editor-only label shown in place of this block's title in the flexible content list below, to make long pages easier to scan. Never shown on the front end.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
             "key": "field_622904dc26067",
             "label": "Query Options",
             "name": "",
@@ -270,7 +290,8 @@
                 "id": ""
             },
             "choices": {
-                "post": "Posts"
+                "post": "Posts",
+                "news": "News"
             },
             "default_value": "",
             "return_format": "value",
@@ -1236,5 +1257,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1790122796
+    "modified": 1790167631
 }

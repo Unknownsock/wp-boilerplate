@@ -12,27 +12,7 @@
     gap: 4rem;
 
     #{$block}__intro {
-        // Lines live on the wrapper itself, not on the text - keeps the
-        // heading/paragraph completely untouched (normal display, no flex)
-        // so its own wrapping/spacing is never affected.
-        position: relative;
-        display: flex;
-        flex-flow: row;
         text-align: center;
-        align-items: center;
-        &::before,
-        &::after {
-            content: '';
-            flex: 1 1 auto;
-            height: 0.1rem;
-            background-color: currentColor;
-        }
-        &::before {
-            margin-right: 1rem;
-        }
-        &::after {
-            margin-left: 1rem;
-        }
 
         h1,
         h2,
@@ -41,9 +21,6 @@
         h5,
         h6,
         p {
-            flex: 0 0 auto;
-            white-space: nowrap;
-
             strong {
                 color: var(--primary-color-1);
             }
