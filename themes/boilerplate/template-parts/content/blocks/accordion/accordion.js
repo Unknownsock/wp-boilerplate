@@ -56,20 +56,9 @@ function openPanel(trigger, panel) {
 
 function initAccordion(block) {
     const list = block.querySelector('.b-accordion__list');
-    const image = block.querySelector('.js-accordion-image');
     if (!list) return;
 
     const items = Array.from(list.querySelectorAll(':scope > .b-accordion__item'));
-
-    function setImage(trigger) {
-        if (!image) return;
-        const src = trigger.getAttribute('data-image');
-        const alt = trigger.getAttribute('data-image-alt') || '';
-        if (src && image.getAttribute('src') !== src) {
-            image.setAttribute('src', src);
-            image.setAttribute('alt', alt);
-        }
-    }
 
     items.forEach((item) => {
         const trigger = item.querySelector('.b-accordion__trigger');
@@ -98,7 +87,6 @@ function initAccordion(block) {
                 closePanel(trigger, panel);
             } else {
                 openPanel(trigger, panel);
-                setImage(trigger);
             }
         });
     });

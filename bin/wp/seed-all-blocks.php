@@ -278,13 +278,11 @@ $content_blocks = array(
 		'accordion'     => array(
 			array(
 				'title'        => 'Accordion item one',
-				'image'        => $image_id ?: null,
 				'text'         => '<p>Answer to the first question.</p>',
 				'button_text'  => '',
 			),
 			array(
 				'title'        => 'Accordion item two',
-				'image'        => $image_id ?: null,
 				'text'         => '<p>Answer to the second question.</p>',
 				'button_text'  => '',
 			),

@@ -50,24 +50,6 @@
         }
     }
 
-    // Accordion list + swappable image side by side from $grid-md up;
-    // stacked (image first) on mobile. Desktop uses the same 10-column
-    // grid as content_grid (_content-grid.scss) - list is 6, image is 3,
-    // with the 10th column left empty between them as a genuine 1-column
-    // gap (not a flat `gap` value) so it scales proportionally with the
-    // other two.
-    #{$block}__layout {
-        display: flex;
-        flex-flow: column;
-        gap: var(--grid-gutter);
-        align-items: flex-start;
-
-        @media screen and (min-width: $grid-md) {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-        }
-    }
-
     #{$block}__list {
         width: 100%;
         display: flex;
@@ -76,35 +58,6 @@
         list-style: none;
         margin: 0;
         padding: 0;
-
-        @media screen and (min-width: $grid-md) {
-            grid-column: 1 / span 6;
-        }
-    }
-
-    // Placeholder for now (placehold.co) - real production asset should
-    // change per open item (see accordion.js js-accordion-image swap);
-    // may warrant a crossfade/animation once real imagery exists.
-    #{$block}__media {
-        width: 100%;
-        order: -1;
-        border-radius: 1.5rem;
-        overflow: hidden;
-
-        @media screen and (min-width: $grid-md) {
-            grid-column: 8 / span 3;
-            order: 0;
-            position: sticky;
-            top: 2rem;
-        }
-    }
-
-    #{$block}__media-image {
-        display: block;
-        width: 100%;
-        height: auto;
-        aspect-ratio: 1 / 1;
-        object-fit: cover;
     }
 
     #{$block}__heading {

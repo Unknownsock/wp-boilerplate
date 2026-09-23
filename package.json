@@ -49,9 +49,11 @@
     "dependencies": {
         "cssnano": "^5.1.12",
         "dotenv": "^17.2.3",
+        "gsap": "^3.12.5",
         "jquery": "^3.6.3",
         "jquery-validation": "^1.19.5",
         "leaflet": "^1.9.4",
+        "lottie-web": "^5.12.2",
         "lodash": "^4.17.21",
         "lodash.throttle": "^4.1.1",
         "postcss-import": "^14.1.0",

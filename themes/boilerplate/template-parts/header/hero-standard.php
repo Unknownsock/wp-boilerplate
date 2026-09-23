@@ -20,7 +20,7 @@
 
 ?>
 
-<section class="o-hero o-hero--standard js-parallax">
+<section class="o-hero o-hero--standard">
 	<div class="o-hero__content">
 
 		<?php

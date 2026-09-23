@@ -11,54 +11,105 @@ build is Vite (SCSS + JS, per-block code-splitting). Local dev runs entirely in 
 When starting a new project from this boilerplate, see the README's "Starting a new project from
 this boilerplate" section for what to rename/genericize first.
 
-## Current status (2026-09-22)
+## Current status (2026-09-23)
 
 **Intent:** turn what was a specific client project (formerly "freckle"/"imp") into a genuinely
 generic, reusable boilerplate — strip anything project-specific, keep the theme unstyled/neutral
 enough to restyle per client, and make the common structural choices (header layout, content
-types) swappable rather than hardcoded.
+types) swappable rather than hardcoded. Two commits exist so far (both local only, never pushed):
+the rename/cleanup/header-styles work, then a second pass trimming blocks and dead styling. This
+session's remaining work (block-title inlining, accordion simplification, jcf/sidebar removal,
+the new GSAP anim system) has **not been committed yet** — do that first in the next session,
+after re-verifying the checklist below still holds.
 
-**Done this session:**
+**Done across prior sessions** (rename to `boilerplate`, leaked client data removed, `clients`→
+`portfolio` CPT rename, three swappable header styles, dead JS/SCSS cleanup, `bin/wp/seed-content.php`
+extended with extra pages/menus) — see git log (`git log --oneline`) for the two commit messages,
+which are detailed enough to stand in for a longer recap here.
 
-- Renamed the whole theme slug `freckle` → `boilerplate` (folder, text-domain, every `freckle_*`
-  function, Vite/Docker/docs paths) — see git history for the full list of touched files.
-- Stripped real leaked client data: a hardcoded Google Analytics ID, Pinterest tag ID, and Adobe
-  Fonts kit ID in `header.php`; hardcoded former-client page IDs/labels in `hero-standard.php`
-  (replaced with a generic dynamic "back to parent page" link).
-- Renamed the `clients` CPT → `portfolio` (it's actually a case-study/portfolio type, not just a
-  logo source) across its registration, single template, ACF field groups, and admin menu; fixed
-  the `category` taxonomy (was registered against nonexistent `projects`/`team` post types);
-  deleted the dead `carousels` CPT.
-- Deleted dead/orphaned JS (`header.js`, `footer.js`, `instagram.js`, `accessibility.js`,
-  `components.js` — empty or fully commented out) and a large amount of dead/commented-out code
-  and narrative "history" comments across `src/js/`, `src/sass/`, and theme PHP (see git log for
-  specifics — this was a broad pass, not itemized here).
-- Added three swappable header styles (`header_style` option: standard mega-menu / centered logo /
-  minimal off-canvas) — see "Header style dispatch" below. Visually verified all three at desktop
-    - mobile widths, with a real nested dropdown, via a throwaway Playwright script (not committed;
-      Playwright itself was installed only in the session scratchpad, not added to `package.json`).
-- Extended `bin/wp/seed-content.php`: seeds two more example content blocks (stats, cards) on
-  Home, a Footer Menu, and two extra pages (Services, Our Approach) nested under About so there's
-  always at least one real dropdown to look at.
-- Recovered from an unrelated incident mid-session: a research subagent deleted 3 files
-  (`sidebar.php`, `single-clients.php`, `heading-fullstop.js`) despite being told to only research —
-  caught via `git status` and restored from git before anything was lost.
+**Done this session (uncommitted):**
+- Removed 7 more content blocks (instagram, page_link_grid, our_work_feed, full_image_gallery,
+  services, columns, testimonial_contact) - consolidating listing-style needs onto the one
+  `listing` block. Their ACF layouts, block folders, and seed rows are all gone.
+- Footer redesign: logo + address + phone/email is now one left column, two footer menus render
+  next to it (`menu-3` "Footer Menu 2" - the location existed but was never seeded), copyright
+  stays in the bottom bar. Fixed a real contrast bug this surfaced (placeholder logo text was
+  invisible against the footer's own navy background via `currentColor` inheritance).
+- Removed npm packages `sass-fluid`, `pace-js`, `ll`, `jcf` (none were wired up) and their dead
+  CSS/markup (`.jcf-checkbox`, `.jcf-button`, `jcf-ignore`).
+- Deleted the entire dead sidebar feature: root `sidebar.php` always no-oped (checked
+  `is_active_sidebar('sidebar-1')`, never registered anywhere), `template-parts/layout/side-bar.php`
+  had zero callers, `_sidebar.scss`'s `.site-sidebar` was never referenced anywhere.
+- Removed the sticky block's decorative rotating SVG shapes, feature-grid layout-1's extra
+  bordered "panel" wrapper div, and the small-card hover lift/zoom (kept just a title colour
+  change).
+- Fixed a real header/off-canvas-panel height mismatch: `.o-site-header`'s own mobile height was
+  `--nav-height-xl` (12rem) while every off-canvas panel assumed `--nav-height-sm` (8rem), so the
+  panel opened 4rem into the header instead of right below it.
+- Inlined the shared `component-block-title.php` into `block-listing.php` (its only caller) and
+  deleted the shared component - confirmed legacy/single-use per your call.
+- Simplified the accordion block: removed the swap-image-on-expand behaviour
+  (`accordion.js`'s `setImage()`, the per-item `image` ACF field, `.b-accordion__media`) - it's a
+  plain text accordion now.
+- Removed the old hand-rolled scroll animations entirely: `layout.js`'s `scrollRotate()`
+  (`[data-rotate-scroll]`, already fully dead - nothing rendered that attribute after the sticky
+  shapes were removed) and `scrollScale()` (`.js-sticky-scale`, also already dead), plus
+  `hero.js` (100% parallax, deleted outright) and `layout.js`'s `parallax()`/`.js-parallax`.
+- Added a new GSAP-based animation system: `src/js/modules/anim.js` (data-attribute driven -
+  `data-scroll-animation="fadeIn|fadeOut|zoomIn|zoomOut|slideIn|slideOut|slideUp|slideUpNoOpacity"`,
+  plus `data-lottie="/path.json"` for Lottie), `gsap`/`lottie-web` added as npm deps, wired into
+  `app.js`, minimal `src/sass/base/_anim.scss` (`will-change` + `[data-lottie]` sizing). **Nothing
+  in any template actually uses these data attributes yet** - the system is wired up and builds
+  clean, but is currently inert until someone adds `data-scroll-animation="..."` to real markup.
 
 **Still open / not yet done:**
-
-- Nothing has been committed yet as of writing this — everything above is working-tree changes.
-- ACF JSON → DB sync (the `wp eval` snippet further down) needs re-running after every ACF JSON
-  edit, including the `header_style` field and the `clients`→`portfolio` relationship-field
-  changes — done once already this session, but redo it if you pull these changes into a fresh DB.
-- `npm install` had never been run before this session (devDependencies, incl. stylelint/eslint,
-  weren't installed) — now installed, but `npm run lint:scss`/`eslint:js` haven't actually been
-  run/fixed yet, only `php -l` / `sass --compile` / `node --check` were used to verify edits.
-- The standard header's mega-menu CTA-card feature (`mega_cta_*` fields) is untouched/unverified —
-  no seeded menu item has one configured, so it's never been visually exercised.
-- The centered/minimal off-canvas dropdown styling is intentionally simpler than the standard
-  header's mega-menu (flat list, no columns/CTA) — `Simple_Menu_Walker` doesn't build that markup.
-- General "is this generic enough" review was broad but not exhaustive — more leftover
-  project-specific assumptions may still turn up in less-visited template parts.
+- **Wireframe/colour system**: strip the primary palette down to a max of 3 colours and restyle
+  toward a neutral wireframe look - not started. Also asked: remove `border-radius` everywhere
+  (explicitly called out as "a theme style" that shouldn't be baked into the generic boilerplate).
+  This is the single biggest remaining task - touches `abstracts/_variables.scss`'s
+  `--primary-color-1` through `-6`, the `$panel-colours` map in `abstracts/_mixins.scss`
+  (White/Blue/Orange/Navy section-colour choices - CLAUDE.md's own documented "Shared panel
+  colour palette" section describes this system), and `border-radius` declarations scattered
+  across most component/block SCSS files. Do this as its own focused pass, not mixed with other
+  edits - it's cross-cutting and easy to half-finish.
+- **Seed alternating background colours**: `bin/wp/seed-all-blocks.php` should cycle each block's
+  `background_colour` field (white/grey-light/blue/navy/gradient) through the seeded rows instead
+  of leaving most at their default, purely so adjacent sections are visually distinguishable when
+  testing. Only blocks that actually have a `background_colour` field: separator, stats, cards,
+  feature_grid, content_grid, accordion, buttons, contact.
+- **More placeholder content**: add more example Team Member posts (currently only one) and more
+  example blog posts (`post` type - needed for the `listing` block's query mode and
+  `latest_blogs` to have more than a couple of items to show).
+- **Broad SCSS/JS comment audit**: asked twice this session ("too many comments... AI-like") -
+  only partially addressed as a side effect of other edits. Needs a dedicated pass over
+  `src/sass/**` and `src/js/**` specifically looking for over-explained/narrative comments, per
+  the WHY-only rule already in this file's top-level instructions. Don't touch the comments
+  CLAUDE.md itself calls out as deliberately load-bearing (the `:not(#\#)` specificity hack, the
+  unlayered background-colour rationale, the header-dispatch pattern, the `simple-nav-list`
+  same-specificity `@media` gotcha below) - those exist because the mistake was already made once.
+- **CI / testing**: discussed but not built. Offered and the user was interested in: (1) a GitHub
+  Actions workflow running `composer qa` + eslint + stylelint + build on push/PR, with the local
+  pre-commit hook loosened to formatting-only; (2) a Cypress suite (already a devDependency,
+  zero spec files currently) for horizontal-scroll detection, broken-internal-link crawling, and
+  console-error assertions across the main templates. Neither exists yet - both are concrete,
+  well-scoped next steps if asked for.
+- The GSAP anim system (above) needs someone to actually add `data-scroll-animation` attributes
+  to real block templates to be useful - right now it's dead weight in the bundle until used.
+- The standard header's mega-menu CTA-card feature (`mega_cta_*` fields) remains untouched/
+  unverified - no seeded menu item has one configured.
+- `client_logo` is still not a registered ACF field on the `portfolio` CPT (the `logos` block
+  reads it via `get_field('client_logo', $client)` but nothing defines it) - pre-existing gap,
+  flagged repeatedly, never fixed.
+- The `--sidebar-width` variable removal and the two ACF-field-with-no-JSON-definition gaps
+  (`field_617e9fb9b4fbc`, used by map/accordion's "Block Width" clone) are cosmetic/minor and
+  probably not worth a dedicated pass on their own - only worth fixing if you're already touching
+  those specific blocks.
+- Environment notes: the Docker `uploads/` permission fix (`chmod 777`, wp-cli container's
+  `www-data` is UID 82 vs the wordpress container's UID 33) is session-only, not persisted in
+  `docker-compose.yml` - it'll need redoing after a container rebuild if image uploads via wp-cli
+  fail again. There was also a stray `npm run dev` process left running from before a recent
+  session (unrelated to any of this work) - if asset loading looks like it's hitting `:5173`
+  unexpectedly, check for a leftover dev server before assuming a build problem.
 
 ## Commands
 
@@ -163,6 +214,18 @@ correct in an un-minified dev build. Those overrides use the project's `:not(#\#
 hack (see below) rather than relying on source order — do the same for any new override in this
 area, and don't trust a `sass --compile` smoke test alone; check the actual `npm run build` output
 in a browser.
+
+### Scroll/entrance animations
+
+`src/js/modules/anim.js` (GSAP + ScrollTrigger, plus Lottie) drives all entrance animation -
+there's no other JS-based animation left in the theme (the old hand-rolled scroll-rotate/scroll-
+scale/parallax code was removed). Add `data-scroll-animation="fadeIn|fadeOut|zoomIn|zoomOut|
+slideIn|slideOut|slideUp|slideUpNoOpacity"` to any element to animate it; optional
+`data-scroll-start`, `data-scroll-duration`, `data-scroll-delay`, `data-disable-mobile`,
+`data-play-once`, `data-animate-on-load-only` override the per-call defaults in `anim.js`'s
+`defaultConfig`. `data-lottie="/path/to/file.json"` (plus optional `data-lottie-loop`/
+`data-lottie-autoplay`, both default true) loads a Lottie animation into that element. As of
+2026-09-23 no template actually uses either attribute yet - the system is wired up but inert.
 
 ### Per-block folder convention
 

@@ -14,6 +14,14 @@
 	// Groups.
 	$title_options = $content['title_options'] ?? null;
 
+	// Title options (formerly the shared component-block-title.php, only
+	// ever used by this block).
+	$title_text_alignment = $title_options['text_alignment'] ?? null;
+	$title_eyebrow         = $title_options['eyebrow'] ?? null;
+	$title_eyebrow_style   = $title_options['eyebrow_style'] ?? 'default';
+	$title_title           = $title_options['title'] ?? null;
+	$title_text            = $title_options['text'] ?? null;
+
 	// Singles.
 	$query_type        = $content['query_type'] ?? null;
 	$relationship      = $content['relationship'] ?? null;
@@ -24,15 +32,19 @@
 ?>
 
 <section class="<?php echo esc_attr( $block . ' white' ); ?>">
-	<?php
-		get_template_part(
-			'template-parts/components/component',
-			'block-title',
-			array(
-				'title_options' => $title_options,
-			)
-		);
-		?>
+	<?php if ( $title_eyebrow || $title_title || $title_text ) : ?>
+		<div class="<?php echo esc_attr( implode( ' ', array( 'c-block-title', $title_text_alignment ) ) ); ?>">
+			<?php if ( $title_eyebrow ) : ?>
+				<p class="c-eyebrow c-eyebrow--<?php echo esc_attr( $title_eyebrow_style ); ?>"><?php echo esc_html( $title_eyebrow ); ?></p>
+			<?php endif; ?>
+			<?php if ( $title_title ) : ?>
+				<p class="c-block-title__title"><?php echo esc_html( $title_title ); ?></p>
+			<?php endif; ?>
+			<?php if ( $title_text ) : ?>
+				<div class="c-block-title__text"><?php echo $title_text; ?></div>
+			<?php endif; ?>
+		</div>
+	<?php endif; ?>
 	<div class="facetwp-template">
 
 			<?php if ( 'enable' === $enable_carousel ) { ?>
