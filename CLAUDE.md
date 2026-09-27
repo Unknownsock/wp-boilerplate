@@ -26,10 +26,9 @@ history lives in `git log` (`git log --oneline`), not here.
   none of these are defined anywhere in `_variables.scss`, so that styling currently resolves to
   nothing/inherited. Needs a decision on what `--base-color-1..5` should map to in the current
   White/Light Grey/Orange/Blue palette before it's worth fixing.
-- No CI and no Cypress specs yet (Cypress is already a devDependency, zero spec files exist). A
-  GitHub Actions workflow (`composer qa` + eslint + stylelint + build on push/PR) and specs for
+- No Cypress specs yet (Cypress is already a devDependency, zero spec files exist). Specs for
   horizontal-scroll detection, broken-internal-link crawling, and console-error assertions across
-  the main templates have been discussed but not built.
+  the main templates have been discussed but not built. (CI itself now exists - see Commands.)
 - Two ACF fields with no JSON definition (`field_617e9fb9b4fbc`, used by map/accordion's "Block
   Width" clone) - cosmetic/minor, only worth fixing if you're already touching those blocks.
 - `src/js/modules/anim.js` (GSAP-based `data-scroll-animation`/`data-lottie` system - see
@@ -79,8 +78,13 @@ npm run lint:php       # cd themes/boilerplate && composer lint   (phpcs, WPCS s
 npm run fix:php        # phpcbf
 ```
 
-Pre-commit (`husky` + `lint-staged`) runs prettier/eslint/stylelint on staged JS/SCSS and
-phpcbf+prettier on staged theme PHP automatically.
+Pre-commit (`husky` + `lint-staged`, `.husky/pre-commit`) is deliberately formatting-only -
+`prettier --write` on staged JS/SCSS, `phpcbf` + `prettier --write` on staged theme PHP - and never
+blocks a commit. `eslint`/`stylelint` (the actual judgment-call linting) run in CI instead
+(`.github/workflows/ci.yml`, on push/PR), not locally on every commit. `fix:php`'s script
+deliberately always exits 0 - `phpcbf` returns exit code 1 to mean "fixes were applied
+successfully" (not failure), which `lint-staged` would otherwise treat as a failed task and revert
+the entire commit; don't remove that `exit 0` without accounting for that.
 
 **PHP tests / static analysis** (run from `themes/boilerplate/`, needs `composer install` there first):
 
@@ -172,8 +176,8 @@ slideIn|slideOut|slideUp|slideUpNoOpacity"` to any element to animate it; option
 `data-scroll-start`, `data-scroll-duration`, `data-scroll-delay`, `data-disable-mobile`,
 `data-play-once`, `data-animate-on-load-only` override the per-call defaults in `anim.js`'s
 `defaultConfig`. `data-lottie="/path/to/file.json"` (plus optional `data-lottie-loop`/
-`data-lottie-autoplay`, both default true) loads a Lottie animation into that element. As of
-2026-09-23 no template actually uses either attribute yet - the system is wired up but inert.
+`data-lottie-autoplay`, both default true) loads a Lottie animation into that element. Currently
+only exercised on the `cards`, `stats`, and `team` blocks - see Known gaps.
 
 ### Per-block folder convention
 
@@ -262,6 +266,15 @@ colour didn't silently become blue too) - White/Light Grey/Orange/Blue is the cu
   edit, nothing else references it by name.
 - `wp-config.php`/`.htaccess`/`uploads.ini` are bind-mounted from `config/` (docker-compose.yml),
   not baked into the theme or the WordPress image.
+- `.env` is real, not decorative — `docker-compose.yml` reads `WP_PORT`/`PHPMYADMIN_PORT`/
+  `DB_NAME`/`DB_USER`/`DB_PASS`/`DB_ROOT_PASSWORD` via `${VAR:-default}` substitution (Compose
+  loads `.env` from the project root automatically for this, no `env_file:` directive needed).
+  `wp-config.php` itself only ever reads `WORDPRESS_*`-prefixed vars (the official image's own
+  convention, via `getenv_docker()`) - `docker-compose.yml`'s `environment:` blocks are what bridge
+  the two names. If you add a new `.env` variable, it needs a matching `${...}` in
+  `docker-compose.yml` or it does nothing - this exact gap (a fully vestigial `.env.example` with
+  zero working variables, copied from some other project's compose setup) went unnoticed for a
+  long time before being wired up for real.
 - `bin/wp/*.php` are one-off content/seed scripts run via `wp eval-file` against the repo root
   (mounted read-only into the `wp-cli` container at `/workspace`).
 - `bin/db/{backup,import,restore}.js` (Node) handle DB dump/restore — `npm run db:backup` etc.
