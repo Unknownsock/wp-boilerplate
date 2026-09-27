@@ -12,9 +12,9 @@
 	$block   = 'b-' . str_replace( '_', '-', $content['acf_fc_layout'] ?? '' );
 
 	// Singles.
-	$wysiwyg            = $content['wysiwyg'] ?? null;
-	$accordions         = $content['accordion'] ?? null;
-	$background_colour  = $content['background_colour'] ?? 'white';
+	$wysiwyg           = $content['wysiwyg'] ?? null;
+	$accordions        = $content['accordion'] ?? null;
+	$background_colour = $content['background_colour'] ?? 'white';
 ?>
 <section class="<?php echo esc_attr( $block . ' ' . $background_colour ); ?>">
 	<?php if ( $wysiwyg ) : ?>

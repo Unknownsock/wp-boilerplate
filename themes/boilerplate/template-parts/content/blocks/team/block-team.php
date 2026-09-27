@@ -34,20 +34,27 @@
 				// Prefers the ACF "Bio" wysiwyg field over the post's normal
 				// editor content, same reasoning as "Photo" below - falls
 				// back to post_content if the field's left empty.
-				$acf_bio     = get_field( 'bio', $member_id );
-				$bio         = $acf_bio ? $acf_bio : apply_filters( 'the_content', get_post_field( 'post_content', $member_id ) );
+				$acf_bio = get_field( 'bio', $member_id );
+				$bio     = $acf_bio ? $acf_bio : apply_filters( 'the_content', get_post_field( 'post_content', $member_id ) );
 				// Prefers the ACF "Photo" field (a plain image field on the
 				// post edit screen itself) over the Featured Image sidebar
 				// widget, since editors kept missing the latter - falls
 				// back to it if set, then to the boilerplate_image() placeholder.
-				$acf_photo   = get_field( 'photo', $member_id );
-				$photo       = null;
+				$acf_photo = get_field( 'photo', $member_id );
+				$photo     = null;
 				if ( ! empty( $acf_photo['url'] ) ) {
 					$photo = '<img class="' . esc_attr( $block ) . '__photo" src="' . esc_url( $acf_photo['url'] ) . '" alt="' . esc_attr( $acf_photo['alt'] ?: $name ) . '" loading="lazy">';
 				} elseif ( has_post_thumbnail( $member_id ) ) {
-					$photo = get_the_post_thumbnail( $member_id, 'medium', array( 'class' => $block . '__photo', 'loading' => 'lazy' ) );
+					$photo = get_the_post_thumbnail(
+						$member_id,
+						'medium',
+						array(
+							'class'   => $block . '__photo',
+							'loading' => 'lazy',
+						)
+					);
 				}
-				$modal_id    = 'team-modal-' . $member_id;
+				$modal_id = 'team-modal-' . $member_id;
 				?>
 				<div class="<?php echo $block; ?>__item" data-scroll-animation="fadeIn" data-scroll-delay="<?php echo esc_attr( $member_index * 100 ); ?>">
 					<div class="<?php echo $block; ?>__image">
@@ -101,7 +108,14 @@
 			if ( ! empty( $acf_photo['url'] ) ) {
 				$photo = '<img class="' . esc_attr( $block ) . '__modal-photo" src="' . esc_url( $acf_photo['url'] ) . '" alt="' . esc_attr( $acf_photo['alt'] ?: $name ) . '" loading="lazy">';
 			} elseif ( has_post_thumbnail( $member_id ) ) {
-				$photo = get_the_post_thumbnail( $member_id, 'medium', array( 'class' => $block . '__modal-photo', 'loading' => 'lazy' ) );
+				$photo = get_the_post_thumbnail(
+					$member_id,
+					'medium',
+					array(
+						'class'   => $block . '__modal-photo',
+						'loading' => 'lazy',
+					)
+				);
 			} else {
 				$placeholder = boilerplate_image( null, 400, 400, wp_strip_all_tags( $name ?: 'Team member' ) );
 				$photo       = '<img class="' . esc_attr( $block ) . '__modal-photo" src="' . esc_url( $placeholder['url'] ) . '" alt="' . esc_attr( $placeholder['alt'] ) . '" loading="lazy">';

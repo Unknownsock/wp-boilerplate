@@ -277,7 +277,7 @@ $content_blocks = array(
 	),
 	array(
 		'acf_fc_layout'     => 'stats',
-		'background_colour' => 'orange',
+		'background_colour' => 'grey-light',
 		'stats'             => array(
 			array(
 				'text_position' => 'below',
@@ -297,7 +297,7 @@ $content_blocks = array(
 	),
 	array(
 		'acf_fc_layout'     => 'cards',
-		'background_colour' => 'navy',
+		'background_colour' => 'orange',
 		'items'             => array(
 			array(
 				'background_colour' => 'none',
@@ -335,7 +335,7 @@ $content_blocks = array(
 	),
 	array(
 		'acf_fc_layout'     => 'content_grid',
-		'background_colour' => 'orange',
+		'background_colour' => 'grey-light',
 		'eyebrow'           => 'Content grid',
 		'rows'              => array(
 			array(
@@ -382,7 +382,7 @@ $content_blocks = array(
 	),
 	array(
 		'acf_fc_layout' => 'accordion',
-		'background_colour' => 'navy',
+		'background_colour' => 'blue',
 		'wysiwyg'       => '<h2>Accordion block</h2>',
 		'accordion'     => array(
 			array(
@@ -435,7 +435,7 @@ $content_blocks = array(
 	),
 	array(
 		'acf_fc_layout'     => 'contact',
-		'background_colour' => 'orange',
+		'background_colour' => 'grey-light',
 		'eyebrow'           => 'Contact',
 		'text'              => '<h2>Get in touch</h2>',
 		'force_stack'       => 0,
@@ -444,7 +444,7 @@ $content_blocks = array(
 	),
 	array(
 		'acf_fc_layout' => 'map',
-		'address'       => 'Crown House, 94 Armley Rd, Armley, Leeds LS12 2EJ',
+		'address'       => 'Leeds Railway Station, New Station Street, Leeds LS1 4DY',
 	),
 	array(
 		'acf_fc_layout' => 'video',

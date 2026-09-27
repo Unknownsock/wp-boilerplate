@@ -16,8 +16,8 @@
 
 	// Singles.
 	$background_colour = $content['background_colour'] ?? 'white';
-	$force_stack        = ! empty( $content['force_stack'] );
-	$button_group        = $content['button_group'] ?? null;
+	$force_stack       = ! empty( $content['force_stack'] );
+	$button_group      = $content['button_group'] ?? null;
 ?>
 <section class="<?php echo esc_attr( $block . ' ' . $background_colour ); ?>">
 	<?php if ( $button_group ) { ?>

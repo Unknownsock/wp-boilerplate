@@ -13,9 +13,9 @@
 
 	// Singles.
 	$background_colour = $content['background_colour'] ?? null;
-	$eyebrow            = $content['eyebrow'] ?? null;
-	$eyebrow_style      = $content['eyebrow_style'] ?? 'centre';
-	$clients            = $content['clients'] ?? null;
+	$eyebrow           = $content['eyebrow'] ?? null;
+	$eyebrow_style     = $content['eyebrow_style'] ?? 'centre';
+	$clients           = $content['clients'] ?? null;
 
 	$classes = implode( ' ', array( $block, $background_colour ) );
 
@@ -51,7 +51,7 @@
 			<?php
 		}
 	};
-?>
+	?>
 
 <section class="<?php echo esc_attr( $block . ' white' ); ?>">
 	<?php if ( $eyebrow ) : ?>

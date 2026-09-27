@@ -36,9 +36,11 @@
     box-sizing: border-box;
     // Transparent over the hero until scrolled a little, then swaps to a
     // solid white bar (.is-scrolled, toggled in navigation.js on scroll -
-    // see headerScrollState()). Mobile keeps its own always-solid
-    // background regardless (&__inner below), so this only really shows
-    // above $grid-md.
+    // see headerScrollState()) - desktop only. Below $grid-nav the
+    // off-canvas hamburger nav takes over (_navigation.scss) and the bar
+    // should always be solid white, scrolled or not - there's no hero
+    // content it needs to stay transparent over once the off-canvas panel
+    // is the nav's only form.
     background-color: transparent;
     box-shadow: none;
     z-index: 999;
@@ -46,6 +48,10 @@
         var(--transition) height,
         var(--transition) background-color,
         var(--transition) box-shadow;
+
+    @media screen and (max-width: $grid-nav) {
+        background-color: var(--secondary-color-1);
+    }
 
     // "Contact us" (outline white -> orange below) - same duration as
     // this bar's own background-color swap above (no delay on either any
@@ -188,16 +194,22 @@
                 display: none;
             }
 
-            // White against the transparent/dark hero on mobile (__inner
-            // has no background of its own there any more) - once
-            // .is-scrolled below, flip back to navy for the pinwheel logo's
-            // own dark-on-white contrast. :not(#\#) beats components/
-            // _hamburger.scss's own same-specificity, later-loaded default
-            // (--primary-color-3) that would otherwise win on source order.
+            // Dark by default - below $grid-nav the bar is always solid
+            // white now (see .o-site-header's own background-color above),
+            // so the hamburger needs dark-on-white there regardless of
+            // scroll position. Only above $grid-nav (pre-.is-scrolled,
+            // over the transparent/dark hero) does it need to go white -
+            // .is-scrolled below flips it back to dark there once scrolled.
+            // :not(#\#) beats components/_hamburger.scss's own same-
+            // specificity, later-loaded default (--primary-color-3) that
+            // would otherwise win on source order.
             .top:not(#\#),
             .middle:not(#\#),
             .bottom:not(#\#) {
-                background-color: var(--secondary-color-1);
+                background-color: var(--primary-color-3);
+                @media screen and (min-width: $grid-nav) {
+                    background-color: var(--secondary-color-1);
+                }
             }
         }
     }

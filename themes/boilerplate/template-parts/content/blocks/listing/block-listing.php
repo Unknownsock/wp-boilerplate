@@ -14,13 +14,21 @@
 	// Groups.
 	$title_options = $content['title_options'] ?? null;
 
-	// Title options (formerly the shared component-block-title.php, only
-	// ever used by this block).
-	$title_text_alignment = $title_options['text_alignment'] ?? null;
-	$title_eyebrow         = $title_options['eyebrow'] ?? null;
-	$title_eyebrow_style   = $title_options['eyebrow_style'] ?? 'default';
-	$title_title           = $title_options['title'] ?? null;
-	$title_text            = $title_options['text'] ?? null;
+	// Title options (formerly the shared component-block-title.php/
+	// .c-block-title - inlined and reworked to the block's own BEM markup,
+	// matching the __header/__intro pattern other blocks use, e.g.
+	// latest-blogs/block-latest-blogs.php).
+	$title_eyebrow       = $title_options['eyebrow'] ?? null;
+	$title_eyebrow_style = $title_options['eyebrow_style'] ?? 'default';
+	$title_title         = $title_options['title'] ?? null;
+	$title_text          = $title_options['text'] ?? null;
+	// ACF's raw choice value is "text-alignment-<left|center|right>" -
+	// reduce that to a proper BEM modifier instead of using it verbatim.
+	$title_alignment_raw = $title_options['text_alignment'] ?? null;
+	$title_header_class  = $block . '__header';
+if ( $title_alignment_raw ) {
+	$title_header_class .= ' ' . $block . '__header--' . str_replace( 'text-alignment-', '', $title_alignment_raw );
+}
 
 	// Singles.
 	$query_type        = $content['query_type'] ?? null;
@@ -34,15 +42,15 @@
 
 <section class="<?php echo esc_attr( $block . ' white' ); ?>">
 	<?php if ( $title_eyebrow || $title_title || $title_text ) : ?>
-		<div class="<?php echo esc_attr( implode( ' ', array( 'c-block-title', $title_text_alignment ) ) ); ?>">
+		<div class="<?php echo esc_attr( $title_header_class ); ?>">
 			<?php if ( $title_eyebrow ) : ?>
 				<p class="c-eyebrow c-eyebrow--<?php echo esc_attr( $title_eyebrow_style ); ?>"><?php echo esc_html( $title_eyebrow ); ?></p>
 			<?php endif; ?>
 			<?php if ( $title_title ) : ?>
-				<p class="c-block-title__title"><?php echo esc_html( $title_title ); ?></p>
+				<h2 class="<?php echo esc_attr( $block ); ?>__title"><?php echo esc_html( $title_title ); ?></h2>
 			<?php endif; ?>
 			<?php if ( $title_text ) : ?>
-				<div class="c-block-title__text"><?php echo $title_text; ?></div>
+				<div class="<?php echo esc_attr( $block ); ?>__text"><?php echo $title_text; ?></div>
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>

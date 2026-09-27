@@ -13,10 +13,8 @@
     flex-flow: column;
     box-sizing: border-box;
     overflow: hidden;
-    // Establishes a stacking context with no other side effects (no
-    // layout/visual change) - contains __link's z-index: -1 below, so
-    // it can only ever paint behind THIS card's own content, never
-    // behind sibling cards or anything further up the page.
+    // Contains __link's z-index: -1 below, so it can only ever paint
+    // behind this card's own content, never behind sibling cards.
     isolation: isolate;
 
     // Both variants alternate dark/light background+text via
@@ -30,15 +28,9 @@
             --card-fg: var(--secondary-color-1);
             color: var(--primary-color-1);
             @include hover() {
-                // Targets __title directly, not this element - __title
-                // sets its own explicit colour (both the default at
-                // &__title above and the even-specific override below),
-                // so nothing here would ever inherit a colour set on the
-                // card itself. :not(#\#) beats the general
-                // .c-card--small hover rule above (same specificity
-                // otherwise, and that one comes later in the file, so it
-                // would win the tie and silently override this back to
-                // --primary-color-1).
+                // :not(#\#) beats the general .c-card--small hover rule
+                // below at the same specificity - without it, source order
+                // would let that rule win the tie and override this back.
                 .c-card__title:not(#\#) {
                     color: var(--primary-color-1);
                 }
@@ -54,7 +46,7 @@
         // Colour" field - same $panel-colours palette content-grid and
         // section backgrounds use, re-pointed at --card-* so __title's
         // accent and __eyebrow/__text colours stay in sync automatically.
-        @include panel-colour-vars(navy);
+        @include panel-colour-vars(blue);
         border: 1px solid var(--primary-color-1);
         box-sizing: border-box;
         padding: 2rem;
@@ -65,11 +57,14 @@
         &.white {
             @include panel-colour-vars(white);
         }
+        &.grey-light {
+            @include panel-colour-vars(grey-light);
+        }
         &.orange {
             @include panel-colour-vars(orange);
         }
-        &.navy {
-            @include panel-colour-vars(navy);
+        &.blue {
+            @include panel-colour-vars(blue);
         }
     }
 
@@ -146,7 +141,6 @@
 
     &__content {
         position: relative;
-        // padding: 0rem var(--grid-gutter) var(--grid-gutter) var(--grid-gutter);
         padding: 0;
         display: flex;
         flex: 1;
@@ -155,18 +149,20 @@
         gap: 3rem;
         box-sizing: border-box;
 
-        // Large: top-aligned, not pushed to the bottom of the card -
-        // when grid stretch (see .c-card--large's own comment) gives a
-        // card extra height to match a taller sibling, the heading
-        // should stay put right under the image, not centre/shift down
-        // into the extra space.
+        // Small: __inner carries no padding of its own (unlike --large's,
+        // see __inner above), so __content needs it directly - no top
+        // padding since the image sits flush above it.
+        .c-card--small & {
+            padding: 4rem;
+        }
+
+        // Large: top-aligned, not pushed to the bottom of the card - when
+        // grid stretch gives a card extra height to match a taller
+        // sibling, the heading should stay under the image, not shift
+        // down into the extra space.
         .c-card--large & {
             justify-content: flex-start;
-        }
-        .c-card--large & {
             background-color: var(--card-bg);
-            @media screen and (min-width: $grid-nav) {
-            }
         }
     }
 
@@ -179,19 +175,15 @@
         text-transform: uppercase;
         color: var(--primary-color-1);
 
-        .c-card:nth-child(even) & {
-        }
-
         // Large: track --card-accent instead of the fixed orange above -
-        // otherwise the .orange background_colour variant (see
-        // .c-card--large.orange above) would paint an orange eyebrow on
-        // an orange card, invisible.
+        // otherwise the .orange background_colour variant would paint an
+        // orange eyebrow on an orange card, invisible.
         .c-card--large & {
             color: var(--card-accent);
         }
 
-        // Small cards' eyebrow is a post tag - always light pink,
-        // lowercase, no alternating colour.
+        // Small cards' eyebrow is a post tag - always orange, lowercase,
+        // no alternating colour.
         .c-card--small & {
             font-size: 1.6rem;
             line-height: 1.6em;
@@ -211,10 +203,9 @@
         }
         // :not(#\#) boosts this above section-level background text-colour
         // rules (section.<colour> h1..h6, _default.scss) - without it, a
-        // card sitting inside a coloured section loses this to that rule
-        // on the element-count tiebreak (same 1-class specificity, more
-        // elements in that selector), so the card's own contrast-correct
-        // colour would silently get overridden by the section's.
+        // card inside a coloured section loses this to that rule on the
+        // element-count tiebreak (same 1-class specificity, more elements
+        // in that selector).
         &:not(#\#) {
             color: var(--card-fg);
         }
@@ -241,12 +232,7 @@
             color: var(--primary-color-1);
         }
 
-        // Bold text within the wysiwyg title alternates yellow/purple.
-        p strong:nth-of-type(odd) {
-            color: var(--primary-color-1);
-            font-weight: inherit;
-        }
-        p strong:nth-of-type(even) {
+        p strong {
             color: var(--primary-color-1);
             font-weight: inherit;
         }
@@ -303,9 +289,9 @@
     }
 
     // z-index: -1 puts this behind everything else in the card without
-    // any of those siblings needing a z-index of their own (z-index:auto
-    // always paints above a negative sibling); .c-card's own
-    // isolation: isolate keeps that -1 contained to this card's stacking.
+    // any sibling needing a z-index of its own (z-index:auto always
+    // paints above a negative sibling); .c-card's own isolation: isolate
+    // keeps that -1 contained to this card's stacking.
     // Small-only - large's markup renders the whole card as a plain <a>/<div>.
     &__link {
         .c-card--small & {
@@ -329,8 +315,8 @@
         color: var(--primary-color-1);
         // transform here is only ever used on --small, to counter
         // __content's own translateY on hover (see @include hover()
-        // below) - needs its own transition so that cancelling-out
-        // animates in step with it instead of snapping instantly.
+        // below) - needs its own transition so cancelling-out animates
+        // in step with it instead of snapping instantly.
         transition:
             var(--transition) color,
             var(--transition-long) transform;
@@ -344,8 +330,6 @@
     // Large's body (text + buttons) is always visible now - static,
     // no hover reveal.
     &--large &__body {
-        & > *:first-child {
-        }
         .c-button {
             justify-content: flex-start;
         }
@@ -361,8 +345,7 @@
     }
 
     // @include hover() above doesn't react to focus (its own :focus is
-    // deliberately commented out, shared by every component using it -
-    // not something to change globally just for this one case).
+    // deliberately commented out, shared by every component using it).
     // Small-only now - large is fully static.
     @media not all and (pointer: coarse) {
         &--small:focus-within {

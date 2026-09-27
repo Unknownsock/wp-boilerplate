@@ -7,8 +7,8 @@
     padding-left: var(--grid-gutter);
     padding-bottom: var(--grid-gutter);
     // Background colour comes from the `background_colour` ACF field via
-    // the shared .white/.orange/.navy classes in _default.scss, not a
-    // hardcoded value here (defaults to `navy` - see block-stats.php).
+    // the shared .white/.grey-light/.orange/.blue classes in _default.scss,
+    // not a hardcoded value here (defaults to `blue` - see block-stats.php).
     @include block-bounds();
     @media screen and (min-width: $grid-md) {
         padding-top: 8rem;
@@ -24,9 +24,7 @@
         // Top-aligned, not centred - items vary in total height depending
         // on their text/label length, but the image circle is always a
         // fixed 25rem and always the first thing in the item (text sits
-        // below it), so top-aligning keeps every image's top edge level
-        // and lets __arrow's margin-top target the image's centre
-        // specifically, rather than drifting with the text underneath.
+        // below it), so top-aligning keeps every image's top edge level.
         align-items: flex-start;
     }
 
@@ -54,7 +52,6 @@
         aspect-ratio: 1 / 1;
         border-radius: 50%;
         padding: 2rem;
-        border: 0.1rem solid var(--secondary-color-1);
         box-sizing: border-box;
         img {
             width: 100%;
@@ -85,7 +82,6 @@
         margin-bottom: 0;
         font-family: var(--font-stack-headers);
         font-size: 4rem;
-        line-height: 1.2em;
         font-weight: 500;
         line-height: 1;
         color: var(--secondary-color-1);
@@ -102,34 +98,20 @@
         color: var(--secondary-color-1);
     }
 
-    // Dotted connector + arrow rendered between items (not after the last
-    // one) - inline SVG so it can pick up the item text colour via
-    // currentColor rather than being baked in as a fixed white asset.
-    #{$block}__arrow {
-        display: none;
-        flex: 0 0 auto;
-        margin: auto 0 14rem 0;
-        align-self: flex-start;
-        width: 4rem;
-        height: auto;
-        color: var(--secondary-color-1);
-
-        @media screen and (min-width: $grid-md) {
-            display: block;
-        }
-    }
-
-    // __number/__label/__arrow default to white text, matching the
-    // block's own navy/orange default backgrounds - but that hardcoded
-    // colour otherwise always wins over _default.scss's section-level
-    // light/dark text rule (2 classes here vs 1 class + element count
-    // there), so on a white/transparent section they'd stay invisible
-    // white-on-white unless flipped back explicitly here too.
-    section.white &,
-    section.transparent & {
+    // __number/__label default to white text, matching the block's own
+    // blue/orange default backgrounds - but that hardcoded colour
+    // otherwise always wins over _default.scss's section-level light/dark
+    // text rule, so on a white/grey-light section they'd stay invisible
+    // white-on-white/white-on-light-grey unless flipped back explicitly
+    // here too. `$block` and the colour class both land on this same
+    // <section> (block-stats.php), so this must be a compound selector
+    // (&.white) - `section.white &` is a descendant combinator that can
+    // never match a single element carrying both classes at once, and
+    // never did (this guard was always dead, on every colour).
+    &.white,
+    &.grey-light {
         #{$block}__number,
-        #{$block}__label,
-        #{$block}__arrow {
+        #{$block}__label {
             color: var(--primary-color-3);
         }
     }

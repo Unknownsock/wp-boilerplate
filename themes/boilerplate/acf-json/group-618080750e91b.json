@@ -125,8 +125,9 @@
             },
             "choices": {
                 "white": "White",
+                "grey-light": "Light Grey",
                 "orange": "Orange",
-                "navy": "Navy"
+                "blue": "Blue"
             },
             "default_value": "white",
             "return_format": "value",
@@ -150,8 +151,9 @@
             },
             "choices": {
                 "white": "White",
+                "grey-light": "Light Grey",
                 "orange": "Orange",
-                "navy": "Navy"
+                "blue": "Blue"
             },
             "default_value": "orange",
             "return_format": "value",

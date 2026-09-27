@@ -3,7 +3,7 @@
 
 .b-contact {
     // Background colour comes from the section's own class (default
-    // "navy") - see block-contact.php + _default.scss.
+    // "blue") - see block-contact.php + _default.scss.
     display: grid;
     gap: var(--grid-gutter);
     grid-template-columns: 1fr;

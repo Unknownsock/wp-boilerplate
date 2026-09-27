@@ -16,8 +16,8 @@
 	$block   = 'b-' . str_replace( '_', '-', $content['acf_fc_layout'] ?? '' );
 
 	// Singles.
-	$items              = $content['items'] ?? null;
-	$background_colour  = $content['background_colour'] ?? 'white';
+	$items             = $content['items'] ?? null;
+	$background_colour = $content['background_colour'] ?? 'white';
 ?>
 <section class="<?php echo esc_attr( $block . ' ' . $background_colour ); ?>">
 	<?php if ( $items ) { ?>

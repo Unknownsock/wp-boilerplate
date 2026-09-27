@@ -411,9 +411,9 @@ function seed_company_details() {
 				array(
 					'address_lines' => array(
 						array( 'address_line' => 'Boilerplate Ltd' ),
-						array( 'address_line' => 'Crown House' ),
-						array( 'address_line' => '94 Armley Rd' ),
-						array( 'address_line' => 'Leeds LS12 2EJ' ),
+						array( 'address_line' => 'Example House' ),
+						array( 'address_line' => '1 Example Street' ),
+						array( 'address_line' => 'Sample City AB1 2CD' ),
 					),
 				),
 				array(

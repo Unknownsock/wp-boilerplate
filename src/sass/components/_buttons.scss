@@ -71,7 +71,6 @@
         gap: 1rem;
         align-content: center;
         align-items: center;
-        box-sizing: border-box;
         white-space: nowrap;
         box-sizing: border-box;
         @media screen and (max-width: $grid-md) {
@@ -139,6 +138,19 @@
             }
         }
 
+        &.c-button--grey-light {
+            --btn-color: var(--secondary-color-2);
+            .c-button__inner {
+                color: var(--primary-color-3);
+            }
+            @include hover() {
+                --btn-color: var(--primary-color-1);
+                .c-button__inner {
+                    color: var(--primary-color-3);
+                }
+            }
+        }
+
         &.c-button--orange {
             --btn-color: var(--primary-color-1);
             .c-button__inner {
@@ -149,8 +161,8 @@
             }
         }
 
-        &.c-button--navy {
-            --btn-color: var(--primary-color-3);
+        &.c-button--blue {
+            --btn-color: var(--primary-color-2);
             .c-button__inner {
                 color: var(--secondary-color-1);
             }
@@ -197,6 +209,19 @@
             }
         }
 
+        &.c-button--grey-light {
+            --btn-color: var(--secondary-color-2);
+            .c-button__inner {
+                color: var(--primary-color-3);
+            }
+            @include hover() {
+                --btn-color: var(--primary-color-1);
+                .c-button__inner {
+                    color: var(--secondary-color-1);
+                }
+            }
+        }
+
         &.c-button--orange {
             --btn-color: var(--primary-color-1);
             .c-button__inner {
@@ -207,8 +232,8 @@
             }
         }
 
-        &.c-button--navy {
-            --btn-color: var(--primary-color-3);
+        &.c-button--blue {
+            --btn-color: var(--primary-color-2);
             .c-button__inner {
                 color: var(--secondary-color-1);
             }
@@ -275,14 +300,19 @@
                 color: var(--secondary-color-1);
             }
         }
+        &.c-button--grey-light {
+            .c-button__inner {
+                color: var(--secondary-color-2);
+            }
+        }
         &.c-button--orange {
             .c-button__inner {
                 color: var(--primary-color-1);
             }
         }
-        &.c-button--navy {
+        &.c-button--blue {
             .c-button__inner {
-                color: var(--primary-color-3);
+                color: var(--primary-color-2);
             }
         }
     }

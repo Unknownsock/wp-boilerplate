@@ -22,7 +22,6 @@
     form {
         .wpcf7-response-output {
             font-size: 1.4rem;
-            color: var(--primary-color-1);
             background-color: var(--primary-color-1);
             color: var(--secondary-color-1);
         }
@@ -549,7 +548,6 @@ textarea {
         text-transform: uppercase;
         font-weight: bold;
         background-color: var(--base-color-4);
-        color: white;
         box-sizing: border-box;
         pointer-events: none;
         user-select: none;
@@ -570,13 +568,12 @@ textarea {
     margin: -1px;
     padding: 0;
     border: 0;
-    word-wrap: normal !important;
+    overflow-wrap: normal !important;
 }
 
 .wpcf7-response-output {
     padding: 1.8rem;
     color: var(--base-color-4);
-    background-color: var(--base-color-2);
     font-size: 1.8rem;
     line-height: calc(1em + 0.4rem);
     text-align: center;

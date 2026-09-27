@@ -12,10 +12,10 @@
 	$block   = 'b-' . str_replace( '_', '-', $content['acf_fc_layout'] ?? '' );
 
 	// Singles.
-	$items              = $content['items'] ?? null;
-	$text               = $content['text'] ?? null;
-	$background_colour  = $content['background_colour'] ?? 'white';
-	$layout             = $content['layout'] ?? 'layout-1';
+	$items             = $content['items'] ?? null;
+	$text              = $content['text'] ?? null;
+	$background_colour = $content['background_colour'] ?? 'white';
+	$layout            = $content['layout'] ?? 'layout-1';
 ?>
 <section class="<?php echo esc_attr( $block . ' ' . $background_colour ); ?>">
 	<?php // Layout 1 ("Our Advantages") puts its title inside the panel, with a full-width rule under it - see #{$block}__panel below. Every other layout keeps the intro above the grid. ?>

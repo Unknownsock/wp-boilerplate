@@ -20,16 +20,16 @@
 	// Falls back to the single legacy "company_address" repeater as one
 	// address if the newer multi-address "addresses" field is empty -
 	// keeps older content working without a forced re-entry.
-	if ( ! $addresses ) {
-		$legacy_address = $company_details['company_address'] ?? null;
-		if ( $legacy_address ) {
-			$addresses = array(
-				array(
-					'address_lines' => $legacy_address,
-				),
-			);
-		}
+if ( ! $addresses ) {
+	$legacy_address = $company_details['company_address'] ?? null;
+	if ( $legacy_address ) {
+		$addresses = array(
+			array(
+				'address_lines' => $legacy_address,
+			),
+		);
 	}
+}
 
 ?>
 

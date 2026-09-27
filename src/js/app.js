@@ -1,5 +1,4 @@
 import './modules/functions.js';
-import './modules/swiper.js';
 import './modules/navigation.js';
 import './modules/blocks.js';
 import './modules/forms.js';

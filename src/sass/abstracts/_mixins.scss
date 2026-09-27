@@ -3,11 +3,11 @@
 @use 'sass:map';
 @use 'variables' as *;
 
-// Shared three-colour "panel" palette - the same White/Orange/Navy choice
+// Shared "panel" palette - the same White/Light Grey/Orange/Blue choice
 // editors get on cards (block-cards.php), content-grid columns
 // (block-content-grid.php), and section backgrounds (the "Background
 // Colour" clone field, field_617ea04499fac). Single source of truth for
-// which name maps to which token, so all three stay in sync instead of
+// which name maps to which token, so all four stay in sync instead of
 // each hand-copying the same colours and silently drifting apart if the
 // palette ever changes. Each consumer still decides HOW to apply these
 // (custom properties for a card's coordinated bg/text/accent vs a flat
@@ -19,13 +19,18 @@ $panel-colours: (
         fg: var(--primary-color-3),
         accent: var(--primary-color-1),
     ),
+    grey-light: (
+        bg: var(--secondary-color-2),
+        fg: var(--primary-color-3),
+        accent: var(--primary-color-1),
+    ),
     orange: (
         bg: var(--primary-color-1),
         fg: var(--secondary-color-1),
         accent: var(--primary-color-3),
     ),
-    navy: (
-        bg: var(--primary-color-3),
+    blue: (
+        bg: var(--primary-color-2),
         fg: var(--secondary-color-1),
         accent: var(--primary-color-1),
     ),

@@ -1,12 +1,18 @@
 :root {
-    // Colours - wireframe placeholder palette, deliberately capped at 3:
-    // one accent, one dark, one light. Swap these for the real client
-    // brand hex codes at the start of each new project; every consumer in
-    // the theme reads through these custom properties, never a hardcoded
-    // hex, so a rebrand is a one-file edit.
-    --primary-color-1: #e35b30; // accent
-    --primary-color-3: #12212a; // dark
-    --secondary-color-1: #fff; // light
+    // Colours - wireframe placeholder palette: two accents (orange, blue),
+    // one dark neutral (also the sitewide default text colour - see
+    // --primary-text-color below), and two light neutrals (white, light
+    // grey). Swap these for the real client brand hex codes at the start of
+    // each new project; every consumer in the theme reads through these
+    // custom properties, never a hardcoded hex, so a rebrand is a one-file
+    // edit.
+    --primary-color-1: #e35b30; // accent (orange)
+    --primary-color-2: #1d4e89; // accent (blue)
+    --primary-color-3: #12212a; // dark neutral - NOT the blue accent above,
+    // this also backs body/heading text colour
+    // (--primary-text-color) sitewide.
+    --secondary-color-1: #fff; // light (white)
+    --secondary-color-2: #eee; // light (light grey)
     --primary-text-color: var(--primary-color-3);
 
     // Typography
@@ -43,7 +49,6 @@
     --font-size: 62.5%;
 
     --hamburger-size: 6rem;
-
 }
 
 $grid-columns: 12;

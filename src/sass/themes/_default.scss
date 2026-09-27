@@ -10,25 +10,26 @@
 // boosts these just enough to reliably beat a plain block-wrapper class
 // regardless of which stylesheet's <link> happens to load first, now that
 // block CSS is split into separate per-block chunks instead of one bundle.
-// $panel-colours (abstracts/_mixins.scss) is the shared White/Orange/Navy
-// palette also used by cards and content-grid columns - the bg/
-// --section-bg pairs below just look the colour name up there instead of
-// hardcoding the same tokens a second time.
+// $panel-colours (abstracts/_mixins.scss) is the shared White/Light Grey/
+// Orange/Blue palette also used by cards and content-grid columns - the
+// bg/--section-bg pairs below just look the colour name up there instead
+// of hardcoding the same tokens a second time. These four are the only
+// values the `background_colour` ACF field (field_617ea04499fac) can ever
+// produce, so they're the only section classes handled here.
 section {
-    &.white:not(.full_image_gallery):not(#\#) {
+    &.white:not(#\#) {
         background-color: panel-colour(white, bg);
         --section-bg: #{panel-colour(white, bg)};
-        + .transparency,
         + .white {
             padding-top: 0 !important;
         }
     }
-    &.transparent:not(#\#) {
-        background-color: transparent;
-        --section-bg: #{panel-colour(white, bg)};
-        + .transparency:not(.full_image_gallery),
-        + .white:not(.full_image_gallery) {
-            padding-top: 0;
+
+    &.grey-light:not(#\#) {
+        background-color: panel-colour(grey-light, bg);
+        --section-bg: #{panel-colour(grey-light, bg)};
+        + .grey-light {
+            padding-top: 0 !important;
         }
     }
 
@@ -37,19 +38,15 @@ section {
     &.orange:not(#\#) {
         background-color: panel-colour(orange, bg);
         --section-bg: #{panel-colour(orange, bg)};
-    }
-    &.orange:not(&.full_image_gallery) {
         + .orange {
             padding-top: 0;
         }
     }
 
-    &.navy:not(#\#) {
-        background-color: panel-colour(navy, bg);
-        --section-bg: #{panel-colour(navy, bg)};
-    }
-    &.navy:not(&.full_image_gallery) {
-        + .navy {
+    &.blue:not(#\#) {
+        background-color: panel-colour(blue, bg);
+        --section-bg: #{panel-colour(blue, bg)};
+        + .blue {
             padding-top: 0;
         }
     }
@@ -78,7 +75,7 @@ section {
 section {
     // Dark backgrounds - headings/copy need to flip to white.
     &.orange,
-    &.navy {
+    &.blue {
         h1,
         h2,
         h3,
@@ -93,7 +90,7 @@ section {
     // Light backgrounds - all light enough for the default dark grey
     // heading/copy colour, so this only needs setting once.
     &.white,
-    &.transparent {
+    &.grey-light {
         h1,
         h2,
         h3,
@@ -114,8 +111,6 @@ section {
             strong {
                 color: var(--primary-color-1);
             }
-        }
-        p {
         }
     }
 }

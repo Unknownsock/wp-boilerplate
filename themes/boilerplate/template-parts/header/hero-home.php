@@ -82,7 +82,7 @@ get_header();
 						'rel'            => 0,
 						'cc_load_policy' => 0,
 					);
-					
+
 					if ( $loop ) {
 						$embed_params['playlist'] = $youtube_id;
 					}

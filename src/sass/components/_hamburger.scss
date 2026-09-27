@@ -9,7 +9,6 @@
     transition: var(--transition) all ease-in;
     .inner {
         position: relative;
-        padding: 0;
         // Drives both the box size and the X-close offset below, so the
         // two always agree with each other instead of the offset being a
         // guessed constant that only happens to match one breakpoint.
@@ -65,7 +64,9 @@
             // them: (height - bar thickness) / 2.
             .top {
                 transform: translateY(
-                        calc((var(--hamburger-height) - var(--hamburger-bar)) / 2)
+                        calc(
+                            (var(--hamburger-height) - var(--hamburger-bar)) / 2
+                        )
                     )
                     rotate(-45deg);
             }

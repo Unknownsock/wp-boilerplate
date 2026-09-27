@@ -421,8 +421,6 @@ $site-nav-transition: 150ms;
                                 position: relative;
                                 top: 0;
                                 margin-top: 2rem;
-                                flex-direction: column;
-                                background: unset;
                                 margin: 0;
                                 display: none;
                                 align-content: flex-start;
@@ -457,7 +455,6 @@ $site-nav-transition: 150ms;
                         // columns, sized to hug its own content rather than
                         // stretching like the link columns.
                         .o-primary-nav__dropdown-cta {
-                            display: flex;
                             flex-direction: column;
                             overflow: hidden;
                             box-sizing: border-box;
@@ -801,8 +798,10 @@ $site-nav-transition: 150ms;
         display: none;
         @media screen and (max-width: $grid-nav) {
             display: block;
+            width: 100%;
             margin-top: 2rem;
             padding: 0 4rem;
+            box-sizing: border-box;
         }
         .c-button {
             width: 100%;
@@ -911,6 +910,8 @@ $site-nav-transition: 150ms;
             padding: 1rem 4rem;
             color: var(--primary-color-3);
             font-size: 2rem;
+            justify-content: space-between;
+            box-sizing: border-box;
         }
         // :not(#\#) beats simple-nav-list's own min-width $grid-nav
         // "position: fixed" dropdown styling - the build's CSS minifier
@@ -937,7 +938,9 @@ $site-nav-transition: 150ms;
 
     > li.o-primary-nav__cta {
         display: block;
+        width: 100%;
         margin-top: 2rem;
         padding: 0 4rem;
+        box-sizing: border-box;
     }
 }

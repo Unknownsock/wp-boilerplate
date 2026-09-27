@@ -1,17 +1,5 @@
 {
-    "src/**/*.js": [
-        "prettier --write",
-        "eslint --fix",
-        "git add"
-    ],
-    "src/**/*.{css,scss}": [
-        "prettier --write",
-        "stylelint --fix",
-        "git add"
-    ],
-    "themes/**/*.php": [
-        "npm run fix:php",
-        "npm run format:php",
-        "git add"
-    ]
+    "src/**/*.js": ["prettier --write"],
+    "src/**/*.{css,scss}": ["prettier --write"],
+    "themes/**/*.php": ["npm run fix:php", "npm run format:php"]
 }

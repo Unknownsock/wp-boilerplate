@@ -14,8 +14,6 @@
     // Dark backgrounds need a light line, not the default dark-on-dark
     // one above - same grouping as _default.scss's section-level rule.
     &.orange &__line,
-    &.navy &__line,
-    &.gradient &__line,
     &.blue &__line {
         background-color: rgba(255, 255, 255, 0.2);
     }

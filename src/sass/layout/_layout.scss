@@ -1,13 +1,13 @@
 @use '../abstracts/variables' as *;
 @use '../abstracts/mixins' as *;
 
-.site-content {
+.o-site-content {
     display: flex;
     box-sizing: border-box;
     .home & {
         flex-flow: column;
     }
-    .site-main {
+    .o-site-main {
         width: 100%;
         display: flex;
         flex-flow: column;

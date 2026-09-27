@@ -288,7 +288,20 @@ function modify_acf_wysiwyg_output( $value, $post_id, $field ) {
 }
 // add_filter( 'acf/format_value/type=wysiwyg', 'modify_acf_wysiwyg_output', 10, 3 ).
 
-// Remove classic editor if toggle = 'new' or if toggle doesn't exist.
+// Remove the native title-then-editor content box from every post type's
+// edit screen - the whole theme renders through the `content_blocks`
+// flexible-content field instead (see CLAUDE.md's block dispatch section);
+// the_content() is never called anywhere on the front end, so the classic/
+// block editor's own content area would just be dead unused input.
+//
+// This used to be conditional on a `content_mode_toggle` field (a legacy/
+// new-content-system split for single-portfolio.php that no longer exists -
+// its field group, and the four toggle-driven field/metabox-hiding hooks
+// that went with it, were removed once single-portfolio.php stopped needing
+// them). Since that field never existed as an actual ACF field group,
+// get_field() for it always returned empty, which always took the "remove
+// the editor" branch anyway - this is that effective behaviour, made
+// unconditional and no longer dependent on a field that was never real.
 add_action(
 	'admin_init',
 	function () {
@@ -308,185 +321,6 @@ add_action(
 			return;
 		}
 
-		$toggle = get_field( 'content_mode_toggle', $post->ID );
-
-		// Remove editor if toggle is 'new' OR if toggle field doesn't exist (null/empty).
-		if ( 'new' === $toggle || empty( $toggle ) ) {
-			// Remove the default editor.
-			remove_post_type_support( $post->post_type, 'editor' );
-		}
-	}
-);
-
-// Hide flexible content field group when toggle = 'legacy'.
-add_filter(
-	'acf/prepare_field/name=content_blocks',
-	function ( $field ) {
-		global $post;
-
-		// Get current post ID from different sources.
-		$post_id = null;
-		if ( isset( $_GET['post'] ) ) {
-			$post_id = intval( $_GET['post'] );
-		} elseif ( isset( $_POST['post_ID'] ) ) {
-			$post_id = intval( $_POST['post_ID'] );
-		} elseif ( $post && isset( $post->ID ) ) {
-			$post_id = $post->ID;
-		}
-
-		if ( ! $post_id ) {
-			return $field;
-		}
-
-		$toggle = get_field( 'content_mode_toggle', $post_id );
-
-		if ( 'legacy' === $toggle ) {
-			return false; // hide the field.
-		}
-
-		return $field;
-	}
-);
-
-// Hide fields below a specific tab when toggle = 'new'.
-add_filter(
-	'acf/prepare_field',
-	function ( $field ) {
-		global $post;
-
-		// Get current post ID.
-		$post_id = null;
-		if ( isset( $_GET['post'] ) ) {
-			$post_id = intval( $_GET['post'] );
-		} elseif ( isset( $_POST['post_ID'] ) ) {
-			$post_id = intval( $_POST['post_ID'] );
-		} elseif ( $post && isset( $post->ID ) ) {
-			$post_id = $post->ID;
-		}
-
-		if ( ! $post_id ) {
-			return $field;
-		}
-
-		$toggle = get_field( 'content_mode_toggle', $post_id );
-
-		if ( 'new' === $toggle ) {
-			// List of field names to hide when toggle is 'new' (everything below Legacy Content tab except client_logo).
-			$fields_to_hide = array(
-				'above_gallery_text',
-				'gallery_layout',
-				'gallery',
-				'below_before_after_text',
-				'before_image',
-				'after_image',
-			);
-
-			if ( in_array( $field['name'], $fields_to_hide, true ) ) {
-				return false; // hide the field.
-			}
-		}
-
-		return $field;
-	}
-);
-
-add_action(
-	'admin_head',
-	function () {
-		global $post, $pagenow;
-
-		if ( ( 'post.php' !== $pagenow && 'post-new.php' !== $pagenow ) || ! $post ) {
-			return;
-		}
-
-		$toggle = get_field( 'content_mode_toggle', $post->ID );
-
-		if ( 'legacy' === $toggle ) {
-			echo '<style type="text/css">
-            #acf-group_5b9930d7812e5 { display: none !important; }
-        </style>';
-			echo '<script type="text/javascript">
-            document.addEventListener("DOMContentLoaded", function() {
-                var metabox = document.getElementById("acf-group_5b9930d7812e5");
-                if (metabox) {
-                    metabox.style.display = "none";
-                }
-            });
-        </script>';
-		}
-
-		if ( 'new' === $toggle ) {
-			echo '<style type="text/css">
-            #acf-group_5ba4e6ecb308c .acf-field-5bd6f3f7a4393,  /* above_gallery_text */
-            #acf-group_5ba4e6ecb308c .acf-field-656de91ef988d,  /* gallery_layout */
-            #acf-group_5ba4e6ecb308c .acf-field-5ba4e79b17431,  /* gallery */
-            #acf-group_5ba4e6ecb308c .acf-field-66c36ee8a0e56,  /* below_before_after_text */
-            #acf-group_5ba4e6ecb308c .acf-field-66c36f3420d2f,  /* before_image */
-            #acf-group_5ba4e6ecb308c .acf-field-66c36f4e20d30,  /* after_image */
-            #acf-group_5ba4e6ecb308c .acf-tab-wrap,             /* tab wrapper - only in Our work group */
-            #acf-group_5ba4e6ecb308c .acf-field-68beb01e26752   /* Legacy Content tab field */
-            { display: none !important; }
-        </style>';
-			echo '<script type="text/javascript">
-            document.addEventListener("DOMContentLoaded", function() {
-                // Only target fields within the Our work metabox
-                var ourWorkMetabox = document.getElementById("acf-group_5ba4e6ecb308c");
-                if (ourWorkMetabox) {
-                    var fieldsToHide = [
-                        "acf-field-5bd6f3f7a4393",
-                        "acf-field-656de91ef988d",
-                        "acf-field-5ba4e79b17431",
-                        "acf-field-66c36ee8a0e56",
-                        "acf-field-66c36f3420d2f",
-                        "acf-field-66c36f4e20d30",
-                        "acf-tab-wrap",
-                        "acf-field-68beb01e26752"
-                    ];
-
-                    fieldsToHide.forEach(function(className) {
-                        var elements = ourWorkMetabox.getElementsByClassName(className);
-                        for (var i = 0; i < elements.length; i++) {
-                            elements[i].style.display = "none";
-                        }
-                    });
-                }
-            });
-        </script>';
-		}
-	}
-);
-
-// Hide the entire field group/metabox when toggle = 'legacy'.
-add_filter(
-	'acf/load_field_group',
-	function ( $field_group ) {
-		global $post;
-
-		// Target the specific field group by key or title.
-		if ( 'group_5b9930d7812e5' !== $field_group['key'] && 'Flexible content' !== $field_group['title'] ) {
-			return $field_group;
-		}
-
-		// Get current post ID.
-		$post_id = null;
-		if ( isset( $_GET['post'] ) ) {
-			$post_id = intval( $_GET['post'] );
-		} elseif ( isset( $_POST['post_ID'] ) ) {
-			$post_id = intval( $_POST['post_ID'] );
-		} elseif ( $post && isset( $post->ID ) ) {
-			$post_id = $post->ID;
-		}
-
-		if ( ! $post_id ) {
-			return $field_group;
-		}
-
-		$toggle = get_field( 'content_mode_toggle', $post_id );
-
-		if ( 'legacy' === $toggle ) {
-			return false; // hide the entire field group.
-		}
-
-		return $field_group;
+		remove_post_type_support( $post->post_type, 'editor' );
 	}
 );

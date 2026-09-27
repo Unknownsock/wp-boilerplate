@@ -13,21 +13,20 @@
 
 	// Singles.
 	$stats             = $content['stats'] ?? null;
-	$background_colour = $content['background_colour'] ?? 'navy';
+	$background_colour = $content['background_colour'] ?? 'blue';
 ?>
 
 <section class="<?php echo esc_attr( $block . ' ' . $background_colour ); ?>">
 	<div class="<?php echo $block; ?>__grid">
 		<?php
 		if ( $stats ) {
-			$total = count( $stats );
 			foreach ( $stats as $i => $stat ) {
 				$value      = $stat['value'] ?? 0;
 				$prefix     = $stat['prefix'] ?? '';
 				$suffix     = $stat['suffix'] ?? '';
 				$use_commas = ! empty( $stat['use_commas'] );
 				$label      = $stat['label'] ?? '';
-				$image      = boilerplate_image( $stat['icon'] ?? null, 120, 120, $label ?: 'Stat' );
+				$image      = boilerplate_image( $stat['icon'] ?? null, 120, 120, $label ? $label : 'Stat' );
 
 				// Either/or - one position, not both (was two independent
 				// checkboxes, which allowed duplicating or hiding the text
@@ -54,23 +53,18 @@
 				};
 				?>
 				<div class="<?php echo $block; ?>__item" data-scroll-animation="fadeIn" data-scroll-delay="<?php echo esc_attr( $i * 100 ); ?>">
-					<?php if ( 'above' === $text_position ) { $render_text(); } ?>
+					<?php
+					if ( 'above' === $text_position ) {
+						$render_text(); }
+					?>
 					<div class="<?php echo $block; ?>__image">
 						<img class="<?php echo $block; ?>__image-el" src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" loading="lazy" width="120" height="120" />
 					</div>
-					<?php if ( 'below' === $text_position ) { $render_text(); } ?>
+					<?php
+					if ( 'below' === $text_position ) {
+						$render_text(); }
+					?>
 				</div>
-				<?php if ( $i < $total - 1 ) : ?>
-					<svg class="<?php echo $block; ?>__arrow" aria-hidden="true" width="67" height="32" viewBox="0 0 67 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<circle cx="2.5" cy="15.2678" r="2.5" fill="currentColor" />
-						<circle cx="12.5" cy="15.2678" r="2.5" fill="currentColor" />
-						<circle cx="21.5" cy="15.2678" r="2.5" fill="currentColor" />
-						<circle cx="31.5" cy="15.2678" r="2.5" fill="currentColor" />
-						<circle cx="41.5" cy="15.2678" r="2.5" fill="currentColor" />
-						<circle cx="51.5" cy="15.2678" r="2.5" fill="currentColor" />
-						<path d="M48.5 1.76782L62.5 15.7678L48.5 29.7678" stroke="currentColor" stroke-width="5" />
-					</svg>
-				<?php endif; ?>
 				<?php
 			}
 		}

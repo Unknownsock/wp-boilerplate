@@ -12,9 +12,9 @@
 	$block   = 'b-' . str_replace( '_', '-', $content['acf_fc_layout'] ?? '' );
 
 	// Singles.
-	$eyebrow            = $content['eyebrow'] ?? null;
-	$rows               = $content['rows'] ?? null;
-	$background_colour  = $content['background_colour'] ?? 'white';
+	$eyebrow           = $content['eyebrow'] ?? null;
+	$rows              = $content['rows'] ?? null;
+	$background_colour = $content['background_colour'] ?? 'white';
 ?>
 
 <section class="<?php echo esc_attr( $block . ' ' . $background_colour ); ?>">
@@ -28,17 +28,17 @@
 				<div class="<?php echo $block; ?>__row">
 					<?php
 					foreach ( $columns as $column ) {
-						$span                   = (int) ( $column['width'] ?? 5 );
-						$content_html           = $column['content'] ?? '';
-						$column_button_group    = $column['button_group'] ?? null;
-						$column_force_stack     = ! empty( $column['force_stack'] );
-						$column_background      = $column['background_colour'] ?? 'none';
-						$column_border          = ! empty( $column['border'] );
-						$column_classes         = $block . '__column ' . $block . '__column--' . $span;
+						$span                = (int) ( $column['width'] ?? 5 );
+						$content_html        = $column['content'] ?? '';
+						$column_button_group = $column['button_group'] ?? null;
+						$column_force_stack  = ! empty( $column['force_stack'] );
+						$column_background   = $column['background_colour'] ?? 'none';
+						$column_border       = ! empty( $column['border'] );
+						$column_classes      = $block . '__column ' . $block . '__column--' . $span;
 						if ( $column_border ) {
 							$column_classes .= ' ' . $block . '__column--border';
 						}
-						$column_inner_classes    = $block . '__column-inner u-wysiwyg';
+						$column_inner_classes = $block . '__column-inner u-wysiwyg';
 						if ( 'none' !== $column_background ) {
 							$column_inner_classes .= ' ' . $block . '__column-inner--panel ' . esc_attr( $column_background );
 						}

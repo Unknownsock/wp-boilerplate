@@ -191,8 +191,10 @@ function add_button( $href, $text, $css_class = '', $id = '', $target = '', $ico
 	// list exactly (field_617ea04499fac / field_63ee393743836 in
 	// group-618080750e91b.json) - a button can always be set to the same
 	// colour as any section background. Legacy previous-client colours
-	// (pink/pink-light/grey-dark/grey-light) removed from the palette.
-	$modifiers = array( 'solid', 'outline', 'text', 'white', 'orange', 'navy', 'eyebrow' );
+	// (pink/pink-light/grey-dark) removed from the palette; "grey-light"
+	// here is the current wireframe palette's own light-grey neutral, not
+	// that old client one.
+	$modifiers = array( 'solid', 'outline', 'text', 'white', 'grey-light', 'orange', 'blue', 'eyebrow' );
 	$tokens    = array_filter( explode( ' ', $css_class ) );
 	$classes   = array( 'c-button' );
 	foreach ( $tokens as $token ) {

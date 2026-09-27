@@ -18,9 +18,9 @@
 
 	?>
 
-<div class="site-content">
+<div class="o-site-content">
 
-	<main id="main" class="site-main" tabindex="-1">
+	<main id="main" class="o-site-main" tabindex="-1">
 
 		<?php
 		if ( is_front_page() ) {

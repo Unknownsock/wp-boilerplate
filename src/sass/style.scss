@@ -9,7 +9,6 @@
 @use 'base/typography';
 @use 'base/accessibility';
 
-@use 'layout/cols';
 @use 'layout/grid';
 @use 'layout/header';
 @use 'layout/footer';
@@ -28,7 +27,6 @@
 @use 'components/hamburger';
 @use 'components/svg';
 @use 'components/eyebrow';
-@use 'components/block-title';
 @use 'components/card';
 
 // Each block's `_<name>.scss` is pulled in by that block's own

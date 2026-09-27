@@ -12,7 +12,7 @@
 	$block   = 'b-' . str_replace( '_', '-', $content['acf_fc_layout'] ?? '' );
 
 	// Singles.
-	$background_colour      = $content['background_colour'] ?? 'navy';
+	$background_colour      = $content['background_colour'] ?? 'blue';
 	$eyebrow                = $content['eyebrow'] ?? null;
 	$text                   = $content['text'] ?? null;
 	$button_group           = $content['button_group'] ?? null;

@@ -5,6 +5,41 @@
 	// Background colour comes from the shared "white" class on the
 	// section - see block-listing.php + _default.scss.
 	// padding: 0;
+
+	// Title Options group's header (formerly the shared .c-block-title
+	// component - inlined here since this is its only caller).
+	&__header {
+		width: 100%;
+		display: flex;
+		flex-flow: column;
+		gap: 2rem;
+
+		&--left {
+			align-items: flex-start;
+			text-align: left;
+		}
+		&--center {
+			align-items: center;
+			text-align: center;
+		}
+		&--right {
+			align-items: flex-end;
+			text-align: right;
+		}
+	}
+
+	&__title {
+		font-size: 4.8rem;
+		line-height: 1.1em;
+		letter-spacing: -0.02em;
+	}
+
+	&__text {
+		display: flex;
+		flex-flow: column;
+		gap: var(--grid-gutter);
+	}
+
 	// facetwp-template is a required class for the FacetWP plugin's
 	// AJAX refresh - keep the literal class, just apply our own bounds.
 	.facetwp-template {

@@ -18,8 +18,8 @@
 
 	?>
 
-<div class="site-content">
-	<main id="main" class="site-main" tabindex="-1">
+<div class="o-site-content">
+	<main id="main" class="o-site-main" tabindex="-1">
 
 		<section class="fourzerofour white">
 			<h1>404 ERROR.</h1>
