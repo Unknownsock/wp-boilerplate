@@ -141,7 +141,7 @@ define('WP_SITEURL','http://localhost:8000');
 
 define( 'WP_MEMORY_LIMIT', '1024M' );
 // define( 'WP_DEBUG', true );
-define( 'WP_DEBUG_LOG', false );
+define( 'WP_DEBUG_LOG', '/var/log/app/wp-debug.log' ); // bind-mounted to ./logs
 define( 'WP_DEBUG_DISPLAY', false );
 @ini_set( 'display_errors', 1 );
 

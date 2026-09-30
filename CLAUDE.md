@@ -275,6 +275,11 @@ colour didn't silently become blue too) - White/Light Grey/Orange/Blue is the cu
   `docker-compose.yml` or it does nothing - this exact gap (a fully vestigial `.env.example` with
   zero working variables, copied from some other project's compose setup) went unnoticed for a
   long time before being wired up for real.
+- Container logs are bind-mounted into `./logs/` (gitignored): `apache/{access,error}.log`,
+  `mysql/{error,slow}.log`, `wp-debug.log` (`WP_DEBUG_LOG`, on by default, `WP_DEBUG=0` in `.env`
+  to disable) and `php-error.log`. The wordpress and wp-cli services both mount `./logs` at
+  `/var/log/app` because they share `wp-config.php`. MariaDB's general query log is left off
+  (noisy) - toggle it in `config/mysql/logging.cnf`.
 - `bin/wp/*.php` are one-off content/seed scripts run via `wp eval-file` against the repo root
   (mounted read-only into the `wp-cli` container at `/workspace`).
 - `bin/db/{backup,import,restore}.js` (Node) handle DB dump/restore — `npm run db:backup` etc.

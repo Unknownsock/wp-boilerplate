@@ -4,6 +4,9 @@ services:
     image: mariadb:11
     volumes:
       - database:/var/lib/mysql
+      # Error + slow query logs, exposed in ./logs/mysql
+      - ./config/mysql/logging.cnf:/etc/mysql/conf.d/logging.cnf:ro
+      - ./logs/mysql:/var/log/mysql
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-change-me}
@@ -45,14 +48,16 @@ services:
       - ./config/wordpress/.htaccess:/var/www/html/.htaccess
       - ./themes:/var/www/html/wp-content/themes
       - wordpress_data:/var/www/html
-      # - ./logs:/var/log/apache2
-      # - ./logs/debug.log:/var/www/html/wp-content/debug.log
+      # Logs exposed in ./logs: apache/ (access+error), wp-debug.log, php-error.log
+      - ./logs/apache:/var/log/apache2
+      - ./logs:/var/log/app
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: ${DB_NAME:-wordpress}
       WORDPRESS_DB_USER: ${DB_USER:-wordpress}
       WORDPRESS_DB_PASSWORD: ${DB_PASS:-wordpress}
-    #   WORDPRESS_DEBUG: 1
+      # Set WP_DEBUG=0 in .env to turn off debug logging
+      WORDPRESS_DEBUG: ${WP_DEBUG:-1}
 
   # WP-CLI — keep alive for ad-hoc commands: docker compose exec wp-cli wp <command>
   wp-cli:
@@ -64,6 +69,8 @@ services:
       - wordpress_data:/var/www/html
       - ./config/wordpress/wp-config.php:/var/www/html/wp-config.php
       - ./themes:/var/www/html/wp-content/themes
+      # Same log path as the wordpress service, so wp-cli's errors land in ./logs too
+      - ./logs:/var/log/app
       # Repo root, read-only - lets `wp eval-file` run one-off content/seed
       # scripts kept in bin/wp/ without them having to live inside the theme.
       - .:/workspace:ro
@@ -72,6 +79,7 @@ services:
       WORDPRESS_DB_NAME: ${DB_NAME:-wordpress}
       WORDPRESS_DB_USER: ${DB_USER:-wordpress}
       WORDPRESS_DB_PASSWORD: ${DB_PASS:-wordpress}
+      WORDPRESS_DEBUG: ${WP_DEBUG:-1}
     entrypoint: ["sleep", "9999"]
 
 volumes:
