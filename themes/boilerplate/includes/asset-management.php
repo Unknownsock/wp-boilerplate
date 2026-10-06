@@ -218,11 +218,18 @@ function boilerplate_enqueue_block_script( $entry_path, $handle ) {
 		}
 	}
 
+	// A style-only block's JS entry is just `import './x.scss'`, which Vite
+	// extracts to CSS, leaving a 0-byte stub - don't make the browser fetch it.
+	$js_path = get_stylesheet_directory() . '/assets/' . $entry['file'];
+	if ( ! filesize( $js_path ) ) {
+		return;
+	}
+
 	wp_enqueue_script(
 		$handle,
 		get_stylesheet_directory_uri() . '/assets/' . $entry['file'],
 		array(),
-		filemtime( get_stylesheet_directory() . '/assets/' . $entry['file'] ),
+		filemtime( $js_path ),
 		true
 	);
 }

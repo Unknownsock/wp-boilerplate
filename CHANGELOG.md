@@ -7,6 +7,12 @@ version bump here actually means for a project already built from this template.
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-06
+
+### Fixed
+
+- Style-only blocks no longer enqueue their empty (0-byte) built JS stub as a `<script type="module">`; only their CSS is loaded.
+
 ## [1.0.0] - 2026-09-27
 
 Initial public release — generalised from a client project into a reusable boilerplate.
@@ -34,5 +40,6 @@ Initial public release — generalised from a client project into a reusable boi
 Tracked in [CLAUDE.md](CLAUDE.md#known-gaps) rather than duplicated here, since they change more
 often than a changelog entry should.
 
-[Unreleased]: https://github.com/unknownsock/wp-boilerplate/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/unknownsock/wp-boilerplate/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/unknownsock/wp-boilerplate/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/unknownsock/wp-boilerplate/releases/tag/v1.0.0

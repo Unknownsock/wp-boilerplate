@@ -1,6 +1,6 @@
 {
     "name": "wp-boilerplate",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "ACF Pro flexible-content WordPress boilerplate theme with a Vite build and Docker dev environment.",
     "scripts": {
         "start": "docker compose up -d",
